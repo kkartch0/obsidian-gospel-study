@@ -1,5 +1,5 @@
 import { Editor, Plugin, requestUrl } from 'obsidian';
-import { getActiveParagraphIdsFromUrl } from 'main.helper';
+import { getActiveParagraphIdsFromUrl, removeFootnotesFromParagraph } from 'main.helper';
 
 export default class GospelStudyPlugin extends Plugin {
 	/**
@@ -56,7 +56,7 @@ export default class GospelStudyPlugin extends Plugin {
 			const activeParagraphIds = getActiveParagraphIdsFromUrl(url);
 			console.debug("🚀 ~ GospelStudyPlugin ~ activeParagraphIds:", activeParagraphIds)
 
-			let text =`#### [${doc.title}](${url})\n`;
+			let text = `#### [${doc.title}](${url})\n`;
 
 			// Get paragraphs for the active paragraph IDs
 			activeParagraphIds.forEach((id) => {
@@ -67,7 +67,9 @@ export default class GospelStudyPlugin extends Plugin {
 				const el = doc.getElementById(id);
 				if (!el) return;
 
-				const innerHTML = el.innerHTML.replace("/study/", "https://www.churchofjesuschrist.org/study/");
+				const innerHTML = removeFootnotesFromParagraph(el);
+
+
 				text += `\n${innerHTML}\n`;
 			});
 
