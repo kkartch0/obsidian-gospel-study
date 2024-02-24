@@ -3,6 +3,10 @@
 	"version": "1.0.0",
 	"description": "An Obsidian plugin that allows for importing scripture verses or other quotes into an Obsidian note by simply pasting in the Gospel Library app share link (i.e. of the format \"https://www.churchofjesuschrist.org/study/*\")",
 	"main": "main.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/kkartch0/obsidian-gospel-study"
+	},
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
@@ -10,7 +14,10 @@
 		"test": "jest"
 	},
 	"keywords": [],
-	"author": "",
+	"author": {
+		"name": "Ky Kartchner",
+		"url": "https://github.com/kkartch0"
+	},
 	"license": "MIT",
 	"devDependencies": {
 		"@types/jest": "^29.5.12",
