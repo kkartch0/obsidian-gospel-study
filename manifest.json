@@ -3,9 +3,8 @@
 	"name": "Sample Plugin",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"description": "Import scripture verses or other quotes into an Obsidian note by simply pasting in the Gospel Library app share link (i.e. of the format \"https://www.churchofjesuschrist.org/study/*\")",
+	"author": "Ky Kartchner",
+	"authorUrl": "https://github.com/kkartch0",
 	"isDesktopOnly": false
 }

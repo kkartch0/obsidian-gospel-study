@@ -1,5 +1,4 @@
-import { GetActiveParagraphIdsFromUrl } from './main';
-import { describe } from 'jest';
+import { getActiveParagraphIdsFromUrl } from 'main.helper';
 
 // Add the import statement for 'describe' from the test runner
 describe('GetActiveParagraphIdsFromUrl', () => {
@@ -7,7 +6,7 @@ describe('GetActiveParagraphIdsFromUrl', () => {
         const urlString = 'https://example.com?id=p1,p2-p5,p6';
         const expectedIds = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6'];
 
-        const result = GetActiveParagraphIdsFromUrl(urlString);
+        const result = getActiveParagraphIdsFromUrl(urlString);
 
         expect(result).toEqual(expectedIds);
     });
@@ -16,7 +15,7 @@ describe('GetActiveParagraphIdsFromUrl', () => {
         const urlString = 'https://example.com';
         const expectedIds: string[] = [];
 
-        const result = GetActiveParagraphIdsFromUrl(urlString);
+        const result = getActiveParagraphIdsFromUrl(urlString);
 
         expect(result).toEqual(expectedIds);
     });
