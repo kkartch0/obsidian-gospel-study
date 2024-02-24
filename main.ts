@@ -1,6 +1,7 @@
 import { Editor, Plugin, requestUrl } from 'obsidian';
+import { getActiveParagraphIdsFromUrl } from 'main.helper';
 
-export default class MyPlugin extends Plugin {
+export default class GospelStudyPlugin extends Plugin {
 	/**
 	 * Called when the plugin is loaded.
 	 */
@@ -50,7 +51,7 @@ export default class MyPlugin extends Plugin {
 			//const doc = parser.parseFromString(response.text, "text/html");
 
 			// Get the URL
-			const activeParagraphIds = this.GetActiveParagraphIdsFromUrl(url);
+			const activeParagraphIds = getActiveParagraphIdsFromUrl(url);
 			console.debug("🚀 ~ MyPlugin ~ activeParagraphIds:", activeParagraphIds)
 
 			// 
