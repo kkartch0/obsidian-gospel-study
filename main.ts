@@ -27,9 +27,8 @@ export default class GospelStudyPlugin extends Plugin {
 			clipboard.stopPropagation();
 			clipboard.preventDefault();
 
-			this.convertUrlToBlock(editor, clipboardData);
+			await this.convertUrlToBlock(editor, clipboardData);
 		}));
-
 	}
 
 	/**
@@ -39,34 +38,41 @@ export default class GospelStudyPlugin extends Plugin {
 	 * @returns A promise that resolves when the conversion is complete.
 	 */
 	async convertUrlToBlock(editor: Editor, url: string): Promise<void> {
-		const pasteId = `Fetching content#${this.createBlockId()}`;
+		// const pasteId = `Fetching content#${this.createBlockId()}`;
 
-		editor.replaceSelection(pasteId);
+		// editor.replaceSelection(pasteId);
 
 		// fetch content from URL using fetch API
 
 		requestUrl(url).then((response) => {
 			// find all p.active-item elements
-			//const parser = new DOMParser();
-			//const doc = parser.parseFromString(response.text, "text/html");
+			const parser = new DOMParser();
+			const doc = parser.parseFromString(response.text, "text/html");
+
+			const paragraphs = doc.querySelectorAll('p');
+			console.debug("🚀 ~ GospelStudyPlugin ~ paragraphs:", paragraphs)
 
 			// Get the URL
 			const activeParagraphIds = getActiveParagraphIdsFromUrl(url);
-			console.debug("🚀 ~ MyPlugin ~ activeParagraphIds:", activeParagraphIds)
+			console.debug("🚀 ~ GospelStudyPlugin ~ activeParagraphIds:", activeParagraphIds)
 
-			// 
+			let text =`#### [${doc.title}](${url})\n`;
 
+			// Get paragraphs for the active paragraph IDs
+			activeParagraphIds.forEach((id) => {
+				if (id === "-") {
+					text += "\n…\n";
+					return;
+				}
+				const el = doc.getElementById(id);
+				if (!el) return;
 
-
-
+				const innerHTML = el.innerHTML.replace("/study/", "https://www.churchofjesuschrist.org/study/");
+				text += `\n${innerHTML}\n`;
+			});
 
 			// create a new block with the fetched content
-			// editor.replaceSelection(`#### [${doc.title}](${url})\n`);
-			// paragraphs.forEach((p) => {
-			// 	editor.replaceSelection(`\n${p.innerHTML}\n`);
-			// });
-
-			// editor.replaceSelection(`\n#study/general-conference/2023/10/42freeman`);
+			editor.replaceSelection(text);
 		});
 
 		// const response = await fetch(url, { mode: "no-cors" });
