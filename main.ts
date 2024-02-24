@@ -1,5 +1,5 @@
 import { Editor, Plugin, requestUrl } from 'obsidian';
-import { getActiveParagraphIdsFromUrl, removeFootnotesFromParagraph } from 'main.helper';
+import { getActiveParagraphIdsFromUrl } from 'main.helper';
 
 export default class GospelStudyPlugin extends Plugin {
 	/**
@@ -38,12 +38,6 @@ export default class GospelStudyPlugin extends Plugin {
 	 * @returns A promise that resolves when the conversion is complete.
 	 */
 	async convertUrlToBlock(editor: Editor, url: string): Promise<void> {
-		// const pasteId = `Fetching content#${this.createBlockId()}`;
-
-		// editor.replaceSelection(pasteId);
-
-		// fetch content from URL using fetch API
-
 		requestUrl(url).then((response) => {
 			// find all p.active-item elements
 			const parser = new DOMParser();
@@ -56,7 +50,7 @@ export default class GospelStudyPlugin extends Plugin {
 			const activeParagraphIds = getActiveParagraphIdsFromUrl(url);
 			console.debug("🚀 ~ GospelStudyPlugin ~ activeParagraphIds:", activeParagraphIds)
 
-			let text = `#### [${doc.title}](${url})\n`;
+			let text =`#### [${doc.title}](${url})\n`;
 
 			// Get paragraphs for the active paragraph IDs
 			activeParagraphIds.forEach((id) => {
@@ -67,40 +61,12 @@ export default class GospelStudyPlugin extends Plugin {
 				const el = doc.getElementById(id);
 				if (!el) return;
 
-				const innerHTML = removeFootnotesFromParagraph(el);
-
-
-				text += `\n${innerHTML}\n`;
+				text += `\n${el.innerHTML}\n`;
 			});
 
 			// create a new block with the fetched content
 			editor.replaceSelection(text);
 		});
-
-		// const response = await fetch(url, { mode: "no-cors" });
-		// const text = await response.text();
-		// console.log(text);
-
-		// const browser = await puppeteer.launch({ headless: "new"});
-		// const page = await browser.newPage();
-
-		// await page.goto(url, { waitUntil: 'domcontentloaded' });
-
-		// const pageTitle = await page.title();
-		// const titleLink = `#### [${pageTitle}](${url})\n`;
-
-		// let text = titleLink;
-
-		// const paragraphs = await page.$$eval('p.active-item', paragraphs => paragraphs.map(p => p.innerHTML));
-		// paragraphs.forEach((innerHTML, index) => {
-		// 	innerHTML = innerHTML.replace("/study/", "https://churchofjesuschrist.org/study/");
-		// 	text += `\n${innerHTML}\n`;
-		// });
-
-		// const tag = "\n#study/general-conference/2023/10/42freeman";
-		// text += tag;
-
-		// console.log(text);
 	}
 
 
