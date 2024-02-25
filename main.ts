@@ -1,5 +1,6 @@
-import { Editor, Plugin, requestUrl } from 'obsidian';
-import { getActiveParagraphIdsFromUrl } from 'main.helper';
+import { Plugin, requestUrl } from 'obsidian';
+import { getActiveParagraphIdsFromUrl, removeFootnotesFromParagraph, removePageBreaksFromParagraph } from 'main.helper';
+
 
 export default class GospelStudyPlugin extends Plugin {
 	/**
@@ -27,7 +28,9 @@ export default class GospelStudyPlugin extends Plugin {
 			clipboard.stopPropagation();
 			clipboard.preventDefault();
 
-			await this.convertUrlToBlock(editor, clipboardData);
+			const block = await this.convertUrlToBlock(clipboardData);
+
+			editor.replaceSelection(block);
 		}));
 	}
 
@@ -37,20 +40,20 @@ export default class GospelStudyPlugin extends Plugin {
 	 * @param url The URL to convert.
 	 * @returns A promise that resolves when the conversion is complete.
 	 */
-	async convertUrlToBlock(editor: Editor, url: string): Promise<void> {
-		requestUrl(url).then((response) => {
+	async convertUrlToBlock(url: string): Promise<string> {
+		return requestUrl(url).then((response) => {
 			// find all p.active-item elements
 			const parser = new DOMParser();
 			const doc = parser.parseFromString(response.text, "text/html");
 
 			const paragraphs = doc.querySelectorAll('p');
-			console.debug("🚀 ~ GospelStudyPlugin ~ paragraphs:", paragraphs)
+			console.debug("🚀 ~ GospelStudyPlugin ~ paragraphs:", paragraphs);
 
 			// Get the URL
 			const activeParagraphIds = getActiveParagraphIdsFromUrl(url);
-			console.debug("🚀 ~ GospelStudyPlugin ~ activeParagraphIds:", activeParagraphIds)
+			console.debug("🚀 ~ GospelStudyPlugin ~ activeParagraphIds:", activeParagraphIds);
 
-			let text =`#### [${doc.title}](${url})\n`;
+			let text = `#### [${doc.title}](${url})\n`;
 
 			// Get paragraphs for the active paragraph IDs
 			activeParagraphIds.forEach((id) => {
@@ -61,11 +64,14 @@ export default class GospelStudyPlugin extends Plugin {
 				const el = doc.getElementById(id);
 				if (!el) return;
 
-				text += `\n${el.innerHTML}\n`;
+				let innerHTML = removeFootnotesFromParagraph(el.innerHTML);
+				innerHTML = removePageBreaksFromParagraph(innerHTML);
+
+				text += `\n${innerHTML}\n`;
+
 			});
 
-			// create a new block with the fetched content
-			editor.replaceSelection(text);
+			return text;
 		});
 	}
 

@@ -1,13 +1,22 @@
-export function getActiveParagraphIdsFromUrl(urlString: string) {
+/**
+ * Retrieves active paragraph IDs from a URL string.
+ * @param urlString - The URL string containing the 'id' parameter.
+ * @returns An array of active paragraph IDs.
+ * @example
+ * // Example usage:
+ * const urlString = "https://example.com/?id=p1,p3-p5";
+ * const activeParagraphIds = getActiveParagraphIdsFromUrl(urlString);
+ * console.log(activeParagraphIds); // Output: ['p1', 'p3', 'p4', 'p5']
+ */
+export function getActiveParagraphIdsFromUrl(urlString: string): string[] {
 	const url = new URL(urlString);
 
 	// Get the 'id' parameter from the URL
 	const idParam = url.searchParams.get('id');
-	console.debug("🚀 ~ MyPlugin ~ idParam:", idParam)
 
 	// Split the 'id' parameter by commas if it is not null
 	const idParts = idParam ? idParam.split(',') : [];
-	console.debug("🚀 ~ MyPlugin ~ idParts:", idParts)
+	console.debug("🚀 ~ file: main.helper.ts:9 ~ getActiveParagraphIdsFromUrl ~ idParts:", idParts);
 
 
 	// Create an empty list to store the paragraph IDs
@@ -15,15 +24,14 @@ export function getActiveParagraphIdsFromUrl(urlString: string) {
 
 	// Loop over the parts of the 'id' parameter
 	for (const part of idParts) {
-		console.debug("🚀 ~ MyPlugin ~ part:", part)
+		console.debug("🚀 ~ file: main.helper.ts:17 ~ getActiveParagraphIdsFromUrl ~ part:", part);
 
 		// If the part contains a dash, it represents a range of paragraph IDs
 		if (part.includes('-')) {
 			// Split the part by the dash
 			const [start, end] = part.split('-').map((n) => Number(n.replace('p', '')));
-			console.debug("🚀 ~ MyPlugin ~ end:", end)
-			console.debug("🚀 ~ MyPlugin ~ start:", start)
-
+			console.debug("🚀 ~ file: main.helper.ts:23 ~ getActiveParagraphIdsFromUrl ~ end:", end);
+			console.debug("🚀 ~ file: main.helper.ts:23 ~ getActiveParagraphIdsFromUrl ~ start:", start);
 
 			// Loop over the range and add each paragraph ID to the list
 			for (let i = start; i <= end; i++) {
@@ -38,10 +46,43 @@ export function getActiveParagraphIdsFromUrl(urlString: string) {
 }
 
 /**
- * replace all anchor tags in el.innerHTML that have class "study-note-ref" with their inner text (minus <sup> tag)
-* for example <a class="study-note-ref" href="/study/scriptures/bofm/2-ne/6?lang=eng&amp;id=12#note11a" data-scroll-id="note11a"><sup class="marker">a</sup>perish</a> with perish
-* <a class="note-ref" href="/study/general-conference/2023/10/11bednar?lang=eng#note3" data-scroll-id="note3"><sup class="marker">3</sup></a> should be removed.
-*/
+ * Removes footnotes from a paragraph of text.
+ * 
+ * @param text - The input text containing footnotes.
+ * @returns The modified text with footnotes removed.
+ * 
+ * @example
+ * const inputText = "This is a paragraph with a <a class='study-note-ref' href='#note1'><sup class='marker'>1</sup>footnote</a>."
+ * const modifiedText = removeFootnotesFromParagraph(inputText);
+ * console.log(modifiedText);
+ * // Output: "This is a paragraph with a footnote."
+ */
 export function removeFootnotesFromParagraph(text: string): string {
-	return text.replace(/<a[^<]*class="study-note-ref"[^<]* href="[^<]*"><sup class="marker">.?<\/sup>([^<]*)<\/a>/g, "$1");
+	const matches = text.matchAll(/<a class="study-note-ref" href="[^>]*"><sup class="marker">[^<]*<\/sup>([^<]*)<\/a>/g);
+	console.debug("🚀 ~ file: main.helper.ts:45 ~ removeFootnotesFromParagraph ~ matches:", matches);
+
+	for (const match of matches) {
+		console.debug("🚀 ~ file: main.helper.ts:41 ~ removeFootnotesFromParagraph ~ match:", match);
+		// group 0 is the whole match, group 1 is the footnote text
+		text = text.replace(match[0], match[1]);
+	}
+
+	return text;
+}
+
+/**
+ * Removes page breaks from a paragraph of text.
+ * 
+ * @param text - The input text containing page breaks.
+ * @returns The modified text with page breaks removed.
+ * 
+ * @example
+ * const inputText = "This is a paragraph.<span class='page-break' data-page='1'></span>This is another paragraph.";
+ * const modifiedText = removePageBreaksFromParagraph(inputText);
+ * console.log(modifiedText);
+ * // Output: "This is a paragraph.This is another paragraph."
+ */
+export function removePageBreaksFromParagraph(text: string): string {
+	text = text.replace(/<span class="page-break" data-page=".*"><\/span>/g, '');
+	return text;
 }
