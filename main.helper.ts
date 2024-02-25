@@ -23,6 +23,8 @@ export function getActiveParagraphIdsFromUrl(urlString: string): string[] {
 	const activeParagraphIds = [];
 
 	// Loop over the parts of the 'id' parameter
+	let previousPartNumber = -1;
+
 	for (const part of idParts) {
 		console.debug("🚀 ~ file: main.helper.ts:17 ~ getActiveParagraphIdsFromUrl ~ part:", part);
 
@@ -33,14 +35,29 @@ export function getActiveParagraphIdsFromUrl(urlString: string): string[] {
 			console.debug("🚀 ~ file: main.helper.ts:23 ~ getActiveParagraphIdsFromUrl ~ end:", end);
 			console.debug("🚀 ~ file: main.helper.ts:23 ~ getActiveParagraphIdsFromUrl ~ start:", start);
 
+			if (previousPartNumber > -1 && start - previousPartNumber > 1) {
+				activeParagraphIds.push("-");
+			}
+
 			// Loop over the range and add each paragraph ID to the list
 			for (let i = start; i <= end; i++) {
 				activeParagraphIds.push('p' + i);
 			}
+
+			previousPartNumber = end;
 		} else {
+
+			const currentPartNumber = Number(part.replace('p', ''));
+			if (previousPartNumber > -1 && currentPartNumber - previousPartNumber > 1) {
+				activeParagraphIds.push('-');
+			}
+
+
 			// If the part doesn't contain a dash, it represents a single paragraph ID
-			activeParagraphIds.push('p' + Number(part.replace('p', '')));
+			activeParagraphIds.push(part);
+			previousPartNumber = currentPartNumber;
 		}
+
 	}
 	return activeParagraphIds;
 }
