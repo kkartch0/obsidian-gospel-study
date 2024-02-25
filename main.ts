@@ -1,5 +1,11 @@
 import { Plugin, requestUrl } from 'obsidian';
-import { getActiveParagraphIdsFromUrl, removeFootnotesFromParagraph, removePageBreaksFromParagraph, createUrlTag } from 'main.helper';
+import { 
+	getActiveParagraphIdsFromUrl, 
+	removeFootnotesFromParagraph, 
+	removePageBreaksFromParagraph, 
+	createUrlTag,
+	getObsidianFileUrl
+} from 'main.helper';
 
 
 export default class GospelStudyPlugin extends Plugin {
@@ -31,6 +37,20 @@ export default class GospelStudyPlugin extends Plugin {
 			const block = await this.convertUrlToBlock(clipboardData);
 
 			editor.replaceSelection(block);
+
+			// copy link of current editor note to clipboard
+			const activeFileName = this.app.workspace.getActiveFile()?.basename;
+			console.debug("🚀 ~ file: main.ts:43 ~ GospelStudyPlugin ~ this.registerEvent ~ activeFileName:", activeFileName);
+
+			if (!activeFileName) return;
+
+			const vaultName = this.app.vault.getName();
+			console.debug("🚀 ~ file: main.ts:45 ~ GospelStudyPlugin ~ this.registerEvent ~ vaultName:", vaultName);
+
+			const fileUrl = getObsidianFileUrl(vaultName, activeFileName);
+			console.debug("🚀 ~ file: main.ts:51 ~ GospelStudyPlugin ~ this.registerEvent ~ fileUrl:", fileUrl);
+
+			navigator.clipboard.writeText(fileUrl);
 		}));
 	}
 

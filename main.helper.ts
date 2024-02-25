@@ -108,3 +108,10 @@ export function createUrlTag(url: string): string {
 	console.debug("🚀 ~ file: main.helper.ts:99 ~ getUrlTag ~ urlTag:", urlTag);
 	return urlTag
 }
+
+export function getObsidianFileUrl(vaultName: string, fileName: string) {
+	vaultName = encodeURIComponent(vaultName);
+	fileName = encodeURIComponent(fileName);
+	const obsidianUrl = `obsidian://open?vault=${vaultName}&file=${fileName}`;
+	return obsidianUrl;
+}
