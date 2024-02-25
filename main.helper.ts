@@ -86,3 +86,25 @@ export function removePageBreaksFromParagraph(text: string): string {
 	text = text.replace(/<span class="page-break" data-page=".*"><\/span>/g, '');
 	return text;
 }
+
+/**
+ * Creates a URL tag from the given URL.
+ * 
+ * @param url The URL to create the tag from.
+ * @returns The URL tag.
+ * 
+ * @example
+ * const url = "https://www.churchofjesuschrist.org/study/scriptures/bofm/2-ne/6?lang=eng&id=p11,p13-p16#p11";
+ * const urlTag = createUrlTag(url);
+ * // Returns "#study/scriptures/bofm/2-ne/6"
+ */
+export function createUrlTag(url: string): string {
+	const urlObj = new URL(url);
+	console.debug("🚀 ~ file: main.helper.ts:94 ~ getUrlTag ~ urlObj:", urlObj);
+
+	const path = urlObj.pathname.replace('/study', 'study');
+	const urlTag = `#${path}`;
+
+	console.debug("🚀 ~ file: main.helper.ts:99 ~ getUrlTag ~ urlTag:", urlTag);
+	return urlTag
+}

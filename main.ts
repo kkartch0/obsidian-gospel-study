@@ -1,5 +1,5 @@
 import { Plugin, requestUrl } from 'obsidian';
-import { getActiveParagraphIdsFromUrl, removeFootnotesFromParagraph, removePageBreaksFromParagraph } from 'main.helper';
+import { getActiveParagraphIdsFromUrl, removeFootnotesFromParagraph, removePageBreaksFromParagraph, createUrlTag } from 'main.helper';
 
 
 export default class GospelStudyPlugin extends Plugin {
@@ -70,6 +70,8 @@ export default class GospelStudyPlugin extends Plugin {
 				text += `\n${innerHTML}\n`;
 
 			});
+
+			text += `\n${createUrlTag(url)}`;
 
 			return text;
 		});
