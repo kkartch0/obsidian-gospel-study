@@ -135,9 +135,14 @@ async function getStudyBlockFromUrl(url: string): Promise<StudyBlock> {
 		const block = new StudyBlock();
 		block.title = doc.title;
 		block.paragraphs = getBlockParagraphs(doc, url);
-		block.referenceLink = `[${block.title}](${url})`;
 		block.tag = createUrlTag(url);
 		block.url = url;
+
+		const urlObject = new URL(url);
+		let paragraphIdsString = urlObject.searchParams.get('id') ?? "";
+		paragraphIdsString = paragraphIdsString.replace(/p/g, '');
+		paragraphIdsString = paragraphIdsString.replace(/,/g, ', ');
+		block.paragraphIdsString = paragraphIdsString;
 
 		return block;
 	});
