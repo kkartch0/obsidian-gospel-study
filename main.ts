@@ -7,15 +7,31 @@ import {
 	getObsidianFileUrl
 } from 'main.helper';
 import StudyBlock from 'StudyBlock';
+import { GospelStudySettingsTab, DEFAULT_SETTINGS, GospelStudyPluginSettings } from './GospelStudySettingsTab';
 
 
 export default class GospelStudyPlugin extends Plugin {
+	settings!: GospelStudyPluginSettings;
+
 	/**
 	 * Called when the plugin is loaded.
 	 */
 	async onload() {
 		console.log('loading the plugin');
+
+		await this.loadSettings();
+
+		this.addSettingTab(new GospelStudySettingsTab(this.app, this));
+
 		this.registerEvent(this.app.workspace.on('editor-paste', this.onEditorPaste.bind(this)));
+	}
+
+	async loadSettings() {
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+	}
+
+	async saveSettings() {
+		await this.saveData(this.settings);
 	}
 
 	/**
@@ -53,10 +69,9 @@ export default class GospelStudyPlugin extends Plugin {
 		clipboard.preventDefault();
 
 		const block = await getStudyBlockFromUrl(clipboardData);
-		const blockText1 = block.toString("#### {{referenceLink}}\n\n{{paragraphs:\n\n}}\n\n{{tag}}");
-		const blockText2 = block.toString("> [!gospel-study]\n> # {{referenceLink}}\n> {{paragraphs:\n>\n> }}\n>\n>{{tag}}");
+		const blockText = block.toString(this.settings.studyBlockFormat);
 
-		editor.replaceSelection(blockText1 + "\n\n" + blockText2);
+		editor.replaceSelection(blockText);
 
 		this.copyCurrentNoteLinkToClipboard()
 	}
