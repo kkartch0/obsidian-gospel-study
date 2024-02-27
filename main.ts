@@ -68,7 +68,7 @@ export default class GospelStudyPlugin extends Plugin {
 		clipboard.stopPropagation();
 		clipboard.preventDefault();
 
-		const block = await getStudyBlockFromUrl(clipboardData);
+		const block = await getStudyBlockFromUrl(clipboardData.trim());
 		const blockText = block.toString(this.settings.studyBlockFormat);
 
 		editor.replaceSelection(blockText);
