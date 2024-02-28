@@ -1,4 +1,4 @@
-import { getActiveParagraphIdsFromUrl, removeFootnotesFromParagraph } from 'main.helper';
+import { getActiveParagraphIdsFromUrl, removeFootnotesFromParagraph } from './main.helper';
 
 // Add the import statement for 'describe' from the test runner
 describe('GetActiveParagraphIdsFromUrl', () => {
