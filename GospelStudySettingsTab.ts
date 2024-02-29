@@ -2,6 +2,7 @@ import GospelStudyPlugin from "main";
 import { App, PluginSettingTab, Setting } from "obsidian";
 
 export interface GospelStudyPluginSettings {
+	copyCurrentNoteLinkAfterPaste: boolean;
 	studyBlockFormat: string;
 }
 
@@ -13,6 +14,7 @@ export const STUDY_BLOCK_FORMAT_2 =
 
 export const DEFAULT_SETTINGS: Partial<GospelStudyPluginSettings> = {
 	studyBlockFormat: STUDY_BLOCK_FORMAT_1,
+	copyCurrentNoteLinkAfterPaste: true
 };
 
 export class GospelStudySettingsTab extends PluginSettingTab {
@@ -81,5 +83,18 @@ export class GospelStudySettingsTab extends PluginSettingTab {
 
 				return text;
 			});
+
+		new Setting(containerEl)
+		.setName("Copy Current Note Link After Paste")
+		.setDesc("Copy the current note link to the clipboard after pasting a study block.")
+		.addToggle((toggle) => {	
+			toggle.setValue(this.plugin.settings.copyCurrentNoteLinkAfterPaste)
+				.onChange(async (value) => {
+					this.plugin.settings.copyCurrentNoteLinkAfterPaste = value;
+					await this.plugin.saveSettings();
+				});
+
+			return toggle;
+		});
 	}
 }

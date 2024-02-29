@@ -73,7 +73,9 @@ export default class GospelStudyPlugin extends Plugin {
 
 		editor.replaceSelection(blockText);
 
-		this.copyCurrentNoteLinkToClipboard()
+		if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
+			this.copyCurrentNoteLinkToClipboard();
+		}
 	}
 
 	/**
