@@ -18,14 +18,14 @@ export const DEFAULT_SETTINGS: Partial<GospelStudyPluginSettings> = {
 };
 
 export class GospelStudySettingsTab extends PluginSettingTab {
-	plugin: GospelStudyPlugin;
+	public plugin: GospelStudyPlugin;
 
-	constructor(app: App, plugin: GospelStudyPlugin) {
+	public constructor(app: App, plugin: GospelStudyPlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
 
-	display(): void {
+	public display(): void {
 		const { containerEl } = this;
 
 		containerEl.empty();

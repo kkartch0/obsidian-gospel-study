@@ -11,12 +11,12 @@ import { GospelStudySettingsTab, DEFAULT_SETTINGS, GospelStudyPluginSettings } f
 
 
 export default class GospelStudyPlugin extends Plugin {
-	settings!: GospelStudyPluginSettings;
+	public settings!: GospelStudyPluginSettings;
 
 	/**
 	 * Called when the plugin is loaded.
 	 */
-	async onload() {
+	public async onload() {
 		console.log('loading the plugin');
 
 		await this.loadSettings();
@@ -26,18 +26,27 @@ export default class GospelStudyPlugin extends Plugin {
 		this.registerEvent(this.app.workspace.on('editor-paste', this.onEditorPaste.bind(this)));
 	}
 
-	async loadSettings() {
+	/**
+	 * Loads the plugin settings from the data store.
+	 * If no settings are found, the default settings are used.
+	 * @returns A promise that resolves when the settings are loaded.
+	 */
+	public async loadSettings(): Promise<void> {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
 	}
 
-	async saveSettings() {
+	/**
+	 * Saves the plugin settings.
+	 * @returns A promise that resolves when the settings are saved.
+	 */
+	public async saveSettings(): Promise<void> {
 		await this.saveData(this.settings);
 	}
 
 	/**
 	 * Called when the plugin is being unloaded.
 	 */
-	onunload() {
+	public onunload() {
 		navigator.clipboard
 		console.log('unloading plugin');
 	}
@@ -49,7 +58,7 @@ export default class GospelStudyPlugin extends Plugin {
 	 * @param editor - The editor object.
 	 * @returns A promise that resolves when the paste event is handled.
 	 */
-	async onEditorPaste(clipboard: ClipboardEvent, editor: Editor): Promise<void> {
+	private async onEditorPaste(clipboard: ClipboardEvent, editor: Editor): Promise<void> {
 		console.debug('pasting');
 
 		if (clipboard.defaultPrevented) return;
@@ -81,7 +90,7 @@ export default class GospelStudyPlugin extends Plugin {
 	/**
 	 * Copies the link of the current note to the clipboard.
 	 */
-	copyCurrentNoteLinkToClipboard() {
+	private copyCurrentNoteLinkToClipboard() {
 		const activeFileName = this.app.workspace.getActiveFile()?.basename;
 		console.debug("🚀 ~ file: main.ts:43 ~ GospelStudyPlugin ~ this.registerEvent ~ activeFileName:", activeFileName);
 
@@ -97,6 +106,14 @@ export default class GospelStudyPlugin extends Plugin {
 	}
 }
 
+/**
+ * Retrieves the paragraphs from a document based on the provided URL and returns an array of strings.
+ * Each string represents the innerHTML of a paragraph element.
+ *
+ * @param doc - The document object to query for paragraphs.
+ * @param url - The URL used to determine the active paragraphs.
+ * @returns An array of strings representing the innerHTML of the active paragraphs.
+ */
 function getBlockParagraphs(doc: Document, url: string): string[] {
 	const paragraphs = doc.querySelectorAll('p');
 	console.debug("🚀 ~ GospelStudyPlugin ~ paragraphs:", paragraphs);

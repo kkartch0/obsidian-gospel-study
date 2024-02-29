@@ -1,9 +1,9 @@
 export default class StudyBlock {
-    title = '';
+    public title = '';
 
-    paragraphs: string[] = [];
+    public paragraphs: string[] = [];
 
-    url: string | undefined;
+    public url = '';
 
     public get referenceLink(): string {
         let titleToUse = this.title;
@@ -13,16 +13,16 @@ export default class StudyBlock {
         return `[${titleToUse}](${this.url})`;
     }
 
-    tag: string | undefined;
+    public tag = '';
 
-    paragraphIdsString: string | undefined;
+    public paragraphIdsString = '';
 
     /**
      * Converts the StudyBlock object to a string representation based on the specified format.
      * @param format - The format string used to generate the string representation.
      * @returns The string representation of the StudyBlock object.
      */
-    toString(format: string): string {
+    public toString(format: string): string {
         
         let injectedText = format;
 
@@ -30,12 +30,7 @@ export default class StudyBlock {
             injectedText = injectedText.replace(new RegExp(`{{${key}}}`, 'g'), String(this[key]));
         }
 
-        // replace {{referenceLink}} with referenceLink()
         injectedText = injectedText.replace(/{{referenceLink}}/g, this.referenceLink);
-
-
-        // {{paragraphs:\n\n>}} should be replaced with the paragraphs joined by "\n\n>"
-        // {{paragraphs:(.*)}} should be replaced with the paragraphs joined by $1
 
         const paragraphsMatch = injectedText.match(/{{paragraphs:([^}]*)}}/);
         if (paragraphsMatch) {
