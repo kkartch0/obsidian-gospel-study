@@ -106,7 +106,7 @@ function getBlockParagraphs(doc: Document, url: string): string[] {
 
 	activeParagraphIds.forEach((id) => {
 		if (id === "-") {
-			activeParagraphs.push("-");
+			activeParagraphs.push("…");
 			return;
 		}
 		const el = doc.getElementById(id);
