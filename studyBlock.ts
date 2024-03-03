@@ -4,10 +4,17 @@ import getFormattedParagraphs from "./paragraphFormatting";
 export default class StudyBlock {
     private _paragraphIdsString: string | undefined;
     private _paragraphs: string[] | undefined;
+    private _referenceLink: string | undefined;
+    private _sourceDocument: Document;
     private _tag: string | undefined;
     private _url: StudyURL;
-    private _sourceDocument: Document;
-    private _referenceLink: string | undefined;
+
+    public static async create(url: StudyURL): Promise<StudyBlock> {
+        const sourceDocument = await url.getDocument();
+        const studyBlock = new StudyBlock(url, sourceDocument);
+
+        return studyBlock;
+    }
 
     private constructor(url: StudyURL, sourceDocument: Document) {
         this._url = url;
@@ -17,14 +24,7 @@ export default class StudyBlock {
         });
     }
 
-    public static async create(url: StudyURL): Promise<StudyBlock> {
-        const sourceDocument = await url.getDocument();
-        const studyBlock = new StudyBlock(url, sourceDocument);
-
-        return studyBlock;
-    }
-
-    public get paragraphIdsString() {
+    public get paragraphIdsString(): string {
         if (this._paragraphIdsString === undefined) {
             let idsString = this._url.searchParams.get("id") ?? "";
             idsString = idsString.replace(/p/g, "");
@@ -60,9 +60,9 @@ export default class StudyBlock {
      * @returns The tag of the study block.
      * @example
      */
-    public get tag() {
+    public get tag(): string {
         if (this._tag === undefined) {
-            const path = this.url.pathname.replace("/study", "study");
+            const path = this._url.pathname.replace("/study", "study");
             this._tag = `#${path}`;
         }
         return this._tag;
@@ -72,8 +72,8 @@ export default class StudyBlock {
         return this._sourceDocument.title;
     }
 
-    public get url(): URL {
-        return this._url;
+    public get url(): string {
+        return this._url.toString();
     }
 
     /**
@@ -84,11 +84,16 @@ export default class StudyBlock {
     public toString(format: string): string {
         let injectedText = format;
 
-        for (const key in this) {
-            injectedText = injectedText.replace(new RegExp(`{{${key}}}`, 'g'), String(this[key]));
-        }
+        const propertyNames = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
 
-        // injectedText = injectedText.replace(/{{referenceLink}}/g, this.referenceLink);
+        propertyNames.forEach((key: string): void => {
+            const value = this[key as keyof StudyBlock]; // Add type assertion to keyof StudyBlock
+            if (typeof (value) !== 'string') {
+                return; // skip function calls
+            }
+
+            injectedText = injectedText.replace(new RegExp(`{{${key}}}`, 'g'), String(value));
+        });
 
         const paragraphsMatch = injectedText.match(/{{paragraphs:([^}]*)}}/);
         if (paragraphsMatch) {
