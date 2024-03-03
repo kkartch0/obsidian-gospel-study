@@ -1,16 +1,27 @@
-export default class ParsedUrl {
-	public standardizedUrl: URL;
+import { requestUrl } from "obsidian";
 
+export default class StudyURL extends URL {
 	private _activeParagraphIds: string[] | undefined;
+	private _html: Document | undefined;
 
-    /**
-     * Gets the active paragraph IDs from the URL.
-     * 
+	/**
+	 * Constructs a ParsedUrl object from the specified URL string.
+	 */
+	constructor(url: string) {
+		url = url.trim();
+		url = url.replace(/%23/g, "#");
+
+		super(url);
+	}
+
+	/**
+	 * Gets the active paragraph IDs from the URL.
+	 * 
 	 * // Example usage:
-     * const parsedUrl = new ParsedUrl("https://example.com/?id=p1,p3-p5");
+	 * const parsedUrl = new ParsedUrl("https://example.com/?id=p1,p3-p5");
 	 * const activeParagraphIds = parsedUrl.activeParagraphIds;
 	 * console.log(activeParagraphIds); // Output: ['p1', 'p3', 'p4', 'p5']
-     */
+	 */
 	public get activeParagraphIds(): string[] {
 		if (this._activeParagraphIds === undefined) {
 			this._activeParagraphIds = this.getActiveParagraphIds();
@@ -18,16 +29,19 @@ export default class ParsedUrl {
 		return this._activeParagraphIds;
 	}
 
-	/**
-	 * Constructs a ParsedUrl object from the specified URL string.
-	 */
-	constructor(url: string) {
-		this.standardizedUrl = ParsedUrl.standardizeUrl(url);
+	public async getDocument(): Promise<Document> {
+		if (this._html === undefined) {
+			const response = await requestUrl(this.toString());
+			const parser = new DOMParser();
+			this._html = parser.parseFromString(response.text, "text/html");
+		}
+
+		return this._html;
 	}
 
 	private getActiveParagraphIds(): string[] {
 		// Get the 'id' parameter from the URL
-		const idParam = this.standardizedUrl.searchParams.get("id");
+		const idParam = this.searchParams.get("id");
 
 		// Split the 'id' parameter by commas if it is not null
 		const idParts = idParam ? idParam.split(",") : [];
@@ -75,11 +89,5 @@ export default class ParsedUrl {
 			}
 		}
 		return activeParagraphIds;
-	}
-
-	public static standardizeUrl(url: string): URL {
-		url = url.trim();
-		url = url.replace(/%23/g, "#");
-		return new URL(url);
 	}
 }
