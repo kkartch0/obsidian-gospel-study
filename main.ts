@@ -5,8 +5,8 @@ import {
 	GospelStudyPluginSettings,
 } from "./gospelStudySettingsTab";
 
-import StudyBlock from "./studyBlock";
-import StudyPageUrl from "./studyUrl";
+import { StudyBlock } from "./studyBlock";
+import { StudyURL } from "./studyUrl";
 
 export default class GospelStudyPlugin extends Plugin {
 	public settings!: GospelStudyPluginSettings;
@@ -110,8 +110,8 @@ export default class GospelStudyPlugin extends Plugin {
 		clipboard.preventDefault();
 
 
-		const standardizedUrl = new StudyPageUrl(clipboardData);
-		const block = await StudyBlock.create(standardizedUrl);
+		const studyUrl = new StudyURL(clipboardData);
+		const block = await StudyBlock.create(studyUrl);
 		const blockText = block.toString(this.settings.studyBlockFormat);
 
 		editor.replaceSelection(blockText);

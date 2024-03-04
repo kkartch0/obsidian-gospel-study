@@ -1,5 +1,5 @@
 
-import StudyURL from "./studyUrl";
+import { StudyURL } from "./studyUrl";
 
 describe("StudyURL", () => {
 	describe("constructor", () => {
@@ -29,26 +29,26 @@ describe("StudyURL", () => {
 	});
 
 	describe("activeParagraphIds", () => {
-		it("should return an array of active paragraph IDs", () => {
+		it("should include hyphens in array of returned active paragraph IDs when ids are non-contiguous", () => {
 			// Arrange
-			const urlString = "https://example.com/?id=p1,p2-p5,p6";
-			const parsedUrl = new StudyURL(urlString);
+			const urlString = "https://example.com/?id=p1,p3-p5,p7";
+			const testSubject = new StudyURL(urlString);
 
 			// Act
-			const result = parsedUrl.activeParagraphIds;
+			const result = testSubject.activeParagraphIds;
 
 			// Assert
-			const expectedIds = ["p1", "p2", "p3", "p4", "p5", "p6"];
+			const expectedIds = ["p1", "-", "p3", "p4", "p5", "-", "p7"];
 			expect(result).toEqual(expectedIds);
 		});
 
 		it("should return an empty array if no active paragraph IDs are found", () => {
 			// Arrange
 			const urlString = "https://example.com";
-			const parsedUrl = new StudyURL(urlString);
+			const testSubject = new StudyURL(urlString);
 
 			// Act
-			const result = parsedUrl.activeParagraphIds;
+			const result = testSubject.activeParagraphIds;
 
 			// Assert
 			const expectedIds: string[] = [];

@@ -1,4 +1,11 @@
-export default function getFormattedParagraphs(document: Document, activeParagraphIds: string[]): string[] {
+/**
+ * Retrieves the paragraphs with the specified ids from the document, formats, and then returns them.
+ * 
+ * @param document - The document object representing the HTML document.
+ * @param activeParagraphIds - An array of active paragraph IDs.
+ * @returns An array of formatted paragraphs.
+ */
+export function getFormattedParagraphs(document: Document, activeParagraphIds: string[]): string[] {
 	const activeParagraphs: string[] = [];
 
 	activeParagraphIds.forEach((id) => {

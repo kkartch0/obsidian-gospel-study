@@ -1,26 +1,36 @@
 import { requestUrl } from "obsidian";
 
-export default class StudyURL extends URL {
+/**
+ * Represents a study URL (i.e. of the format "https://churchofjesuschrist.org/study/*"). This class extends the 
+ * built-in URL class by providing additional functionality for standardizing the format, interpreting URL params, 
+ * and requesting the associated html document.
+ */
+export class StudyURL extends URL {
 	private _activeParagraphIds: string[] | undefined;
 	private _html: Document | undefined;
 
 	/**
-	 * Constructs a ParsedUrl object from the specified URL string.
+	 * Constructs an instance of StudyUrl from the specified URL string.
+	 * @param url - The URL string.
 	 */
-	constructor(url: string) {
+	public constructor(url: string) {
 		url = url.trim();
 		url = url.replace(/%23/g, "#");
 
+		// TODO: Fix ids that don't have a "p" prefix
+		// if (!part.includes("p")) {
+		// 	part = `p${part}`;
+		// }
 		super(url);
 	}
 
 	/**
 	 * Gets the active paragraph IDs from the URL.
 	 * 
-	 * // Example usage:
-	 * const parsedUrl = new ParsedUrl("https://example.com/?id=p1,p3-p5");
+	 * @example
+	 * const parsedUrl = new StudyURL("https://example.com/?id=p1,p3-p5,p7");
 	 * const activeParagraphIds = parsedUrl.activeParagraphIds;
-	 * console.log(activeParagraphIds); // Output: ['p1', 'p3', 'p4', 'p5']
+	 * console.log(activeParagraphIds); // Output: ['p1', '-', 'p3', 'p4', 'p5', '-', 'p7']
 	 */
 	public get activeParagraphIds(): string[] {
 		if (this._activeParagraphIds === undefined) {
@@ -29,7 +39,14 @@ export default class StudyURL extends URL {
 		return this._activeParagraphIds;
 	}
 
-	public async getDocument(): Promise<Document> {
+	/**
+	 * Retrieves the document associated with the study URL.
+	 * If the document has not been fetched yet, it makes a request to the URL and parses the response into an HTML document.
+	 * Subsequent calls to this method will return the cached HTML document.
+	 * 
+	 * @returns A promise that resolves to the HTML document.
+	 */
+	public async getAssociatedDocument(): Promise<Document> {
 		if (this._html === undefined) {
 			const response = await requestUrl(this.toString());
 			const parser = new DOMParser();
@@ -39,55 +56,69 @@ export default class StudyURL extends URL {
 		return this._html;
 	}
 
+	/**
+	 * Retrieves the active paragraph IDs based on the search parameters.
+	 * @returns An array of active paragraph IDs.
+	 */
 	private getActiveParagraphIds(): string[] {
-		// Get the 'id' parameter from the URL
 		const idParam = this.searchParams.get("id");
-
-		// Split the 'id' parameter by commas if it is not null
 		const idParts = idParam ? idParam.split(",") : [];
+		const activeParagraphIds: string[] = [];
 
-		// Create an empty list to store the paragraph IDs
-		const activeParagraphIds = [];
-
-		// Loop over the parts of the 'id' parameter
-		let previousPartNumber = -1;
-
-		for (let part of idParts) {
-			if (!part.includes("p")) {
-				part = `p${part}`;
-			}
-
-			// If the part contains a dash, it represents a range of paragraph IDs
-			if (part.includes("-")) {
-				// Split the part by the dash
-				const [start, end] = part
-					.split("-")
-					.map((n) => Number(n.replace("p", "")));
-
-				if (previousPartNumber > -1 && start - previousPartNumber > 1) {
-					activeParagraphIds.push("-");
-				}
-
-				// Loop over the range and add each paragraph ID to the list
-				for (let i = start; i <= end; i++) {
-					activeParagraphIds.push("p" + i);
-				}
-
-				previousPartNumber = end;
-			} else {
-				const currentPartNumber = Number(part.replace("p", ""));
-				if (
-					previousPartNumber > -1 &&
-					currentPartNumber - previousPartNumber > 1
-				) {
-					activeParagraphIds.push("-");
-				}
-
-				// If the part doesn't contain a dash, it represents a single paragraph ID
+		for (const part of idParts) {
+			if (part.includes("-")) { // It is a range of paragraphs
+				const paragraphIdsInRange = this.paragraphRangeToParagraphIds(part);
+				activeParagraphIds.push(...paragraphIdsInRange);
+			} else { // It is a single paragraph
 				activeParagraphIds.push(part);
-				previousPartNumber = currentPartNumber;
 			}
 		}
+
+		this.insertHyphenBetweenNonContiguousParagraphs(activeParagraphIds);
+
 		return activeParagraphIds;
+	}
+
+	/**
+	 * Inserts hyphens between non-contiguous paragraphs in the activeParagraphIds array.
+	 * @param activeParagraphIds - The array of paragraph IDs to insert hyphens into.
+	 * @example 
+	 * const activeParagraphIds = ['p1', 'p3', 'p5', 'p6', 'p7', 'p10'];
+	 * this.insertEllipsesBetweenNonContiguousParagraphs(activeParagraphIds);
+	 * console.log(activeParagraphIds); // Output: ['p1','-', 'p3', '-', 'p5', 'p6', 'p7', '-', 'p10']
+	 */
+	private insertHyphenBetweenNonContiguousParagraphs(activeParagraphIds: string[]): void {
+		activeParagraphIds.sort();
+		for (let i = 0; i < activeParagraphIds.length - 1; ++i) {
+			const currentId = activeParagraphIds[i];
+			const nextId = activeParagraphIds[i + 1];
+			const currentNumber = Number(currentId.replace("p", ""));
+			const nextNumber = Number(nextId.replace("p", ""));
+
+			const paragraphsAreNonContiguous = nextNumber - currentNumber > 1;
+			if (paragraphsAreNonContiguous) {
+				activeParagraphIds.splice(i + 1, 0, "-"); // Insert a hyphen between the paragraph ids
+			}
+		}
+	}
+
+	/**
+	 * Converts a paragraph range string to an array of paragraph IDs.
+	 * @param range - The paragraph range string in the format "startId-endId".
+	 * @returns An array of paragraph IDs.
+	 */
+	private paragraphRangeToParagraphIds(range: string): string[] {
+		const [startId, endId] = range.split("-");
+
+		const start = Number(startId.replace("p", ""));
+		const end = Number(endId.replace("p", ""));
+
+		const paragraphIds: string[] = [];
+
+		for (let i = start; i <= end; ++i) {
+			paragraphIds.push(`p${i}`);
+		}
+
+		return paragraphIds;
 	}
 }
