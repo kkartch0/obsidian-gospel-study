@@ -9,7 +9,7 @@ export function getFormattedParagraphs(document: Document, activeParagraphIds: s
 	const activeParagraphs: string[] = [];
 
 	activeParagraphIds.forEach((id) => {
-		if (id === "-") {
+		if (id === "-") { // Hyphen indicates that the next paragraph is not contiguous with the previous one, so we add an ellipsis.
 			activeParagraphs.push("…");
 			return;
 		}
@@ -23,26 +23,6 @@ export function getFormattedParagraphs(document: Document, activeParagraphIds: s
 	});
 
 	return activeParagraphs;
-}
-/**
- * Removes page breaks from a paragraph of text.
- *
- * @param text - The input text containing page breaks.
- * @returns The modified text with page breaks removed.
- *
- * @example
- * const inputText = "This is a paragraph.<span class='page-break' data-page='1'></span>This is another paragraph.";
- * const modifiedText = removePageBreaksFromParagraph(inputText);
- * console.log(modifiedText);
- * // Output: "This is a paragraph.This is another paragraph."
- */
-
-export function removePageBreaksFromParagraph(text: string): string {
-	text = text.replace(
-		/<span class="page-break" data-page=".*"><\/span>/g,
-		""
-	);
-	return text;
 }
 
 /**
@@ -58,13 +38,30 @@ export function removePageBreaksFromParagraph(text: string): string {
  * // Output: "This is a paragraph with a footnote."
  */
 export function removeFootnotesFromParagraph(text: string): string {
-	const matches = text.matchAll(
-		/<a class="study-note-ref" href="[^>]*"><sup class="marker">[^<]*<\/sup>([^<]*)<\/a>/g
+	text = text.replace(
+		/<a class="study-note-ref" href="[^>]*"><sup class="marker">[^<]*<\/sup>([^<]*)<\/a>/g,
+		"$1"
 	);
-	for (const match of matches) {
-		// group 0 is the whole match, group 1 is the footnote text
-		text = text.replace(match[0], match[1]);
-	}
 
+	return text;
+}
+
+/**
+ * Removes page breaks from a paragraph of text.
+ *
+ * @param text - The input text containing page breaks.
+ * @returns The modified text with page breaks removed.
+ *
+ * @example
+ * const inputText = "This is a paragraph.<span class='page-break' data-page='1'></span>This is another paragraph.";
+ * const modifiedText = removePageBreaksFromParagraph(inputText);
+ * console.log(modifiedText);
+ * // Output: "This is a paragraph.This is another paragraph."
+ */
+export function removePageBreaksFromParagraph(text: string): string {
+	text = text.replace(
+		/<span class="page-break" data-page=".*"><\/span>/g,
+		""
+	);
 	return text;
 }
