@@ -1,4 +1,4 @@
-import { moveLangParamToFrontOfSearchParams } from './studyUrlFormatting';
+import { standardizeSearchParams as standardizeSearchParams } from './studyUrlFormatting';
 
 describe('moveLangParamToFrontOfSearchParams', () => {
     it('should move lang parameter to the front of search params', () => {
@@ -6,7 +6,7 @@ describe('moveLangParamToFrontOfSearchParams', () => {
         const url = 'https://www.churchofjesuschrist.org/study/general-conference/2023/10/13daines?id=p33%23p33&lang=eng';
 
         // Act
-        const result = moveLangParamToFrontOfSearchParams(url);
+        const result = standardizeSearchParams(url);
 
         // Assert
         const expectedUrl = 'https://www.churchofjesuschrist.org/study/general-conference/2023/10/13daines?lang=eng&id=p33#p33';
@@ -18,7 +18,7 @@ describe('moveLangParamToFrontOfSearchParams', () => {
         const url = 'https://example.com/?param1=value1&param2=value2';
 
         // Act
-        const result = moveLangParamToFrontOfSearchParams(url);
+        const result = standardizeSearchParams(url);
 
         // Assert
         const expectedUrl = 'https://example.com/?param1=value1&param2=value2';
@@ -30,7 +30,7 @@ describe('moveLangParamToFrontOfSearchParams', () => {
         const url = 'https://example.com/';
 
         // Act
-        const result = moveLangParamToFrontOfSearchParams(url);
+        const result = standardizeSearchParams(url);
 
         // Assert
         const expectedUrl = 'https://example.com/';

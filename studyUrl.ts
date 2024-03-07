@@ -1,5 +1,5 @@
 import { requestUrl } from "obsidian";
-import { moveLangParamToFrontOfSearchParams } from "./studyUrlFormatting";
+import { standardizeSearchParams } from "./studyUrlFormatting";
 
 /**
  * Represents a study URL (i.e. of the format "https://churchofjesuschrist.org/study/*"). This class extends the 
@@ -17,7 +17,7 @@ export class StudyURL extends URL {
 	public constructor(url: string) {
 		url = url.trim();
 
-		url = moveLangParamToFrontOfSearchParams(url);
+		url = standardizeSearchParams(url);
 
 		super(url);
 	}
