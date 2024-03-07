@@ -1,4 +1,4 @@
-import { moveLangParamToFrontOfSearchParams, replacePercent23WithHash } from './studyUrlFormatting';
+import { moveLangParamToFrontOfSearchParams } from './studyUrlFormatting';
 
 describe('moveLangParamToFrontOfSearchParams', () => {
     it('should move lang parameter to the front of search params', () => {
@@ -34,20 +34,6 @@ describe('moveLangParamToFrontOfSearchParams', () => {
 
         // Assert
         const expectedUrl = 'https://example.com/';
-        expect(result).toEqual(expectedUrl);
-    });
-});
-
-describe('moveLangParamToFrontOfSearchParams', () => {
-    it('should replace %23 with # in the URL', () => {
-        // Arrange
-        const url = 'https://www.example.com/path%23to%23file';
-
-        // Act
-        const result = replacePercent23WithHash(url);
-
-        // Assert
-        const expectedUrl = 'https://www.example.com/path#to#file';
         expect(result).toEqual(expectedUrl);
     });
 });

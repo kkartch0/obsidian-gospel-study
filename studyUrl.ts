@@ -18,7 +18,6 @@ export class StudyURL extends URL {
 		url = url.trim();
 
 		url = moveLangParamToFrontOfSearchParams(url);
-		url = replacePercent23WithHash(url);
 
 		super(url);
 	}
@@ -65,11 +64,15 @@ export class StudyURL extends URL {
 		const idParts = idParam ? idParam.split(",") : [];
 		const activeParagraphIds: string[] = [];
 
-		for (const part of idParts) {
+		for (let part of idParts) {
 			if (part.includes("-")) { // It is a range of paragraphs
 				const paragraphIdsInRange = this.paragraphRangeToParagraphIds(part);
 				activeParagraphIds.push(...paragraphIdsInRange);
 			} else { // It is a single paragraph
+				if (!part.contains('p')) { // sometimes the url does not have the 'p' prefix and just has the number
+					part = `p${part}`;  // the p prefix is important for the rest of the code to work so we add it here
+				}
+
 				activeParagraphIds.push(part);
 			}
 		}

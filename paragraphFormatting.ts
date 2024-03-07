@@ -7,7 +7,7 @@
  */
 export function getFormattedParagraphs(document: Document, activeParagraphIds: string[]): string[] {
 	const activeParagraphs: string[] = [];
-
+	
 	activeParagraphIds.forEach((id) => {
 		if (id === "-") { // Hyphen indicates that the next paragraph is not contiguous with the previous one, so we add an ellipsis.
 			activeParagraphs.push("…");
