@@ -1,4 +1,5 @@
 import { requestUrl } from "obsidian";
+import { moveLangParamToFrontOfSearchParams, replacePercent23WithHash } from "./studyUrlFormatting";
 
 /**
  * Represents a study URL (i.e. of the format "https://churchofjesuschrist.org/study/*"). This class extends the 
@@ -15,14 +16,13 @@ export class StudyURL extends URL {
 	 */
 	public constructor(url: string) {
 		url = url.trim();
-		url = url.replace(/%23/g, "#");
 
-		// TODO: Fix ids that don't have a "p" prefix
-		// if (!part.includes("p")) {
-		// 	part = `p${part}`;
-		// }
+		url = moveLangParamToFrontOfSearchParams(url);
+		url = replacePercent23WithHash(url);
+
 		super(url);
 	}
+
 
 	/**
 	 * Gets the active paragraph IDs from the URL.
