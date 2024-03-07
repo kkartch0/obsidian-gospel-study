@@ -9,7 +9,7 @@ describe('moveLangParamToFrontOfSearchParams', () => {
         const result = moveLangParamToFrontOfSearchParams(url);
 
         // Assert
-        const expectedUrl = 'https://www.churchofjesuschrist.org/study/general-conference/2023/10/13daines?lang=eng&id=p33%23p33';
+        const expectedUrl = 'https://www.churchofjesuschrist.org/study/general-conference/2023/10/13daines?lang=eng&id=p33#p33';
         expect(result).toEqual(expectedUrl);
     });
 

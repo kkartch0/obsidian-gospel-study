@@ -1,5 +1,5 @@
 import { requestUrl } from "obsidian";
-import { moveLangParamToFrontOfSearchParams, replacePercent23WithHash } from "./studyUrlFormatting";
+import { moveLangParamToFrontOfSearchParams } from "./studyUrlFormatting";
 
 /**
  * Represents a study URL (i.e. of the format "https://churchofjesuschrist.org/study/*"). This class extends the 
@@ -69,7 +69,7 @@ export class StudyURL extends URL {
 				const paragraphIdsInRange = this.paragraphRangeToParagraphIds(part);
 				activeParagraphIds.push(...paragraphIdsInRange);
 			} else { // It is a single paragraph
-				if (!part.contains('p')) { // sometimes the url does not have the 'p' prefix and just has the number
+				if (!part.includes('p')) { // sometimes the url does not have the 'p' prefix and just has the number
 					part = `p${part}`;  // the p prefix is important for the rest of the code to work so we add it here
 				}
 
