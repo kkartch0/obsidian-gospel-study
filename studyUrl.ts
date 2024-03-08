@@ -16,9 +16,7 @@ export class StudyURL extends URL {
 	 */
 	public constructor(url: string) {
 		url = url.trim();
-
 		url = standardizeSearchParams(url);
-
 		super(url);
 	}
 
@@ -69,7 +67,7 @@ export class StudyURL extends URL {
 				const paragraphIdsInRange = this.paragraphRangeToParagraphIds(part);
 				activeParagraphIds.push(...paragraphIdsInRange);
 			} else { // It is a single paragraph
-				if (!part.includes('p')) { // sometimes the url does not have the 'p' prefix and just has the number
+				if (!part.startsWith('p')) { // sometimes the url does not have the 'p' prefix and just has the number
 					part = `p${part}`;  // the p prefix is important for the rest of the code to work so we add it here
 				}
 

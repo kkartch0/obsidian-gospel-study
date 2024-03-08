@@ -1,6 +1,6 @@
-import { standardizeSearchParams as standardizeSearchParams } from './studyUrlFormatting';
+import { standardizeSearchParams } from './studyUrlFormatting';
 
-describe('moveLangParamToFrontOfSearchParams', () => {
+describe('standardizeSearchParams', () => {
     it('should move lang parameter to the front of search params', () => {
         // Arrange
         const url = 'https://www.churchofjesuschrist.org/study/general-conference/2023/10/13daines?id=p33%23p33&lang=eng';
