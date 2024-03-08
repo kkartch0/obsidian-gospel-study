@@ -1,4 +1,5 @@
 import { requestUrl } from "obsidian";
+import { standardizeSearchParams } from "./studyUrlFormatting";
 
 /**
  * Represents a study URL (i.e. of the format "https://churchofjesuschrist.org/study/*"). This class extends the 
@@ -15,14 +16,10 @@ export class StudyURL extends URL {
 	 */
 	public constructor(url: string) {
 		url = url.trim();
-		url = url.replace(/%23/g, "#");
-
-		// TODO: Fix ids that don't have a "p" prefix
-		// if (!part.includes("p")) {
-		// 	part = `p${part}`;
-		// }
+		url = standardizeSearchParams(url);
 		super(url);
 	}
+
 
 	/**
 	 * Gets the active paragraph IDs from the URL.
@@ -65,11 +62,15 @@ export class StudyURL extends URL {
 		const idParts = idParam ? idParam.split(",") : [];
 		const activeParagraphIds: string[] = [];
 
-		for (const part of idParts) {
+		for (let part of idParts) {
 			if (part.includes("-")) { // It is a range of paragraphs
 				const paragraphIdsInRange = this.paragraphRangeToParagraphIds(part);
 				activeParagraphIds.push(...paragraphIdsInRange);
 			} else { // It is a single paragraph
+				if (!part.startsWith('p')) { // sometimes the url does not have the 'p' prefix and just has the number
+					part = `p${part}`;  // the p prefix is important for the rest of the code to work so we add it here
+				}
+
 				activeParagraphIds.push(part);
 			}
 		}

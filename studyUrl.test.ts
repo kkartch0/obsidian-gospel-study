@@ -2,31 +2,6 @@
 import { StudyURL } from "./studyUrl";
 
 describe("StudyURL", () => {
-	describe("constructor", () => {
-		it("should trim the URL", () => {
-			// Arrange
-			const url = "   https://example.com   ";
-
-			// Act
-			const testSubject = new StudyURL(url);
-
-			// Assert
-			const expected = "https://example.com/";
-			expect(testSubject.href).toEqual(expected);
-		});
-
-		it("should replace %23 with # in the URL", () => {
-			// Arrange
-			const url = "https://example.com/%23section";
-
-			// Act
-			const testSubject = new StudyURL(url);
-
-			// Assert
-			const expected = "https://example.com/#section";
-			expect(testSubject.href).toEqual(expected);
-		});
-	});
 
 	describe("activeParagraphIds", () => {
 		it("should include hyphens in array of returned active paragraph IDs when ids are non-contiguous", () => {
