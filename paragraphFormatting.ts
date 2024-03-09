@@ -65,3 +65,7 @@ export function removePageBreaksFromParagraph(text: string): string {
 	);
 	return text;
 }
+export function removeRelatedContentFromParagraph(text: string): string {
+
+	return text;
+}
