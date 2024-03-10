@@ -1,4 +1,8 @@
-import { removeFootnotesFromParagraph, removeRelatedContentFromParagraph } from "./paragraphFormatting";
+import {
+	removeFootnotesFromParagraph,
+	removePageBreaksFromParagraph,
+	removeRelatedContentFromParagraph
+} from "./paragraphFormatting";
 
 describe("removeFootnotesFromParagraph", () => {
 	it("should remove footnotes from the paragraph", () => {
@@ -66,5 +70,22 @@ describe("removeRelatedContentFromParagraph", () => {
 		const expectedOutput = '<span class="verse-number">1 </span>And it came to pass that after we had come down into the wilderness unto our father, behold, he was filled with joy, and also my mother, Sariah, was exceedingly glad, for she truly had mourned because of us.';
 		expect(result).toEqual(expectedOutput);
 
+	});
+});
+
+
+describe("removePageBreaksFromParagraph", () => {
+	it("should remove multiple page breaks from the paragraph", () => {
+		// Arrange
+		const input =
+			'This is a paragraph with <span class="page-break" data-page="page1"></span>page break and <span class="page-break"></span>another page break.';
+
+		// Act
+		const result = removePageBreaksFromParagraph(input);
+
+		// Assert
+		const expectedOutput =
+			"This is a paragraph with page break and another page break.";
+		expect(result).toEqual(expectedOutput);
 	});
 });

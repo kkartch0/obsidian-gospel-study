@@ -61,11 +61,11 @@ export function removeFootnotesFromParagraph(text: string): string {
  * // Output: "This is a paragraph.This is another paragraph."
  */
 export function removePageBreaksFromParagraph(text: string): string {
-	text = text.replace(
-		/<span class="page-break" data-page=".*"><\/span>/g,
-		""
-	);
-	return text;
+	const root = parse(text);
+	root.querySelectorAll('span.page-break').forEach((element) => {
+		element.remove();
+	});
+	return root.toString();
 }
 
 /**
