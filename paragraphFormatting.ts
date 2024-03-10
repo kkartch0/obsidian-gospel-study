@@ -1,3 +1,4 @@
+import {parse} from 'node-html-parser';
 /**
  * Retrieves the paragraphs with the specified ids from the document, formats, and then returns them.
  * 
@@ -18,6 +19,7 @@ export function getFormattedParagraphs(document: Document, activeParagraphIds: s
 
 		let innerHTML = removeFootnotesFromParagraph(paragraphElement.innerHTML);
 		innerHTML = removePageBreaksFromParagraph(innerHTML);
+		innerHTML = removeRelatedContentFromParagraph(innerHTML);
 
 		activeParagraphs.push(innerHTML);
 	});
@@ -65,7 +67,25 @@ export function removePageBreaksFromParagraph(text: string): string {
 	);
 	return text;
 }
-export function removeRelatedContentFromParagraph(text: string): string {
 
-	return text;
+/**
+ * Removes related content elements from a paragraph of text.
+ * 
+ * @param text - The input text containing the paragraph.
+ * @returns The modified text with the related content removed.
+ * 
+ * @example
+ * const inputText = "This is a paragraph with <span title='Associated Content'><button><svg></svg>related content</button></span>.";
+ * const modifiedText = removeRelatedContentFromParagraph(inputText);
+ * console.log(modifiedText);
+ * // Output: "This is a paragraph with ."
+ */
+export function removeRelatedContentFromParagraph(text: string): string {
+	const root = parse(text);
+	// remove all span tags from root that have title of "Associated Content"
+	root.querySelectorAll('span[title="Associated Content"]').forEach((element) => {
+		element.remove();
+	});
+
+	return root.toString();
 }
