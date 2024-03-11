@@ -89,7 +89,6 @@ export class StudyURL extends URL {
 	 * console.log(activeParagraphIds); // Output: ['p1','-', 'p3', '-', 'p5', 'p6', 'p7', '-', 'p10']
 	 */
 	private insertHyphenBetweenNonContiguousParagraphs(activeParagraphIds: string[]): void {
-		activeParagraphIds.sort();
 		for (let i = 0; i < activeParagraphIds.length - 1; ++i) {
 			const currentId = activeParagraphIds[i];
 			const nextId = activeParagraphIds[i + 1];

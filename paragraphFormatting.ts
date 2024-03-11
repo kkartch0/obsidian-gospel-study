@@ -18,6 +18,7 @@ export function getFormattedParagraphs(document: Document, activeParagraphIds: s
 
 		let innerHTML = removeFootnotesFromParagraph(paragraphElement.innerHTML);
 		innerHTML = removePageBreaksFromParagraph(innerHTML);
+		innerHTML = removeRelatedContentFromParagraph(innerHTML);
 
 		activeParagraphs.push(innerHTML);
 	});
@@ -59,9 +60,37 @@ export function removeFootnotesFromParagraph(text: string): string {
  * // Output: "This is a paragraph.This is another paragraph."
  */
 export function removePageBreaksFromParagraph(text: string): string {
-	text = text.replace(
-		/<span class="page-break" data-page=".*"><\/span>/g,
-		""
-	);
-	return text;
+	const parser = new DOMParser();
+	const doc = parser.parseFromString(text, 'text/html');
+
+	const elements = doc.querySelectorAll('span.page-break');
+	elements.forEach((element) => {
+		element.remove();
+	});
+
+	return doc.body.innerHTML;
+}
+
+/**
+ * Removes related content elements from a paragraph of text.
+ * 
+ * @param text - The input text containing the paragraph.
+ * @returns The modified text with the related content removed.
+ * 
+ * @example
+ * const inputText = "This is a paragraph with <span title='Associated Content'><button><svg></svg>related content</button></span>.";
+ * const modifiedText = removeRelatedContentFromParagraph(inputText);
+ * console.log(modifiedText);
+ * // Output: "This is a paragraph with ."
+ */
+export function removeRelatedContentFromParagraph(text: string): string {
+	const parser = new DOMParser();
+	const doc = parser.parseFromString(text, 'text/html');
+	
+	const elements = doc.querySelectorAll('span[title="Associated Content"]');
+	elements.forEach((element) => {
+		element.remove();
+	});
+
+	return doc.body.innerHTML;
 }
