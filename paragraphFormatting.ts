@@ -1,4 +1,3 @@
-import {parse} from 'node-html-parser';
 /**
  * Retrieves the paragraphs with the specified ids from the document, formats, and then returns them.
  * 
@@ -61,11 +60,15 @@ export function removeFootnotesFromParagraph(text: string): string {
  * // Output: "This is a paragraph.This is another paragraph."
  */
 export function removePageBreaksFromParagraph(text: string): string {
-	const root = parse(text);
-	root.querySelectorAll('span.page-break').forEach((element) => {
+	const parser = new DOMParser();
+	const doc = parser.parseFromString(text, 'text/html');
+
+	const elements = doc.querySelectorAll('span.page-break');
+	elements.forEach((element) => {
 		element.remove();
 	});
-	return root.toString();
+
+	return doc.body.innerHTML;
 }
 
 /**
@@ -81,11 +84,13 @@ export function removePageBreaksFromParagraph(text: string): string {
  * // Output: "This is a paragraph with ."
  */
 export function removeRelatedContentFromParagraph(text: string): string {
-	const root = parse(text);
-	// remove all span tags from root that have title of "Associated Content"
-	root.querySelectorAll('span[title="Associated Content"]').forEach((element) => {
+	const parser = new DOMParser();
+	const doc = parser.parseFromString(text, 'text/html');
+	
+	const elements = doc.querySelectorAll('span[title="Associated Content"]');
+	elements.forEach((element) => {
 		element.remove();
 	});
 
-	return root.toString();
+	return doc.body.innerHTML;
 }
