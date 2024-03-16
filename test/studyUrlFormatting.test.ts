@@ -1,4 +1,4 @@
-import { standardizeSearchParams } from './studyUrlFormatting';
+import { standardizeSearchParams } from '../src/studyUrlFormatting';
 
 describe('standardizeSearchParams', () => {
     it('should move lang parameter to the front of search params', () => {

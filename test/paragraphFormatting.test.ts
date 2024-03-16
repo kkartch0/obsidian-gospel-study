@@ -2,7 +2,7 @@ import {
 	removeFootnotesFromParagraph,
 	removePageBreaksFromParagraph,
 	removeRelatedContentFromParagraph
-} from "./paragraphFormatting";
+} from "../src/paragraphFormatting";
 
 describe("removeFootnotesFromParagraph", () => {
 	it("should remove footnotes from the paragraph", () => {

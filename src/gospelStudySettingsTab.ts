@@ -1,4 +1,4 @@
-import GospelStudyPlugin from "main";
+import GospelStudyPlugin from "./main";
 import { App, PluginSettingTab, Setting } from "obsidian";
 
 export interface GospelStudyPluginSettings {

@@ -1,4 +1,4 @@
-import { StudyURL } from "studyUrl";
+import { StudyURL } from "./studyUrl";
 import { getFormattedParagraphs } from "./paragraphFormatting";
 
 export class StudyBlock {
