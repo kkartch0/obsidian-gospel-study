@@ -94,3 +94,13 @@ export function removeRelatedContentFromParagraph(text: string): string {
 
 	return doc.body.innerHTML;
 }
+
+/**
+ * Replaces all occurrences of "/study/" in the given text with "https://www.churchofjesuschrist.org/study/".
+ * 
+ * @param text - The input text to be processed.
+ * @returns The modified text with fully qualified study links.
+ */
+export function fullyQualifyStudyLinks(text: string): string{
+	return text.replace(/"\/study\//g, "\"https://www.churchofjesuschrist.org/study/");
+}

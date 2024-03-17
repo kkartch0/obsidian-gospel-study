@@ -1,4 +1,5 @@
 import {
+	fullyQualifyStudyLinks,
 	removeFootnotesFromParagraph,
 	removePageBreaksFromParagraph,
 	removeRelatedContentFromParagraph
@@ -86,6 +87,32 @@ describe("removePageBreaksFromParagraph", () => {
 		// Assert
 		const expectedOutput =
 			"This is a paragraph with page break and another page break.";
+		expect(result).toEqual(expectedOutput);
+	});
+});
+
+describe("fullyQualifyStudyLinks", () => {
+	it("should fully qualify study links in the text", () => {
+		// Arrange
+		const input = 'This is a paragraph with <a href="/study/scriptures/bofm/1-ne/1.1"><sup class="marker">1</sup>study link</a> and <a href="/study/scriptures/bofm/1-ne/2.1"><sup class="marker">2</sup>another study link</a>.';
+
+		// Act
+		const result = fullyQualifyStudyLinks(input);
+
+		// Assert
+		const expectedOutput = 'This is a paragraph with <a href="https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/1.1"><sup class="marker">1</sup>study link</a> and <a href="https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/2.1"><sup class="marker">2</sup>another study link</a>.';
+		expect(result).toEqual(expectedOutput);
+	});
+
+	it("should not modify links that are already fully qualified", () => {
+		// Arrange
+		const input = 'This is a paragraph with <a href="https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/1.1"><sup class="marker">1</sup>study link</a> and <a href="https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/2.1"><sup class="marker">2</sup>another study link</a>.';
+
+		// Act
+		const result = fullyQualifyStudyLinks(input);
+
+		// Assert
+		const expectedOutput = 'This is a paragraph with <a href="https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/1.1"><sup class="marker">1</sup>study link</a> and <a href="https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/2.1"><sup class="marker">2</sup>another study link</a>.';
 		expect(result).toEqual(expectedOutput);
 	});
 });
