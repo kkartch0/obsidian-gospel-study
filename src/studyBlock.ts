@@ -1,5 +1,6 @@
 import { StudyURL } from "./studyUrl";
 import { getFormattedParagraphs } from "./paragraphFormatting";
+import { GospelStudyPluginSettings } from "./gospelStudyPluginSettings";
 
 export class StudyBlock {
     private _paragraphIdsString: string | undefined;
@@ -8,6 +9,7 @@ export class StudyBlock {
     private _sourceDocument: Document;
     private _tag: string | undefined;
     private _url: StudyURL;
+    private _pluginSettings: GospelStudyPluginSettings;
 
     /**
      * Creates a new StudyBlock instance from the specified StudyURL.
@@ -15,9 +17,9 @@ export class StudyBlock {
      * @param url The StudyURL associated with the StudyBlock.
      * @returns A Promise that resolves to a StudyBlock instance.
      */
-    public static async create(url: StudyURL): Promise<StudyBlock> {
+    public static async create(url: StudyURL, pluginSettings: GospelStudyPluginSettings): Promise<StudyBlock> {
         const sourceDocument = await url.getAssociatedDocument();
-        const studyBlock = new StudyBlock(url, sourceDocument);
+        const studyBlock = new StudyBlock(url, sourceDocument, pluginSettings);
 
         return studyBlock;
     }
@@ -25,9 +27,10 @@ export class StudyBlock {
     /**
      * Constructs a new instance of StudyBlock from the specified URL and source document.
      */
-    private constructor(url: StudyURL, sourceDocument: Document) {
+    private constructor(url: StudyURL, sourceDocument: Document, pluginSettings: GospelStudyPluginSettings) {
         this._url = url;
         this._sourceDocument = sourceDocument;
+        this._pluginSettings = pluginSettings;
     }
 
     /**
@@ -55,7 +58,7 @@ export class StudyBlock {
      */
     public get paragraphs(): string[] {
         if (this._paragraphs === undefined) {
-            this._paragraphs = getFormattedParagraphs(this._sourceDocument, this._url.activeParagraphIds);
+            this._paragraphs = getFormattedParagraphs(this._sourceDocument, this._url.activeParagraphIds, this._pluginSettings);
         }
         return this._paragraphs || [];
     }

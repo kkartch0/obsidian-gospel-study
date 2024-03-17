@@ -1,3 +1,5 @@
+import { GospelStudyPluginSettings } from "./gospelStudyPluginSettings";
+
 /**
  * Retrieves the paragraphs with the specified ids from the document, formats, and then returns them.
  * 
@@ -5,7 +7,7 @@
  * @param activeParagraphIds - An array of active paragraph IDs.
  * @returns An array of formatted paragraphs.
  */
-export function getFormattedParagraphs(document: Document, activeParagraphIds: string[]): string[] {
+export function getFormattedParagraphs(document: Document, activeParagraphIds: string[], pluginSettings: GospelStudyPluginSettings): string[] {
 	const activeParagraphs: string[] = [];
 
 	activeParagraphIds.forEach((id) => {
@@ -16,18 +18,30 @@ export function getFormattedParagraphs(document: Document, activeParagraphIds: s
 		const paragraphElement = document.getElementById(id);
 		if (!paragraphElement) return;
 
-		let innerHTML = formatParagraph(paragraphElement.innerHTML);
+		const formattedParagraph = formatParagraph(paragraphElement.innerHTML, pluginSettings);
 
-		activeParagraphs.push(innerHTML);
+		activeParagraphs.push(formattedParagraph);
 	});
 	return activeParagraphs;
 }
 
-export function formatParagraph(paragraphHTML: string): string {
+export function formatParagraph(paragraphHTML: string, pluginSettings: GospelStudyPluginSettings): string {
+	const parser = new DOMParser();
+	const doc = parser.parseFromString(paragraphHTML, 'text/html');
+
 	paragraphHTML = removeFootnotesFromParagraph(paragraphHTML);
 	paragraphHTML = removePageBreaksFromParagraph(paragraphHTML);
 	paragraphHTML = removeRelatedContentFromParagraph(paragraphHTML);
 	paragraphHTML = fullyQualifyStudyLinks(paragraphHTML);
+
+	if (!pluginSettings.retainScriptureReferenceLinks) {
+		const referenceLinks = doc.querySelectorAll('a.scripture-ref');
+		referenceLinks.forEach((element): void => {
+			// Replace the scripture reference link with the text content of the link.
+			element.replaceWith(element.textContent || '');
+		});
+		paragraphHTML = doc.body.innerHTML;
+	}
 
 	return paragraphHTML;
 }

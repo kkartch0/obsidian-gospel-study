@@ -1,10 +1,6 @@
 import { Plugin, Editor } from "obsidian";
-import {
-	GospelStudySettingsTab,
-	DEFAULT_SETTINGS,
-	GospelStudyPluginSettings,
-} from "./gospelStudySettingsTab";
-
+import { GospelStudyPluginSettingTab } from "./gospelStudyPluginSettingTab";
+import { DEFAULT_SETTINGS, GospelStudyPluginSettings} from "./gospelStudyPluginSettings";
 import { StudyBlock } from "./studyBlock";
 import { StudyURL } from "./studyUrl";
 
@@ -32,7 +28,7 @@ export default class GospelStudyPlugin extends Plugin {
 
 		await this.loadSettings();
 
-		this.addSettingTab(new GospelStudySettingsTab(this.app, this));
+		this.addSettingTab(new GospelStudyPluginSettingTab(this.app, this));
 
 		this.registerEvent(
 			this.app.workspace.on("editor-paste", this.onEditorPaste.bind(this))
@@ -111,7 +107,7 @@ export default class GospelStudyPlugin extends Plugin {
 
 
 		const studyUrl = new StudyURL(clipboardData);
-		const block = await StudyBlock.create(studyUrl);
+		const block = await StudyBlock.create(studyUrl, this.settings);
 		const blockText = block.toString(this.settings.studyBlockFormat);
 
 		editor.replaceSelection(blockText);
