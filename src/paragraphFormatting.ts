@@ -7,7 +7,7 @@
  */
 export function getFormattedParagraphs(document: Document, activeParagraphIds: string[]): string[] {
 	const activeParagraphs: string[] = [];
-	
+
 	activeParagraphIds.forEach((id) => {
 		if (id === "-") { // Hyphen indicates that the next paragraph is not contiguous with the previous one, so we add an ellipsis.
 			activeParagraphs.push("…");
@@ -16,14 +16,20 @@ export function getFormattedParagraphs(document: Document, activeParagraphIds: s
 		const paragraphElement = document.getElementById(id);
 		if (!paragraphElement) return;
 
-		let innerHTML = removeFootnotesFromParagraph(paragraphElement.innerHTML);
-		innerHTML = removePageBreaksFromParagraph(innerHTML);
-		innerHTML = removeRelatedContentFromParagraph(innerHTML);
+		let innerHTML = formatParagraph(paragraphElement.innerHTML);
 
 		activeParagraphs.push(innerHTML);
 	});
-
 	return activeParagraphs;
+}
+
+export function formatParagraph(paragraphHTML: string): string {
+	paragraphHTML = removeFootnotesFromParagraph(paragraphHTML);
+	paragraphHTML = removePageBreaksFromParagraph(paragraphHTML);
+	paragraphHTML = removeRelatedContentFromParagraph(paragraphHTML);
+	paragraphHTML = fullyQualifyStudyLinks(paragraphHTML);
+
+	return paragraphHTML;
 }
 
 /**
@@ -38,7 +44,7 @@ export function getFormattedParagraphs(document: Document, activeParagraphIds: s
  * console.log(modifiedText);
  * // Output: "This is a paragraph with a footnote."
  */
-export function removeFootnotesFromParagraph(text: string): string {
+function removeFootnotesFromParagraph(text: string): string {
 	text = text.replace(
 		/<a class="study-note-ref" href="[^>]*"><sup class="marker">[^<]*<\/sup>([^<]*)<\/a>/g,
 		"$1"
@@ -59,7 +65,7 @@ export function removeFootnotesFromParagraph(text: string): string {
  * console.log(modifiedText);
  * // Output: "This is a paragraph.This is another paragraph."
  */
-export function removePageBreaksFromParagraph(text: string): string {
+function removePageBreaksFromParagraph(text: string): string {
 	const parser = new DOMParser();
 	const doc = parser.parseFromString(text, 'text/html');
 
@@ -83,10 +89,10 @@ export function removePageBreaksFromParagraph(text: string): string {
  * console.log(modifiedText);
  * // Output: "This is a paragraph with ."
  */
-export function removeRelatedContentFromParagraph(text: string): string {
+function removeRelatedContentFromParagraph(text: string): string {
 	const parser = new DOMParser();
 	const doc = parser.parseFromString(text, 'text/html');
-	
+
 	const elements = doc.querySelectorAll('span[title="Associated Content"]');
 	elements.forEach((element) => {
 		element.remove();
@@ -101,6 +107,6 @@ export function removeRelatedContentFromParagraph(text: string): string {
  * @param text - The input text to be processed.
  * @returns The modified text with fully qualified study links.
  */
-export function fullyQualifyStudyLinks(text: string): string{
+function fullyQualifyStudyLinks(text: string): string {
 	return text.replace(/"\/study\//g, "\"https://www.churchofjesuschrist.org/study/");
 }
