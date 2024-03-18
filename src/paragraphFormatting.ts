@@ -25,24 +25,47 @@ export function getFormattedParagraphs(document: Document, activeParagraphIds: s
 	return activeParagraphs;
 }
 
+/**
+ * Formats a paragraph by applying various transformations based on the plugin settings.
+ * 
+ * @param paragraphHTML - The HTML content of the paragraph.
+ * @param pluginSettings - The settings of the Gospel Study plugin.
+ * @returns The formatted paragraph HTML.
+ */
 export function formatParagraph(paragraphHTML: string, pluginSettings: GospelStudyPluginSettings): string {
-	const parser = new DOMParser();
-	const doc = parser.parseFromString(paragraphHTML, 'text/html');
-
 	paragraphHTML = removeFootnotesFromParagraph(paragraphHTML);
 	paragraphHTML = removePageBreaksFromParagraph(paragraphHTML);
 	paragraphHTML = removeRelatedContentFromParagraph(paragraphHTML);
 	paragraphHTML = fullyQualifyStudyLinks(paragraphHTML);
 
 	if (!pluginSettings.retainScriptureReferenceLinks) {
-		const referenceLinks = doc.querySelectorAll('a.scripture-ref');
-		referenceLinks.forEach((element): void => {
-			// Replace the scripture reference link with the text content of the link.
-			element.replaceWith(element.textContent || '');
-		});
-		paragraphHTML = doc.body.innerHTML;
+		paragraphHTML = removeScriptureReferenceLinks(paragraphHTML);
 	}
 
+	return paragraphHTML;
+}
+
+/**
+ * Removes scripture reference links (e.g. <a class="scripture-ref">Some Reference</a>) from the given paragraph by replacing them with their text content.
+ * 
+ * @param paragraphHTML - The HTML string representing the paragraph.
+ * @returns The modified paragraph HTML with scripture reference links removed.
+ * @example
+ * const inputText = "This is a paragraph with a <a class='scripture-ref'>scripture reference</a>."
+ * const modifiedText = removeScriptureReferenceLinks(inputText);
+ * console.log(modifiedText);
+ * // Output: "This is a paragraph with a scripture reference."
+ */
+function removeScriptureReferenceLinks(paragraphHTML: string) {
+	const parser = new DOMParser();
+	const doc = parser.parseFromString(paragraphHTML, 'text/html');
+
+	const referenceLinks = doc.querySelectorAll('a.scripture-ref');
+	referenceLinks.forEach((element): void => {
+		// Replace the scripture reference link with the text content of the link.
+		element.replaceWith(element.textContent || '');
+	});
+	paragraphHTML = doc.body.innerHTML;
 	return paragraphHTML;
 }
 
@@ -120,6 +143,11 @@ function removeRelatedContentFromParagraph(text: string): string {
  * 
  * @param text - The input text to be processed.
  * @returns The modified text with fully qualified study links.
+ * @example
+ * const inputText = "This is a paragraph with <a href='/study/scriptures/bofm/1-ne/1.1'>study link</a> and <a href='/study/scriptures/bofm/1-ne/2.1'>another study link</a>.";
+ * const modifiedText = fullyQualifyStudyLinks(inputText);
+ * console.log(modifiedText);
+ * // Output: "This is a paragraph with <a href='https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/1.1'>study link</a> and <a href='https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/2.1'>another study link</a>."
  */
 function fullyQualifyStudyLinks(text: string): string {
 	return text.replace(/"\/study\//g, "\"https://www.churchofjesuschrist.org/study/");
