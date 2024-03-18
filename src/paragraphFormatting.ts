@@ -34,8 +34,7 @@ export function getFormattedParagraphs(document: Document, activeParagraphIds: s
  */
 export function formatParagraph(paragraphHTML: string, pluginSettings: GospelStudyPluginSettings): string {
 	paragraphHTML = removeFootnotesFromParagraph(paragraphHTML);
-	paragraphHTML = removePageBreaksFromParagraph(paragraphHTML);
-	paragraphHTML = removeRelatedContentFromParagraph(paragraphHTML);
+	paragraphHTML = removeNonUsefulTags(paragraphHTML);
 	paragraphHTML = fullyQualifyStudyLinks(paragraphHTML);
 
 	if (!pluginSettings.retainScriptureReferenceLinks) {
@@ -43,6 +42,28 @@ export function formatParagraph(paragraphHTML: string, pluginSettings: GospelStu
 	}
 
 	return paragraphHTML;
+}
+
+/**
+ * Removes tags that are not useful/functional in the Obsidian context such as associated content, page breaks, and note references.
+ * 
+ * @param text - The input text containing HTML tags.
+ * @returns The modified text with non-useful tags removed.
+ */
+function removeNonUsefulTags(text: string): string {
+	const parser = new DOMParser();
+	const doc = parser.parseFromString(text, 'text/html');
+
+	const tagsToRemove = ['span.page-break', 'span[title="Associated Content"]', 'a.note-ref'];
+
+	tagsToRemove.forEach((tag) => {
+		const elements = doc.querySelectorAll(tag);
+		elements.forEach((element) => {
+			element.remove();
+		});
+	});
+
+	return doc.body.innerHTML;
 }
 
 /**
@@ -90,53 +111,6 @@ function removeFootnotesFromParagraph(text: string): string {
 	return text;
 }
 
-/**
- * Removes page breaks from a paragraph of text.
- *
- * @param text - The input text containing page breaks.
- * @returns The modified text with page breaks removed.
- *
- * @example
- * const inputText = "This is a paragraph.<span class='page-break' data-page='1'></span>This is another paragraph.";
- * const modifiedText = removePageBreaksFromParagraph(inputText);
- * console.log(modifiedText);
- * // Output: "This is a paragraph.This is another paragraph."
- */
-function removePageBreaksFromParagraph(text: string): string {
-	const parser = new DOMParser();
-	const doc = parser.parseFromString(text, 'text/html');
-
-	const elements = doc.querySelectorAll('span.page-break');
-	elements.forEach((element) => {
-		element.remove();
-	});
-
-	return doc.body.innerHTML;
-}
-
-/**
- * Removes related content elements from a paragraph of text.
- * 
- * @param text - The input text containing the paragraph.
- * @returns The modified text with the related content removed.
- * 
- * @example
- * const inputText = "This is a paragraph with <span title='Associated Content'><button><svg></svg>related content</button></span>.";
- * const modifiedText = removeRelatedContentFromParagraph(inputText);
- * console.log(modifiedText);
- * // Output: "This is a paragraph with ."
- */
-function removeRelatedContentFromParagraph(text: string): string {
-	const parser = new DOMParser();
-	const doc = parser.parseFromString(text, 'text/html');
-
-	const elements = doc.querySelectorAll('span[title="Associated Content"]');
-	elements.forEach((element) => {
-		element.remove();
-	});
-
-	return doc.body.innerHTML;
-}
 
 /**
  * Replaces all occurrences of "/study/" in the given text with "https://www.churchofjesuschrist.org/study/".
