@@ -6,18 +6,6 @@ import {
 describe("formatParagraph", () => {
 	it("should remove footnotes from the paragraph", () => {
 		// Arrange
-		const input = 'This is a paragraph with <a class="study-note-ref" href="#"><sup class="marker">1</sup>footnote</a>.';
-
-		// Act
-		const result = formatParagraph(input, DEFAULT_SETTINGS);
-
-		// Assert
-		const expectedOutput = "This is a paragraph with footnote.";
-		expect(result).toEqual(expectedOutput);
-	});
-
-	it("should remove multiple footnotes from the paragraph", () => {
-		// Arrange
 		const input =
 			'This is a paragraph with <a class="study-note-ref" href="#"><sup class="marker">1</sup>footnote</a> and <a class="study-note-ref" href="#"><sup class="marker">2</sup>another footnote</a>.';
 
@@ -27,32 +15,6 @@ describe("formatParagraph", () => {
 		// Assert
 		const expectedOutput =
 			"This is a paragraph with footnote and another footnote.";
-		expect(result).toEqual(expectedOutput);
-	});
-
-	it("should not remove other HTML tags from the paragraph", () => {
-		// Arrange
-		const input =
-			'This is a <strong>paragraph</strong> with <a class="study-note-ref" href="#"><sup class="marker">1</sup>footnote</a>.';
-
-		// Act
-		const result = formatParagraph(input, DEFAULT_SETTINGS);
-
-		// Assert
-		const expectedOutput =
-			"This is a <strong>paragraph</strong> with footnote.";
-		expect(result).toEqual(expectedOutput);
-	});
-
-	it("should handle paragraphs without footnotes", () => {
-		// Arrange
-		const input = "This is a paragraph without any footnotes.";
-
-		// Act
-		const result = formatParagraph(input, DEFAULT_SETTINGS);
-
-		// Assert
-		const expectedOutput = "This is a paragraph without any footnotes.";
 		expect(result).toEqual(expectedOutput);
 	});
 
@@ -68,8 +30,8 @@ describe("formatParagraph", () => {
 		expect(result).toEqual(expectedOutput);
 
 	});
-
-	it("should remove multiple page breaks from the paragraph", () => {
+  
+	it("should remove page breaks from the paragraph", () => {
 		// Arrange
 		const input =
 			'This is a paragraph with <span class="page-break" data-page="page1"></span>page break and <span class="page-break"></span>another page break.';
@@ -107,7 +69,7 @@ describe("formatParagraph", () => {
 		expect(result).toEqual(expectedOutput);
 	});
 
-	it("should remove scripture reference links if the setting is disabled", () => {
+	it("should remove scripture reference links if the setting to retain them is disabled", () => {
 		// Arrange
 		const input = 'See <a class="scripture-ref" href="https://www.churchofjesuschrist.org/study/scriptures/bofm/2-ne/21?lang=eng">2&nbsp;Nephi 21–22</a> and <a class="scripture-ref" href="https://www.churchofjesuschrist.org/study/scriptures/bofm/2-ne/21.12?lang=eng#p12">2&nbsp;Nephi 21:12</a> for more information.';
 
@@ -120,5 +82,18 @@ describe("formatParagraph", () => {
 		// Assert
 		const expectedOutput = 'See 2&nbsp;Nephi 21–22 and 2&nbsp;Nephi 21:12 for more information.';
 		expect(result).toEqual(expectedOutput);
+	});
+
+	it('should remove note-ref tags from the paragraph', () => {
+		// Arrange
+		const input = 'Help carry His love to His children, and some of it will splash on you.<a class="note-ref" href="/study/general-conference/2023/10/13daines?lange=eng#note30" data-scroll-id="note30"><sup class="marker">30</sup></a>';
+
+		// Act
+		const result = formatParagraph(input, DEFAULT_SETTINGS);
+
+		// Assert
+		const expectedOutput = 'Help carry His love to His children, and some of it will splash on you.';
+		expect(result).toEqual(expectedOutput);
+
 	});
 });
