@@ -1,23 +1,8 @@
-import GospelStudyPlugin from "main";
+import { STUDY_BLOCK_FORMAT_1, STUDY_BLOCK_FORMAT_2 } from "./gospelStudyPluginSettings";
+import GospelStudyPlugin from "./main";
 import { App, PluginSettingTab, Setting } from "obsidian";
 
-export interface GospelStudyPluginSettings {
-	copyCurrentNoteLinkAfterPaste: boolean;
-	studyBlockFormat: string;
-}
-
-export const STUDY_BLOCK_FORMAT_1 =
-	"> [!gospel-study]\n> # {{referenceLink}}\n> {{paragraphs:\n>\n> }}\n>\n>{{tag}}";
-
-export const STUDY_BLOCK_FORMAT_2 =
-	"#### {{referenceLink}}\n\n{{paragraphs:\n\n}}\n\n{{tag}}";
-
-export const DEFAULT_SETTINGS: Partial<GospelStudyPluginSettings> = {
-	studyBlockFormat: STUDY_BLOCK_FORMAT_1,
-	copyCurrentNoteLinkAfterPaste: true
-};
-
-export class GospelStudySettingsTab extends PluginSettingTab {
+export class GospelStudyPluginSettingTab extends PluginSettingTab {
 	public plugin: GospelStudyPlugin;
 
 	public constructor(app: App, plugin: GospelStudyPlugin) {
@@ -91,6 +76,19 @@ export class GospelStudySettingsTab extends PluginSettingTab {
 			toggle.setValue(this.plugin.settings.copyCurrentNoteLinkAfterPaste)
 				.onChange(async (value) => {
 					this.plugin.settings.copyCurrentNoteLinkAfterPaste = value;
+					await this.plugin.saveSettings();
+				});
+
+			return toggle;
+		});
+
+		new Setting(containerEl)
+		.setName("Retain Scripture Reference Links")
+		.setDesc('If enabled, scripture reference links (e.g.<a class="scripture-ref" href="https://www.churchofjesuschrist.org/study/scriptures/bofm/2-ne/21.12?lang=eng#p12">2&nbsp;Nephi 21:12</a>) will be retained, otherwise the hyperlink will be removed and only the text (e.g. "2 Nephi 21:12") will remain.')
+		.addToggle((toggle) => {	
+			toggle.setValue(this.plugin.settings.retainScriptureReferenceLinks)
+				.onChange(async (value) => {
+					this.plugin.settings.retainScriptureReferenceLinks = value;
 					await this.plugin.saveSettings();
 				});
 
