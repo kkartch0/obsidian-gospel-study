@@ -111,7 +111,6 @@ function removeFootnotesFromParagraph(text: string): string {
 	return text;
 }
 
-
 /**
  * Replaces all occurrences of "/study/" in the given text with "https://www.churchofjesuschrist.org/study/".
  * 

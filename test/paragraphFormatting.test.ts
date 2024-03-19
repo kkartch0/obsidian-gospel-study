@@ -30,7 +30,7 @@ describe("formatParagraph", () => {
 		expect(result).toEqual(expectedOutput);
 
 	});
-
+  
 	it("should remove page breaks from the paragraph", () => {
 		// Arrange
 		const input =
