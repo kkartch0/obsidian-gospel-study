@@ -1,7 +1,7 @@
-import { DEFAULT_SETTINGS } from "../src/gospelStudyPluginSettings";
+import { DEFAULT_SETTINGS } from "../src/gospel-study-plugin-settings";
 import {
 	formatParagraph
-} from "../src/paragraphFormatting";
+} from "../src/paragraph-formatting";
 
 describe("formatParagraph", () => {
 	it("should remove footnotes from the paragraph", () => {

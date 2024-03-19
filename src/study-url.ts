@@ -1,5 +1,5 @@
 import { requestUrl } from "obsidian";
-import { standardizeSearchParams } from "./studyUrlFormatting";
+import { standardizeSearchParams } from "./study-url-formatting";
 
 /**
  * Represents a study URL (i.e. of the format "https://churchofjesuschrist.org/study/*"). This class extends the 

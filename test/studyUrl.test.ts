@@ -1,5 +1,5 @@
 
-import { StudyURL } from "../src/studyUrl";
+import { StudyURL } from "../src/study-url";
 
 describe("StudyURL", () => {
 

@@ -1,6 +1,6 @@
-import { StudyURL } from "./studyUrl";
-import { getFormattedParagraphs } from "./paragraphFormatting";
-import { GospelStudyPluginSettings } from "./gospelStudyPluginSettings";
+import { StudyURL } from "./study-url";
+import { getFormattedParagraphs } from "./paragraph-formatting";
+import { GospelStudyPluginSettings } from "./gospel-study-plugin-settings";
 
 export class StudyBlock {
     private _paragraphIdsString: string | undefined;

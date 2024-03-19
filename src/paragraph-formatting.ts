@@ -1,4 +1,4 @@
-import { GospelStudyPluginSettings } from "./gospelStudyPluginSettings";
+import { GospelStudyPluginSettings } from "./gospel-study-plugin-settings";
 
 /**
  * Retrieves the paragraphs with the specified ids from the document, formats, and then returns them.
