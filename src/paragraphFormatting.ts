@@ -1,4 +1,4 @@
-import { GospelStudyPluginSettings } from "./gospelStudyPluginSettings";
+import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
 
 /**
  * Retrieves the paragraphs with the specified ids from the document, formats, and then returns them.
@@ -7,7 +7,7 @@ import { GospelStudyPluginSettings } from "./gospelStudyPluginSettings";
  * @param activeParagraphIds - An array of active paragraph IDs.
  * @returns An array of formatted paragraphs.
  */
-export function getFormattedParagraphs(document: Document, activeParagraphIds: string[], pluginSettings: GospelStudyPluginSettings): string[] {
+export function getFormattedParagraphs(currentDocument: Document, activeParagraphIds: string[], pluginSettings: GospelStudyPluginSettings): string[] {
 	const activeParagraphs: string[] = [];
 
 	activeParagraphIds.forEach((id) => {
@@ -15,7 +15,7 @@ export function getFormattedParagraphs(document: Document, activeParagraphIds: s
 			activeParagraphs.push("…");
 			return;
 		}
-		const paragraphElement = document.getElementById(id);
+		const paragraphElement = currentDocument.getElementById(id);
 		if (!paragraphElement) return;
 
 		const formattedParagraph = formatParagraph(paragraphElement.innerHTML, pluginSettings);
