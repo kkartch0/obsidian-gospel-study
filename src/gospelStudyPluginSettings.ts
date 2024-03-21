@@ -1,8 +1,4 @@
-export interface GospelStudyPluginSettings {
-	copyCurrentNoteLinkAfterPaste: boolean;
-	studyBlockFormat: string;
-	retainScriptureReferenceLinks: boolean;
-}
+import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
 
 export const STUDY_BLOCK_FORMAT_1 = "> [!gospel-study]\n> # {{referenceLink}}\n> {{paragraphs:\n>\n> }}\n>\n>{{tag}}";
 
