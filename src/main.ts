@@ -105,7 +105,18 @@ export default class GospelStudyPlugin extends Plugin {
 		clipboard.stopPropagation();
 		clipboard.preventDefault();
 
+		await this.onGospelLinkEvent(clipboardData, editor);
+	}
 
+	/**
+	 * A handler for when a link is added to Obsidian. Can be used
+	 * with clipboard or shared events.
+	 *
+	 * @param {string} data - The data 
+	 * @param {Editor} editor - The current Obsidian editor.
+	 * @returns {Promise<boolean>} - If an ID parser is found, returns true; otherwise, returns false.
+	 */
+	private async onGospelLinkEvent(clipboardData: string, editor: Editor) {
 		const studyUrl = new StudyURL(clipboardData);
 		const block = await StudyBlock.create(studyUrl, this.settings);
 		const blockText = this.formatBlockText(block, this.settings.studyBlockFormat);
