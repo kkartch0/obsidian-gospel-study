@@ -1,6 +1,6 @@
 import { Plugin, Editor } from "obsidian";
 import { GospelStudyPluginSettingTab } from "./gospelStudyPluginSettingTab";
-import { DEFAULT_SETTINGS, GospelStudyPluginSettings} from "./gospelStudyPluginSettings";
+import { DEFAULT_SETTINGS, GospelStudyPluginSettings } from "./gospelStudyPluginSettings";
 import { StudyBlock } from "./studyBlock";
 import { StudyURL } from "./studyUrl";
 
@@ -108,12 +108,40 @@ export default class GospelStudyPlugin extends Plugin {
 
 		const studyUrl = new StudyURL(clipboardData);
 		const block = await StudyBlock.create(studyUrl, this.settings);
-		const blockText = block.toString(this.settings.studyBlockFormat);
+		const blockText = this.formatBlockText(block, this.settings.studyBlockFormat);
 
 		editor.replaceSelection(blockText);
 
 		if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
 			this.copyCurrentNoteLinkToClipboard();
 		}
+	}
+
+	/**
+		* Converts the StudyBlock object to a string representation based on the specified format.
+		* @param format - The format string used to generate the string representation.
+		* @returns The string representation of the StudyBlock object.
+		*/
+	public formatBlockText(data: Partial<StudyBlock>, format: string): string {
+		let injectedText = format;
+
+		const propertyNames = Object.getOwnPropertyNames(Object.getPrototypeOf(data));
+
+		propertyNames.forEach((key: string): void => {
+			const value = data[key as keyof StudyBlock]; // Add type assertion to keyof StudyBlock
+			if (typeof (value) !== 'string') {
+				return; // skip function calls
+			}
+
+			injectedText = injectedText.replace(new RegExp(`{{${key}}}`, 'g'), String(value));
+		});
+
+		const paragraphsMatch = injectedText.match(/{{paragraphs:([^}]*)}}/);
+		if (paragraphsMatch) {
+			const paragraphsSeparator = paragraphsMatch[1];
+			injectedText = injectedText.replace(new RegExp(`{{paragraphs:${paragraphsSeparator}}}`, 'g'), data.paragraphs?.join(paragraphsSeparator) || '');
+		}
+
+		return injectedText;
 	}
 }
