@@ -1,8 +1,7 @@
 import { Plugin, Editor } from "obsidian";
 import { GospelStudyPluginSettingTab } from "./gospelStudyPluginSettingTab";
-import { DEFAULT_SETTINGS, GospelStudyPluginSettings} from "./gospelStudyPluginSettings";
-import { StudyBlock } from "./studyBlock";
-import { StudyURL } from "./studyUrl";
+import { DEFAULT_SETTINGS, GospelStudyPluginSettings } from "./gospelStudyPluginSettings";
+import { getStudyBlockTextFromUrl } from "./getStudyBlockTextFromUrl";
 
 export default class GospelStudyPlugin extends Plugin {
 	public settings!: GospelStudyPluginSettings;
@@ -105,7 +104,7 @@ export default class GospelStudyPlugin extends Plugin {
 		clipboard.stopPropagation();
 		clipboard.preventDefault();
 
-		const blockText = await this.getStudyBlockTextFromUrl(clipboardData, this.settings);
+		const blockText = await getStudyBlockTextFromUrl(clipboardData, this.settings);
 
 		editor.replaceSelection(blockText);
 
@@ -114,10 +113,4 @@ export default class GospelStudyPlugin extends Plugin {
 		}
 	}
 
-	public async getStudyBlockTextFromUrl(clipboardData: string, pluginSettings: GospelStudyPluginSettings) {
-		const studyUrl = new StudyURL(clipboardData);
-		const block = await StudyBlock.create(studyUrl, pluginSettings);
-		const blockText = block.toString(pluginSettings.studyBlockFormat);
-		return blockText;
-	}
 }

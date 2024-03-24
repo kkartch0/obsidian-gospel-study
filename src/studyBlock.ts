@@ -73,7 +73,7 @@ export class StudyBlock {
     public get referenceLink(): string {
         if (this._referenceLink === undefined) {
             let titleToUse = this.title;
-            if (this.paragraphs[0]?.contains('verse-number')) {
+            if (this.paragraphs[0]?.includes('verse-number')) {
                 titleToUse += `:${this.paragraphIdsString}`;
             }
             this._referenceLink = `[${titleToUse}](${this.url})`;

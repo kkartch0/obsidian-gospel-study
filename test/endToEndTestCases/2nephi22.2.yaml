@@ -1,13 +1,17 @@
 pastedText: |
   https://www.churchofjesuschrist.org/study/scriptures/bofm/2-ne/22?lang=eng&id=2#p2
 
-studyBlockFormat: |
-  {{title}}
-  {{url}}
-  {{paragraphIdsString}}
-  {{paragraphs:\n\n}}
-  {{referenceLink}}
-  {{tag}}
+pluginSettings:
+  studyBlockFormat: |
+    {{title}}
+    {{url}}
+    {{paragraphIdsString}}
+    {{paragraphs:
+    
+    }}
+    {{referenceLink}}
+    {{tag}}
+  retainScriptureReferenceLinks: true
 
 expectedResult: |
   2 Nephi 22
