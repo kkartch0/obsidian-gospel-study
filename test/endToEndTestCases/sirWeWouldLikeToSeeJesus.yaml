@@ -1,0 +1,19 @@
+pastedText: |
+  https://www.churchofjesuschrist.org/study/general-conference/2023/10/13daines?lang=eng&id=p34-p35#p34
+
+pluginSettings:
+  studyBlockFormat: STUDY_BLOCK_FORMAT_1
+  retainScriptureReferenceLinks: true
+
+expectedResult: |
+  > [!gospel-study]
+  > # [Sir, We Would Like to See Jesus](https://www.churchofjesuschrist.org/study/general-conference/2023/10/13daines?lang=eng&id=p34-p35#p34)
+  > Grab a pick and shovel and join the team. Help carry His love to His children, and some of it will splash on you.
+  >
+  > Let us seek His loving face, His covenant embrace, and then join arm in arm with His children, and together we will sing “Redeemer of Israel”:
+  >
+  >#study/general-conference/2023/10/13daines
+
+verifies:
+  - study block format (note-ref links are removed) (issue #17)
+  - general conference talk

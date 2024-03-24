@@ -22,5 +22,5 @@ expectedResult: |
   #study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/10
 
 verifies: 
-  - study block format (scripture-ref tag links are fixed)
+  - study block format (scripture-ref tag links are fixed) (issue #22)
   - come follow me manual

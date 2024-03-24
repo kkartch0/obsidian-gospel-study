@@ -13,5 +13,5 @@ expectedResult: |
   #study/scriptures/bofm/2-ne/22
 
 verifies:
-  - study block format (verses are in referenceLink)
+  - study block format (verses are in referenceLink) (issue #1)
   - book of mormon
