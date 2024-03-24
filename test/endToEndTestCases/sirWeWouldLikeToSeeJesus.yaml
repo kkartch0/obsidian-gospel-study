@@ -1,5 +1,5 @@
 pastedText: |
-  https://www.churchofjesuschrist.org/study/general-conference/2023/10/13daines?lang=eng&id=p34-p35#p34
+  https://www.churchofjesuschrist.org/study/general-conference/2023/10/13daines?id=p33%23p33&lang=eng
 
 pluginSettings:
   studyBlockFormat: STUDY_BLOCK_FORMAT_1
@@ -7,13 +7,12 @@ pluginSettings:
 
 expectedResult: |
   > [!gospel-study]
-  > # [Sir, We Would Like to See Jesus](https://www.churchofjesuschrist.org/study/general-conference/2023/10/13daines?lang=eng&id=p34-p35#p34)
-  > Grab a pick and shovel and join the team. Help carry His love to His children, and some of it will splash on you.
-  >
-  > Let us seek His loving face, His covenant embrace, and then join arm in arm with His children, and together we will sing “Redeemer of Israel”:
+  > # [Sir, We Would Like to See Jesus](https://www.churchofjesuschrist.org/study/general-conference/2023/10/13daines?lang=eng&id=p33#p33)
+  > A few years ago, I got a calling I didn’t feel up to. I awoke early, nervous—but with a phrase in mind I had not heard before: that to serve in this Church is to stand in the river of God’s love for His children. This Church is a work party of people with picks and shovels trying to help clear the channel for the river of God’s love to reach His children at the end of the row.
   >
   >#study/general-conference/2023/10/13daines
 
 verifies:
-  - study block format (note-ref links are removed) (issue #17)
+  - note-ref links are removed (issue #17)
+  - quote of the day (issue #3)
   - general conference talk

@@ -5,8 +5,9 @@ export function requestUrl(url: string): Promise<RequestUrlResponse> {
   const urlToHtmlFileMap: { [key: string]: string } = {
     "https://www.churchofjesuschrist.org/study/scriptures/bofm/2-ne/22?lang=eng&id=2#p2": "2nephi22.2.html",
     "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/10?lang=eng&id=p8": "weRejoiceInChrist.html",
-    "https://www.churchofjesuschrist.org/study/general-conference/2023/10/13daines?lang=eng&id=p34-p35#p34": "sirWeWouldLikeToSeeJesus.html",
+    "https://www.churchofjesuschrist.org/study/general-conference/2023/10/13daines?lang=eng&id=p33#p33": "sirWeWouldLikeToSeeJesus.html",
     "https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/5?lang=eng&id=p1-p2#p1": "1nephi5.1-2.html",
+    "https://www.churchofjesuschrist.org/study/scriptures/bofm/2-ne/10?lang=eng&id=24#p24": "2nephi10.24.html",
   };
 
   const htmlFileName = urlToHtmlFileMap[url];
