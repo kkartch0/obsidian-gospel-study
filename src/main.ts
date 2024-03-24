@@ -105,15 +105,19 @@ export default class GospelStudyPlugin extends Plugin {
 		clipboard.stopPropagation();
 		clipboard.preventDefault();
 
-
-		const studyUrl = new StudyURL(clipboardData);
-		const block = await StudyBlock.create(studyUrl, this.settings);
-		const blockText = block.toString(this.settings.studyBlockFormat);
+		const blockText = await this.getStudyBlockTextFromUrl(clipboardData, this.settings);
 
 		editor.replaceSelection(blockText);
 
 		if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
 			this.copyCurrentNoteLinkToClipboard();
 		}
+	}
+
+	public async getStudyBlockTextFromUrl(clipboardData: string, pluginSettings: GospelStudyPluginSettings) {
+		const studyUrl = new StudyURL(clipboardData);
+		const block = await StudyBlock.create(studyUrl, pluginSettings);
+		const blockText = block.toString(pluginSettings.studyBlockFormat);
+		return blockText;
 	}
 }
