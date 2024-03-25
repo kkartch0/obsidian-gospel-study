@@ -1,0 +1,17 @@
+pastedText: |
+  https://www.churchofjesuschrist.org/study/scriptures/bofm/2-ne/10?id=24%23p24&lang=eng
+
+pluginSettings:
+  studyBlockFormat: STUDY_BLOCK_FORMAT_2
+  retainScriptureReferenceLinks: true
+
+expectedResult: |
+  #### [2 Nephi 10:24](https://www.churchofjesuschrist.org/study/scriptures/bofm/2-ne/10?lang=eng&id=24#p24)
+
+  <span class="verse-number">24 </span>Wherefore, my beloved brethren, reconcile yourselves to the will of God, and not to the will of the devil and the flesh; and remember, after ye are reconciled unto God, that it is only in and through the grace of God that ye are saved.
+
+  #study/scriptures/bofm/2-ne/10
+
+verifies:
+  - verse of the day (issue #3)
+  - book of mormon
