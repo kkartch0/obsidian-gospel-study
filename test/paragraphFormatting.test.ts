@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS } from "../src/gospelStudyPluginSettings";
+import { DEFAULT_SETTINGS } from "../src/defaultPluginSettings";
 import {
 	formatParagraph
 } from "../src/paragraphFormatting";
