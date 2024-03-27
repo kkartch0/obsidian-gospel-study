@@ -1,4 +1,4 @@
-import { STUDY_BLOCK_FORMAT_1, STUDY_BLOCK_FORMAT_2 } from "./gospelStudyPluginSettings";
+import { STUDY_BLOCK_FORMAT_1, STUDY_BLOCK_FORMAT_2 } from "./defaultPluginSettings";
 import GospelStudyPlugin from "./main";
 import { App, PluginSettingTab, Setting } from "obsidian";
 

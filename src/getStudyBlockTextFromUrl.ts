@@ -1,4 +1,4 @@
-import { GospelStudyPluginSettings } from "./gospelStudyPluginSettings";
+import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
 import { StudyBlock } from "./studyBlock";
 import { StudyURL } from "./studyUrl";
 

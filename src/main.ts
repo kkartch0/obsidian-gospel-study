@@ -1,6 +1,7 @@
 import { Plugin, Editor } from "obsidian";
 import { GospelStudyPluginSettingTab } from "./gospelStudyPluginSettingTab";
-import { DEFAULT_SETTINGS, GospelStudyPluginSettings } from "./gospelStudyPluginSettings";
+import { DEFAULT_SETTINGS } from "./defaultPluginSettings";
+import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
 import { getStudyBlockTextFromUrl } from "./getStudyBlockTextFromUrl";
 
 export default class GospelStudyPlugin extends Plugin {
