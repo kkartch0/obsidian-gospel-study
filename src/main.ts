@@ -8,6 +8,7 @@ export default class GospelStudyPlugin extends Plugin {
 	public settings!: GospelStudyPluginSettings;
 
 	handledByPasteEvent!: boolean;
+	previousContent!: string;
 
 	/**
 	 * Loads the plugin settings from the data store.
@@ -38,9 +39,47 @@ export default class GospelStudyPlugin extends Plugin {
 			this.app.workspace.on("editor-paste", this.onEditorPaste.bind(this))
 		);
 
-		this.registerEvent(
-			this.app.workspace.on("editor-change", this.onEditorChange.bind(this))
-		);
+		this.previousContent = this.app.workspace.activeEditor?.editor?.getValue() || "";
+		this.registerInterval(window.setInterval(this.checkForFileUpdates.bind(this), 1_000));
+	}
+
+	private async checkForFileUpdates() {
+		if (this.handledByPasteEvent) {
+			// ensure we don't try to handle the paste event again
+			this.handledByPasteEvent = false;
+			return;
+		}
+
+		const editor = this.app.workspace.activeEditor?.editor;
+		if (!editor) return;
+
+		console.log("editor changed");
+
+		let currentContent = editor.getValue() || "";
+
+		if (this.previousContent !== currentContent) {
+			const diff = diffLines(this.previousContent, currentContent);
+			const addedLines = diff.filter((part: Change) => part.added);
+
+			const urlPattern = "(https://www.churchofjesuschrist.org/study/.*)";
+			addedLines.forEach(async (part: Change) => {
+				const match = part.value.match(urlPattern)
+				if (match) {
+					const url = match[0];
+					const blockText = await getStudyBlockTextFromUrl(url, this.settings);
+
+					currentContent = currentContent.replace(url, blockText);
+					editor.setValue(currentContent);
+
+					if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
+						this.copyCurrentNoteLinkToClipboard();
+					}
+
+					this.previousContent = editor.getValue() || "";
+					this.handledByPasteEvent = false;
+				}
+			});
+		}
 	}
 
 	/**
@@ -113,45 +152,14 @@ export default class GospelStudyPlugin extends Plugin {
 		clipboard.stopPropagation();
 		clipboard.preventDefault();
 
-		const blockText = await getStudyBlockTextFromUrl(clipboardData, this.settings);
-
 		this.handledByPasteEvent = true;
+
+		const blockText = await getStudyBlockTextFromUrl(clipboardData, this.settings);
 
 		editor.replaceSelection(blockText);
 
 		if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
 			this.copyCurrentNoteLinkToClipboard();
 		}
-	}
-
-	private async onEditorChange(editor: Editor, info: { data: string; }) {
-		if (this.handledByPasteEvent){ 
-			// ensure we don't try to handle the paste event again
-			this.handledByPasteEvent = false;
-			return;
-		}
-
-		console.log("editor changed");
-
-		const previousContent = info.data;
-		const currentContent = editor.getValue();
-
-		if (previousContent !== currentContent) {
-			const diff = diffLines(previousContent, currentContent);
-			const addedLines = diff.filter((part: Change) => part.added);
-
-			const urlPattern = "https://www.churchofjesuschrist.org/study/";
-			const addedUrlLine = addedLines.find((part: Change) => part.value.includes(urlPattern));
-
-			if (addedUrlLine) {
-				const blockText = await getStudyBlockTextFromUrl(addedUrlLine.value, this.settings);
-				editor.replaceSelection(blockText);
-
-				if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
-					this.copyCurrentNoteLinkToClipboard();
-				}
-			}
-		}
-		this.handledByPasteEvent = false;
 	}
 }
