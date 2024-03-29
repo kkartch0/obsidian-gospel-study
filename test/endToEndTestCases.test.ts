@@ -1,8 +1,8 @@
 import fs from 'fs';
-import yaml from 'yaml';
-import { getStudyBlockTextFromUrl } from 'obsidian-gospel-study/getStudyBlockTextFromUrl';
-import { DEFAULT_SETTINGS, STUDY_BLOCK_FORMAT_1, STUDY_BLOCK_FORMAT_2 } from 'obsidian-gospel-study/defaultPluginSettings';
-import { GospelStudyPluginSettings } from "obsidian-gospel-study/models/GospelStudyPluginSettings";
+import yaml from '../node_modules/yaml/dist';
+import { getStudyBlockTextFromUrl } from '../src/getStudyBlockTextFromUrl';
+import { DEFAULT_SETTINGS, STUDY_BLOCK_FORMAT_1, STUDY_BLOCK_FORMAT_2 } from '../src/defaultPluginSettings';
+import { GospelStudyPluginSettings } from "../src/models/GospelStudyPluginSettings";
 
 let fileNames: string[] = [];
 
