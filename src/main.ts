@@ -2,13 +2,11 @@ import { Plugin, Editor } from "obsidian";
 import { GospelStudyPluginSettingTab } from "./gospelStudyPluginSettingTab";
 import { DEFAULT_SETTINGS, GospelStudyPluginSettings } from "./gospelStudyPluginSettings";
 import { getStudyBlockTextFromUrl } from "./getStudyBlockTextFromUrl";
-import { diffLines, Change } from "diff";
 
 export default class GospelStudyPlugin extends Plugin {
 	public settings!: GospelStudyPluginSettings;
 
-	handledByPasteEvent!: boolean;
-	previousContent!: string;
+	handlingEvent!: boolean;
 
 	/**
 	 * Loads the plugin settings from the data store.
@@ -33,53 +31,47 @@ export default class GospelStudyPlugin extends Plugin {
 
 		this.addSettingTab(new GospelStudyPluginSettingTab(this.app, this));
 
-		this.handledByPasteEvent = false;
+		this.handlingEvent = false;
 
 		this.registerEvent(
-			this.app.workspace.on("editor-paste", this.onEditorPaste.bind(this))
+			this.app.workspace.on("editor-change", this.checkForUnresolvedStudyUrl.bind(this))
 		);
-
-		this.previousContent = this.app.workspace.activeEditor?.editor?.getValue() || "";
-		this.registerInterval(window.setInterval(this.checkForFileUpdates.bind(this), 1_000));
 	}
 
-	private async checkForFileUpdates() {
-		if (this.handledByPasteEvent) {
-			// ensure we don't try to handle the paste event again
-			this.handledByPasteEvent = false;
-			return;
-		}
+	private async checkForUnresolvedStudyUrl(editor: Editor, info: any) {
+		if (this.handlingEvent) return;
 
-		const editor = this.app.workspace.activeEditor?.editor;
-		if (!editor) return;
-
-		console.log("editor changed");
+		this.handlingEvent = true;
 
 		let currentContent = editor.getValue() || "";
 
-		if (this.previousContent !== currentContent) {
-			const diff = diffLines(this.previousContent, currentContent);
-			const addedLines = diff.filter((part: Change) => part.added);
+		const urlPattern : RegExp = /^ *(https:\/\/www.churchofjesuschrist.org\/study\/[^\s\)]*) *$/gm;
+		const match = currentContent.match(urlPattern)
 
-			const urlPattern = "(https://www.churchofjesuschrist.org/study/.*)";
-			addedLines.forEach(async (part: Change) => {
-				const match = part.value.match(urlPattern)
-				if (match) {
-					const url = match[0];
-					const blockText = await getStudyBlockTextFromUrl(url, this.settings);
-
-					currentContent = currentContent.replace(url, blockText);
-					editor.setValue(currentContent);
-
-					if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
-						this.copyCurrentNoteLinkToClipboard();
-					}
-
-					this.previousContent = editor.getValue() || "";
-					this.handledByPasteEvent = false;
-				}
-			});
+		if (!match) { 
+			this.handlingEvent = false;
+			return;
 		}
+
+		const promises = match.map(async (url) => {
+			const blockText = await getStudyBlockTextFromUrl(url, this.settings);
+			return { url, blockText };
+
+		});
+
+		const urlResolves = await Promise.all(promises);
+
+		urlResolves.forEach(({ url, blockText }) => {
+			currentContent = currentContent.replace(url, blockText);
+		});
+
+		editor.setValue(currentContent);
+
+		if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
+			this.copyCurrentNoteLinkToClipboard();
+		}
+
+		this.handlingEvent = false;
 	}
 
 	/**
@@ -123,43 +115,5 @@ export default class GospelStudyPlugin extends Plugin {
 		fileName = encodeURIComponent(fileName);
 		const obsidianUrl = `obsidian://open?vault=${vaultName}&file=${fileName}`;
 		return obsidianUrl;
-	}
-
-	/**
-	 * Handles the paste event in the editor.
-	 *
-	 * @param clipboard - The clipboard event object.
-	 * @param editor - The editor object.
-	 * @returns A promise that resolves when the paste event is handled.
-	 */
-	private async onEditorPaste(
-		clipboard: ClipboardEvent,
-		editor: Editor
-	): Promise<void> {
-		if (clipboard.defaultPrevented) return;
-		if (!navigator.onLine) return;
-
-		const clipboardData = clipboard.clipboardData?.getData("text/plain");
-
-		if (!clipboardData) return;
-		if (
-			!clipboardData.contains(
-				"https://www.churchofjesuschrist.org/study/"
-			)
-		)
-			return;
-
-		clipboard.stopPropagation();
-		clipboard.preventDefault();
-
-		this.handledByPasteEvent = true;
-
-		const blockText = await getStudyBlockTextFromUrl(clipboardData, this.settings);
-
-		editor.replaceSelection(blockText);
-
-		if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
-			this.copyCurrentNoteLinkToClipboard();
-		}
 	}
 }
