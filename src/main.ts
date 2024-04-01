@@ -38,7 +38,7 @@ export default class GospelStudyPlugin extends Plugin {
 		this.handlingEvent = false;
 
 		this.registerEvent(
-			this.app.workspace.on("editor-change", this.checkForUnresolvedStudyUrl.bind(this))
+			this.app.workspace.on("editor-change", this.resolveUnresolvedStudyUrls.bind(this))
 		);
 	}
 
@@ -47,11 +47,10 @@ export default class GospelStudyPlugin extends Plugin {
 	 * @param editor - The editor instance.
 	 * @param _info - Additional information (not used in this method).
 	 */
-	private async checkForUnresolvedStudyUrl(editor: Editor, _info: any) {
+	private async resolveUnresolvedStudyUrls(editor: Editor, _info: any) {
 		if (this.handlingEvent) return;
 
 		this.handlingEvent = true;
-
 		let currentContent = editor.getValue() || "";
 
 		const urlPattern : RegExp = /^ *(https:\/\/www.churchofjesuschrist.org\/study\/[^\s\)]*) *$/gm;
@@ -62,21 +61,19 @@ export default class GospelStudyPlugin extends Plugin {
 			return;
 		}
 
-		const promises = match.map(async (url) => {
+		const urlResolvePromises = match.map(async (url) => {
 			const blockText = await getStudyBlockTextFromUrl(url, this.settings);
 			return { url, blockText };
-
 		});
 
-		const urlResolves = await Promise.all(promises);
-
+		const urlResolves = await Promise.all(urlResolvePromises);
 		urlResolves.forEach(({ url, blockText }) => {
 			currentContent = currentContent.replace(url, blockText);
 		});
 
 		editor.setValue(currentContent);
 
-		const lastStudyBlock = urlResolves[urlResolves.length - 1].blockText;
+		const lastStudyBlock = urlResolves.last()?.blockText || "";
 		this.scrollToStudyBlock(lastStudyBlock);
 
 		if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
