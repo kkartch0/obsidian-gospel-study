@@ -1,4 +1,4 @@
-import { Plugin, Editor } from "obsidian";
+import { Plugin, Editor, View, MarkdownView } from "obsidian";
 import { GospelStudyPluginSettingTab } from "./gospelStudyPluginSettingTab";
 import { DEFAULT_SETTINGS } from "./defaultPluginSettings";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
@@ -7,6 +7,9 @@ import { getStudyBlockTextFromUrl } from "./getStudyBlockTextFromUrl";
 export default class GospelStudyPlugin extends Plugin {
 	public settings!: GospelStudyPluginSettings;
 
+	/**
+	 * Used for locking the handling of the editor-change event to prevent infinite loops. 
+	 */
 	handlingEvent!: boolean;
 
 	/**
@@ -39,7 +42,12 @@ export default class GospelStudyPlugin extends Plugin {
 		);
 	}
 
-	private async checkForUnresolvedStudyUrl(editor: Editor, info: any) {
+	/**
+	 * Checks for unresolved study URLs in the editor content and replaces them with their corresponding study block text.
+	 * @param editor - The editor instance.
+	 * @param _info - Additional information (not used in this method).
+	 */
+	private async checkForUnresolvedStudyUrl(editor: Editor, _info: any) {
 		if (this.handlingEvent) return;
 
 		this.handlingEvent = true;
@@ -68,11 +76,23 @@ export default class GospelStudyPlugin extends Plugin {
 
 		editor.setValue(currentContent);
 
+		this.scrollToBottom();
+
 		if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
 			this.copyCurrentNoteLinkToClipboard();
 		}
 
 		this.handlingEvent = false;
+	}
+
+	/**
+	 * Scrolls the active Markdown view to the bottom.
+	 */
+	private scrollToBottom() {
+		const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+		if (view) {
+			view.currentMode.applyScroll(view.editor.lastLine());
+		}
 	}
 
 	/**
