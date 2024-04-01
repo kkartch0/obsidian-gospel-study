@@ -1,4 +1,4 @@
-import { Plugin, Editor, View, MarkdownView } from "obsidian";
+import { Plugin, Editor, MarkdownView } from "obsidian";
 import { GospelStudyPluginSettingTab } from "./gospelStudyPluginSettingTab";
 import { DEFAULT_SETTINGS } from "./defaultPluginSettings";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
@@ -76,7 +76,8 @@ export default class GospelStudyPlugin extends Plugin {
 
 		editor.setValue(currentContent);
 
-		this.scrollToBottom();
+		const lastStudyBlock = urlResolves[urlResolves.length - 1].blockText;
+		this.scrollToStudyBlock(lastStudyBlock);
 
 		if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
 			this.copyCurrentNoteLinkToClipboard();
@@ -86,12 +87,15 @@ export default class GospelStudyPlugin extends Plugin {
 	}
 
 	/**
-	 * Scrolls the active Markdown view to the bottom.
+	 * Scrolls the last resolved study block into view.
 	 */
-	private scrollToBottom() {
+	private scrollToStudyBlock(lastStudyBlock: string) {
 		const view = this.app.workspace.getActiveViewOfType(MarkdownView);
 		if (view) {
-			view.currentMode.applyScroll(view.editor.lastLine());
+			const studyBlockLineCount = lastStudyBlock.split("\n").length;
+			const lineToScrollTo = view.editor.lastLine() - studyBlockLineCount;
+
+			view.currentMode.applyScroll(lineToScrollTo);
 		}
 	}
 
