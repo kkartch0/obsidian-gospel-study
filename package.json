@@ -20,7 +20,6 @@
 	},
 	"license": "MIT",
 	"devDependencies": {
-		"@types/diff": "^5.0.9",
 		"@types/jest": "^29.5.12",
 		"@types/node": "^16.11.6",
 		"@typescript-eslint/eslint-plugin": "5.29.0",
@@ -34,8 +33,5 @@
 		"tslib": "2.4.0",
 		"typescript": "4.7.4",
 		"yaml": "^2.4.1"
-	},
-	"dependencies": {
-		"diff": "^5.2.0"
 	}
 }
