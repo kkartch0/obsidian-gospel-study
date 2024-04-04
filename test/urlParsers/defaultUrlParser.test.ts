@@ -1,4 +1,4 @@
-import { UrlParseResult } from "src/models/UrlParseResult";
+import { UrlParserResult } from "src/models/UrlParserResult";
 import { defaultUrlParser } from "../../src/urlParsers/defaultUrlParser";
 
 describe("defaultUrlParser", () => {
@@ -73,10 +73,10 @@ describe("defaultUrlParser", () => {
 	});
 
 	describe("getParagraphIds", () => {
-		let parseResult: UrlParseResult;
+		let parseResult: UrlParserResult;
 
 		const act = () => {
-			parseResult = defaultUrlParser.getParagraphIDs(url);
+			parseResult = defaultUrlParser.parse(url);
 		};
 
 		describe("a URL with a single ID", () => {

@@ -7,19 +7,16 @@ export async function getStudyBlockTextFromUrl(data: string, pluginSettings: Gos
 	const standardizedUrl = standardizeSearchParams(data);
 	const url = new URL(standardizedUrl);
 
-	// Find the first parser that can parse out this type of URL
 	const urlParser = registeredUrlParsers.find(currentParser => currentParser.isParseable(url));
 
-	// console.log(data, url.searchParams.get("id"), parser);
-
-	// If no parser is found, return false.
 	if (!urlParser) {
 		return null;
 	}
 
 	const urlParserResult = urlParser.parse(url);
 
-	const block = await StudyBlock.create(url, paragraphResult, pluginSettings);
+	const block = await StudyBlock.create(urlParserResult, pluginSettings);
 	const blockText = block.toString(pluginSettings.studyBlockFormat);
+
 	return blockText;
 }

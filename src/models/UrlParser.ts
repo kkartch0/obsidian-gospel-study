@@ -1,4 +1,4 @@
-import { UrlParseResult } from "./UrlParseResult";
+import { UrlParserResult } from "./UrlParserResult";
 
 /**
  * Declares methods to be used for parsing paragraph IDs out of the given URL.
@@ -16,7 +16,7 @@ export interface UrlParser {
      * Parses the paragraph IDs from the given URL.
      *
      * @param {URL} url - The URL that is being added to Obsidian.
-     * @returns {UrlParseResult} - The parse results, including the separated paragraph IDs and the display format for paragraph IDs.
+     * @returns {UrlParserResult} - The parse results, including the separated paragraph IDs and the display format for paragraph IDs.
      */
-    getParagraphIDs(url: URL): UrlParseResult;
+    parse(url: URL): UrlParserResult;
 }

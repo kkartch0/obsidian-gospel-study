@@ -1,86 +1,5 @@
 import { UrlParser } from "src/models/UrlParser";
-import { UrlParseResult } from "src/models/UrlParseResult";
-
-type ParagraphItem = {
-    paragraphId: string;
-    paragraphNum: number;
-};
-
-type ParagraphResults = {
-    paragraphIds: string[];
-    lastParagraphNum: number;
-}
-
-/**
- * The regex which verifies whether the ID query parameter is in the correct format for this parser.
- */
-const correctFormatRegex = /^(?:[a-z]+[0-9]+[,-])*[a-z]+[0-9]+$/;
-
-/**
- * The regex that will parse out the paragraph numbers from the ID query parameter.
- */
-const paragrahRegex = /([a-z]+[0-9]+)((?:-[a-z]+[0-9]+)?),?/g;
-
-/**
- * The regex used to remove the prefixes from paragraph IDs.
- */
-const paragraphDisplayText = /[a-z]/g;
-
-/**
- * Retrieves the number from a paragraph ID.
- */
-const numRegex = /\d+/;
-
-/**
- * Retrieves the prefix of a paragraph ID.
- */
-const prefixRegex = /\D+/;
-
-/**
- * Retrieves the number from a paragraph ID.
- *
- * @param {string} currentId - The current paragraph ID that is being processed.
- * @returns {number} - The number from the given paragraph ID.
- */
-function getNumber(currentId: string): number {
-    return parseInt((currentId.match(numRegex) ?? ["0"])[0]);
-}
-
-/**
- * Retrieves the prefix from a paragraph ID.
- *
- * @param {string} currentId - The current paragraph ID that is being processed.
- * @returns {number} - The number from the given paragraph ID.
- */
-function getPrefix(currentId: string): string {
-    return (currentId.match(prefixRegex) ?? ["p"])[0];
-}
-
-/**
- * Takes a Regex result, and expands it if it represents a range of paragraph IDs. Intended to be used with the flatMap function.
- *
- * @param {RegExpMatchArray} result - One of the parse results from the id query parameter.
- * @returns {ParagraphItem | ParagraphItem[]} - Either a single or list of paragraph items resulting from the current parsed results.
- */
-function expandParagraphIds(result: RegExpMatchArray): ParagraphItem | ParagraphItem[] {
-    const firstNum = getNumber(result[1]);
-
-    if (result[2] === '') {
-        return {
-            paragraphId: result[1],
-            paragraphNum: firstNum
-        } as ParagraphItem;
-    }
-    
-    const prefix = getPrefix(result[1]);
-    const secondNum = getNumber(result[2]);
-
-    return Array.from({ length: secondNum - firstNum + 1 }, (_, i) => firstNum + i)
-        .map(paragraphNum => ({
-            paragraphId: `${prefix}${paragraphNum}`,
-            paragraphNum
-        }));
-}
+import { UrlParserResult } from "src/models/UrlParserResult";
 
 /**
  * Declares a parser for the default ID format (e.g., p1,p3-p7,p9)
@@ -88,44 +7,75 @@ function expandParagraphIds(result: RegExpMatchArray): ParagraphItem | Paragraph
 export const defaultUrlParser: UrlParser = {
     isParseable(url: URL): boolean {
         const idParam = url.searchParams.get("id");
+        const correctFormatRegex = /^(?:[a-z]+[0-9]+[,-])*[a-z]+[0-9]+$/;
         return !!idParam && correctFormatRegex.test(idParam);
     },
 
-    getParagraphIDs(url: URL): UrlParseResult {
-        const idParam = url.searchParams.get("id") ?? "";
-        const displayParagraphIds = idParam.replace(paragraphDisplayText, "").replace(/,/g, ", ");
+    parse(url: URL): UrlParserResult {
+        const idParam = url.searchParams.get("id") || "";
+        const idParts = idParam.split(",");
 
-        const results = Array.from(idParam.matchAll(paragrahRegex));
+        const paragraphIds: string[] = [];
 
-        const expandedParagraphIds = results
-            .flatMap(expandParagraphIds);
+        for (const part of idParts) {
+            if (part.includes("-")) { // It is a range of paragraphs
+                const paragraphIdsInRange = paragraphRangeToParagraphIds(part);
+                paragraphIds.push(...paragraphIdsInRange);
+            } else { // It is a single paragraph
+                paragraphIds.push(part);
+            }
+        }
 
-		let paragraphResults: ParagraphResults = {
-			paragraphIds: [],
-			lastParagraphNum: 0
-		};
+        insertHyphenBetweenNonContiguousParagraphs(paragraphIds);
 
-		for (const [index, currentParagraphIds] of expandedParagraphIds.entries()) {
-			const newResults: string[] = [];
-
-			if (index > 0 && currentParagraphIds.paragraphNum > paragraphResults.lastParagraphNum + 1) {
-				newResults.push("-");
-			}
-
-			newResults.push(currentParagraphIds.paragraphId);
-
-			paragraphResults = {
-				paragraphIds: [
-					...paragraphResults.paragraphIds,
-					...newResults
-				],
-				lastParagraphNum: currentParagraphIds.paragraphNum
-			}
-		}
+        const displayParagraphIds = idParam.replace(/p/g, "").replace(/,/g, ", ");
 
         return {
-            paragraphIds: paragraphResults.paragraphIds,
-            displayParagraphIds
+            paragraphIds,
+            displayParagraphIds,
+            url
         };
     },
 };
+
+/**
+* Converts a paragraph range string to an array of paragraph IDs.
+* @param range - The paragraph range string in the format "startId-endId".
+* @returns An array of paragraph IDs.
+*/
+function paragraphRangeToParagraphIds(range: string): string[] {
+    const [startId, endId] = range.split("-");
+
+    const start = Number(startId.replace("p", ""));
+    const end = Number(endId.replace("p", ""));
+
+    const paragraphIds: string[] = [];
+    for (let i = start; i <= end; ++i) {
+        paragraphIds.push(`p${i}`);
+    }
+
+    return paragraphIds;
+}
+
+/**
+* Inserts hyphens between non-contiguous paragraphs in the activeParagraphIds array.
+* @param activeParagraphIds - The array of paragraph IDs to insert hyphens into.
+* @example 
+* const activeParagraphIds = ['p1', 'p3', 'p5', 'p6', 'p7', 'p10'];
+* insertEllipsesBetweenNonContiguousParagraphs(activeParagraphIds);
+* console.log(activeParagraphIds); // Output: ['p1','-', 'p3', '-', 'p5', 'p6', 'p7', '-', 'p10']
+*/
+function insertHyphenBetweenNonContiguousParagraphs(activeParagraphIds: string[]) {
+    for (let i = 0; i < activeParagraphIds.length - 1; ++i) {
+        const currentId = activeParagraphIds[i];
+        const nextId = activeParagraphIds[i + 1];
+        const currentNumber = Number(currentId.replace("p", ""));
+        const nextNumber = Number(nextId.replace("p", ""));
+
+        const paragraphsAreNonContiguous = nextNumber - currentNumber > 1;
+        if (paragraphsAreNonContiguous) {
+            activeParagraphIds.splice(i + 1, 0, "-"); // Insert a hyphen between the paragraph ids
+        }
+    }
+}
+

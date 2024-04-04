@@ -1,7 +1,7 @@
 /**
- * The parsed results returned by a ParagraphIDParser.
+ * The parsed results returned by a UrlParser.
  */
-export interface UrlParseResult {
+export interface UrlParserResult {
     /**
      * The list of paragraph IDs derived from a URL.
      */
@@ -11,4 +11,9 @@ export interface UrlParseResult {
      * A display version of the paragraph IDs derived from a URL.
      */
     displayParagraphIds: string;
+
+    /**
+     * The URL that was parsed.
+     */
+    url: URL;
 }
