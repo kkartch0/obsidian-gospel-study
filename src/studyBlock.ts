@@ -1,4 +1,4 @@
-import { getFormattedParagraphs } from "./paragraphFormatting";
+import { getFormattedParagraphs } from "./paragraphFormatting/paragraphFormatting";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
 import { UrlParserResult } from "./models/UrlParserResult";
 import { requestUrl } from "obsidian";

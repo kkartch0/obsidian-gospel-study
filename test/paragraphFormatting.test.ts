@@ -1,7 +1,7 @@
 import { DEFAULT_SETTINGS } from "../src/defaultPluginSettings";
 import {
 	formatParagraph
-} from "../src/paragraphFormatting";
+} from "../src/paragraphFormatting/paragraphFormatting";
 
 describe("formatParagraph", () => {
 	it("should remove footnotes from the paragraph", () => {
