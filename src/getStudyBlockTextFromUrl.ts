@@ -13,11 +13,11 @@ export async function getStudyBlockTextFromUrl(data: string, pluginSettings: Gos
 	// console.log(data, url.searchParams.get("id"), parser);
 
 	// If no parser is found, return false.
-	if (!parser) {
+	if (!urlParser) {
 		return null;
 	}
 
-	const paragraphResult = parser.getParagraphIDs(url);
+	const urlParserResult = urlParser.parse(url);
 
 	const block = await StudyBlock.create(url, paragraphResult, pluginSettings);
 	const blockText = block.toString(pluginSettings.studyBlockFormat);

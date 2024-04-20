@@ -16,8 +16,8 @@ export class StudyBlock {
      */
     public static async create(url: URL,urlParseResult: UrlParseResult, pluginSettings: GospelStudyPluginSettings): Promise<StudyBlock> {
 		const response = await requestUrl(url.toString());
-		const parser = new DOMParser();
-		const sourceDocument = parser.parseFromString(response.text, "text/html");
+		const domParser = new DOMParser();
+		const sourceDocument = domParser.parseFromString(response.text, "text/html");
         const studyBlock = new StudyBlock(url, urlParseResult, sourceDocument, pluginSettings);
 
         return studyBlock;
