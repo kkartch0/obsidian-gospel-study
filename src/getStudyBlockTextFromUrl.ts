@@ -8,7 +8,7 @@ export async function getStudyBlockTextFromUrl(data: string, pluginSettings: Gos
 	const url = new URL(standardizedUrl);
 
 	// Find the first parser that can parse out this type of URL
-	const parser = registeredUrlParsers.find(currentParser => currentParser.isParseable(url));
+	const urlParser = registeredUrlParsers.find(currentParser => currentParser.isParseable(url));
 
 	// console.log(data, url.searchParams.get("id"), parser);
 
