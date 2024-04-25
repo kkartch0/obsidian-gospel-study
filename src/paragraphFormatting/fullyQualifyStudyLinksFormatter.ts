@@ -1,4 +1,3 @@
-import { GospelStudyPluginSettings } from "src/models/GospelStudyPluginSettings";
 import { ParagraphFormatter } from "src/models/ParagraphFormatter";
 
 /**

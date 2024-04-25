@@ -14,7 +14,7 @@ import { ParagraphFormatter } from "src/models/ParagraphFormatter";
  */
 export const removeScriptureReferenceLinksFormatter: ParagraphFormatter = {
 	isEnabled(settings: GospelStudyPluginSettings): boolean {
-		return settings.retainScriptureReferenceLinks;
+		return !settings.retainScriptureReferenceLinks;
 	},
 
 	format(paragraph: string): string {
