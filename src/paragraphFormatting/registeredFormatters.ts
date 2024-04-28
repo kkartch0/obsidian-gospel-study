@@ -4,24 +4,21 @@ import fs from 'fs';
 export let registeredFormatters: ParagraphFormatter[] = []; 
 
 /**
- * Imports all formatters and adds formatters that are enabled based on the plugin settings.
+ * Imports all formatters (i.e. files that end with "Formatter.ts") and assigns them to registeredFormatters.
  * 
  * @param pluginSettings - The settings of the Gospel Study plugin.
  * @returns An array of enabled formatters.
  */
-async function loadInAllFormatters(): Promise<ParagraphFormatter[]> {
+async function loadInAllFormatters() {
     const files = fs.readdirSync('src/paragraphFormatting');
     const formatterPromises = files.filter(file => file.endsWith('Formatter.ts')).map(async file => {
-        const formatter = await import(`./${file}`) as ParagraphFormatter;
+        const module = await import(`./${file}`);
+        const formatter = module.default as ParagraphFormatter;
         return formatter;
     });
 
-    const loadedFormatters = await Promise.all(formatterPromises);
-    return loadedFormatters;
+    registeredFormatters = await Promise.all(formatterPromises);
 }
 
-async function loadFormatters() {
-    registeredFormatters = await loadInAllFormatters();
-}
 
-loadFormatters();
+loadInAllFormatters();

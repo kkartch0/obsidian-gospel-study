@@ -3,7 +3,7 @@ import { DEFAULT_SETTINGS } from "../src/defaultPluginSettings";
 import {
 	formatParagraph,
 } from "../src/paragraphFormatting/paragraphFormatting";
-import { registeredFormatters } from "src/paragraphFormatting/registeredFormatters";
+import { registeredFormatters } from "../src/paragraphFormatting/registeredFormatters";
 
 describe("formatParagraph", () => {
 	let defaultEnabledFormatters: ParagraphFormatter[];
