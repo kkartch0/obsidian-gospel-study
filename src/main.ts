@@ -107,10 +107,12 @@ export default class GospelStudyPlugin extends Plugin {
 
 		const blockText = await getStudyBlockTextFromUrl(clipboardData, this.settings);
 
-		editor.replaceSelection(blockText);
+		if (blockText) {
+			editor.replaceSelection(blockText);
 
-		if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
-			this.copyCurrentNoteLinkToClipboard();
+			if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
+				this.copyCurrentNoteLinkToClipboard();
+			}
 		}
 	}
 

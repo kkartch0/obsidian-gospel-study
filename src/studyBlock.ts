@@ -1,25 +1,25 @@
-import { StudyURL } from "./studyUrl";
 import { getFormattedParagraphs } from "./paragraphFormatting";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
+import { UrlParserResult } from "./models/UrlParserResult";
+import { requestUrl } from "obsidian";
 
 export class StudyBlock {
-    private _paragraphIdsString: string | undefined;
     private _paragraphs: string[] | undefined;
     private _referenceLink: string | undefined;
-    private _sourceDocument: Document;
     private _tag: string | undefined;
-    private _url: StudyURL;
-    private _pluginSettings: GospelStudyPluginSettings;
 
     /**
-     * Creates a new StudyBlock instance from the specified StudyURL.
+     * Creates a new StudyBlock instance using the given URL parser result and plugin settings.
      * 
-     * @param url The StudyURL associated with the StudyBlock.
+     * @param urlParserResult - The result of parsing a URL.
+     * @param pluginSettings - The settings for the Gospel Study plugin.
      * @returns A Promise that resolves to a StudyBlock instance.
      */
-    public static async create(url: StudyURL, pluginSettings: GospelStudyPluginSettings): Promise<StudyBlock> {
-        const sourceDocument = await url.getAssociatedDocument();
-        const studyBlock = new StudyBlock(url, sourceDocument, pluginSettings);
+    public static async create(urlParserResult: UrlParserResult, pluginSettings: GospelStudyPluginSettings): Promise<StudyBlock> {
+		const response = await requestUrl(urlParserResult.url.toString());
+		const parser = new DOMParser();
+		const sourceDocument = parser.parseFromString(response.text, "text/html");
+        const studyBlock = new StudyBlock(urlParserResult, sourceDocument, pluginSettings);
 
         return studyBlock;
     }
@@ -27,11 +27,10 @@ export class StudyBlock {
     /**
      * Constructs a new instance of StudyBlock from the specified URL and source document.
      */
-    private constructor(url: StudyURL, sourceDocument: Document, pluginSettings: GospelStudyPluginSettings) {
-        this._url = url;
-        this._sourceDocument = sourceDocument;
-        this._pluginSettings = pluginSettings;
-    }
+    private constructor(
+		private _urlParserResult: UrlParserResult,
+		private _sourceDocument: Document,
+		private _pluginSettings: GospelStudyPluginSettings) {}
 
     /**
      * Gets the string representation of the paragraph IDs excluding the "p" prefix.
@@ -42,15 +41,7 @@ export class StudyBlock {
      * console.log(studyURL.activeParagraphIdsString); // Output: "1, 3-5, 7"
      */
     public get paragraphIdsString(): string {
-        if (this._paragraphIdsString === undefined) {
-            let idsString = this._url.searchParams.get("id") ?? "";
-            idsString = idsString.replace(/p/g, "");
-            idsString = idsString.replace(/,/g, ", ");
-
-            this._paragraphIdsString = idsString;
-        }
-
-        return this._paragraphIdsString;
+		return this._urlParserResult.displayParagraphIds;
     }
 
     /**
@@ -58,7 +49,7 @@ export class StudyBlock {
      */
     public get paragraphs(): string[] {
         if (this._paragraphs === undefined) {
-            this._paragraphs = getFormattedParagraphs(this._sourceDocument, this._url.activeParagraphIds, this._pluginSettings);
+            this._paragraphs = getFormattedParagraphs(this._sourceDocument, this._urlParserResult.paragraphIds, this._pluginSettings);
         }
         return this._paragraphs || [];
     }
@@ -91,7 +82,7 @@ export class StudyBlock {
      */
     public get tag(): string {
         if (this._tag === undefined) {
-            const path = this._url.pathname.replace("/study", "study");
+            const path = this._urlParserResult.url.pathname.replace("/study", "study");
             this._tag = `#${path}`;
         }
         return this._tag;
@@ -110,7 +101,7 @@ export class StudyBlock {
      * @returns The URL of the StudyBlock.
      */
     public get url(): string {
-        return this._url.toString();
+        return this._urlParserResult.url.toString();
     }
 
     /**
