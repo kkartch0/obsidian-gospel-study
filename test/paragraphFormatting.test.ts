@@ -2,7 +2,7 @@ import { ParagraphFormatter } from "src/models/ParagraphFormatter";
 import { DEFAULT_SETTINGS } from "../src/defaultPluginSettings";
 import {
 	formatParagraph,
-} from "../src/paragraphFormatting/paragraphFormatting";
+} from "../src/paragraphFormatting";
 import { registeredFormatters } from "../src/paragraphFormatting/registeredFormatters";
 
 describe("formatParagraph", () => {
