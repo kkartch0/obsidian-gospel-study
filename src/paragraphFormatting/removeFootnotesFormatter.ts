@@ -12,7 +12,7 @@ import { ParagraphFormatter } from "src/models/ParagraphFormatter";
  * console.log(modifiedText);
  * // Output: "This is a paragraph with a footnote."
  */
-export const footnotesFormatter: ParagraphFormatter = {
+export const removeFootnotesFormatter: ParagraphFormatter = {
 	isEnabled(): boolean {
 		return true;
 	},
@@ -26,5 +26,3 @@ export const footnotesFormatter: ParagraphFormatter = {
 		return paragraph;
 	}
 }
-
-export default footnotesFormatter;

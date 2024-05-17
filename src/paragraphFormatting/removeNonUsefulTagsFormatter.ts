@@ -27,5 +27,3 @@ export const removeNonUsefulTagsFormatter: ParagraphFormatter = {
 		return doc.body.innerHTML;
 	}
 };
-
-export default removeNonUsefulTagsFormatter;
