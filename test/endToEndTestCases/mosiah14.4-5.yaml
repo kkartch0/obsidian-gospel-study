@@ -1,0 +1,18 @@
+pastedText: |
+  https://www.churchofjesuschrist.org/study/scriptures/bofm/mosiah/14?lang=eng&id=p4-p5
+
+pluginSettings:
+  studyBlockFormat: STUDY_BLOCK_FORMAT_1
+  retainScriptureReferenceLinks: true
+
+expectedResult: |
+  > [!gospel-study]
+  > # [Mosiah 14:4-5](https://www.churchofjesuschrist.org/study/scriptures/bofm/mosiah/14?lang=eng&id=p4-p5)
+  > <span class="verse-number">4 </span>Surely he has borne our griefs, and carried our sorrows; yet we did esteem him stricken, smitten of God, and afflicted.
+  >
+  > <span class="verse-number">5 </span>But he was wounded for our transgressions, he was bruised for our iniquities; the chastisement of our peace was upon him; and with his stripes we are healed.
+  >
+  >#study/scriptures/bofm/mosiah/14
+
+verifies:
+  - Footnotes are removed correctly (issue #45)

@@ -19,7 +19,7 @@ export const footnotesFormatter: ParagraphFormatter = {
 
 	format(paragraph: string) {
 		paragraph = paragraph.replace(
-			/<a class="study-note-ref" href="[^>]*"><sup class="marker">[^<]*<\/sup>([^<]*)<\/a>/g,
+			/<a class="study-note-ref" href="[^>]*"><sup class="marker"[^>]*>[^<]*<\/sup>([^<]*)<\/a>/g,
 			"$1"
 		);
 
