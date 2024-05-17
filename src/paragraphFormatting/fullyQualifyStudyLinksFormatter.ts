@@ -20,5 +20,3 @@ export const fullyQualifyStudyLinksFormatter: ParagraphFormatter = {
 		return paragraph.replace(/"\/study\//g, "\"https://www.churchofjesuschrist.org/study/");
 	}
 };
-
-export default fullyQualifyStudyLinksFormatter;

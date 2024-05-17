@@ -12,19 +12,17 @@ import { ParagraphFormatter } from "src/models/ParagraphFormatter";
  * console.log(modifiedText);
  * // Output: "This is a paragraph with a footnote."
  */
-export const footnotesFormatter: ParagraphFormatter = {
+export const removeFootnotesFormatter: ParagraphFormatter = {
 	isEnabled(): boolean {
 		return true;
 	},
 
 	format(paragraph: string) {
 		paragraph = paragraph.replace(
-			/<a class="study-note-ref" href="[^>]*"><sup class="marker">[^<]*<\/sup>([^<]*)<\/a>/g,
+			/<a class="study-note-ref" href="[^>]*"><sup class="marker"[^>]*>[^<]*<\/sup>([^<]*)<\/a>/g,
 			"$1"
 		);
 
 		return paragraph;
 	}
 }
-
-export default footnotesFormatter;

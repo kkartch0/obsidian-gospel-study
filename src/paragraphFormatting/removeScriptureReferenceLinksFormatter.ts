@@ -31,5 +31,3 @@ export const removeScriptureReferenceLinksFormatter: ParagraphFormatter = {
 		return paragraph;
 	}
 }
-
-export default removeScriptureReferenceLinksFormatter;
