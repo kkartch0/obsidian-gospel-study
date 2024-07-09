@@ -1,4 +1,4 @@
-import { Plugin, Editor } from "obsidian";
+import { Plugin, Editor, Notice } from "obsidian";
 import { GospelStudyPluginSettingTab } from "./gospelStudyPluginSettingTab";
 import { DEFAULT_SETTINGS } from "./defaultPluginSettings";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
@@ -113,6 +113,9 @@ export default class GospelStudyPlugin extends Plugin {
 			if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
 				this.copyCurrentNoteLinkToClipboard();
 			}
+		} else {
+			new Notice("Failed to retrieve study block from URL.");
+			editor.replaceSelection(clipboardData);
 		}
 	}
 
