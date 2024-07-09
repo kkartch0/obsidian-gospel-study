@@ -105,16 +105,22 @@ export default class GospelStudyPlugin extends Plugin {
 		clipboard.stopPropagation();
 		clipboard.preventDefault();
 
-		const blockText = await getStudyBlockTextFromUrl(clipboardData, this.settings);
+		try {
+			const blockText = await getStudyBlockTextFromUrl(clipboardData, this.settings);
 
-		if (blockText) {
-			editor.replaceSelection(blockText);
+			if (blockText) {
+				editor.replaceSelection(blockText);
 
-			if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
-				this.copyCurrentNoteLinkToClipboard();
+				if (this.settings.copyCurrentNoteLinkAfterPaste === true) {
+					this.copyCurrentNoteLinkToClipboard();
+				}
+			} else {
+				throw new Error();
 			}
-		} else {
-			new Notice("Failed to retrieve study block from URL.");
+		} catch (error) {
+			const failureMessage = "Failed to retrieve study block from pasted content.";
+			new Notice(`${failureMessage}: ${error}`);
+			console.error(error);
 			editor.replaceSelection(clipboardData);
 		}
 	}
