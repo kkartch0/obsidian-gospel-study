@@ -2,6 +2,7 @@ import { getFormattedParagraphs } from "./paragraphFormatting";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
 import { UrlParserResult } from "./models/UrlParserResult";
 import { requestUrl } from "obsidian";
+import { Platform } from "obsidian";
 
 export class StudyBlock {
     private _paragraphs: string[] | undefined;
@@ -16,9 +17,16 @@ export class StudyBlock {
      * @returns A Promise that resolves to a StudyBlock instance.
      */
     public static async create(urlParserResult: UrlParserResult, pluginSettings: GospelStudyPluginSettings): Promise<StudyBlock> {
-		const response = await requestUrl(urlParserResult.url.toString());
-		const parser = new DOMParser();
-		const sourceDocument = parser.parseFromString(response.text, "text/html");
+        const urlToRequest = urlParserResult.url.toString();
+
+        const response = await requestUrl({
+            url: urlToRequest, method: "GET", headers: {
+                "cookie": "analytics_video_metadata_load=false"
+            }
+        });
+
+        const parser = new DOMParser();
+        const sourceDocument = parser.parseFromString(response.text, "text/html");
         const studyBlock = new StudyBlock(urlParserResult, sourceDocument, pluginSettings);
 
         return studyBlock;
@@ -28,9 +36,9 @@ export class StudyBlock {
      * Constructs a new instance of StudyBlock from the specified URL and source document.
      */
     private constructor(
-		private _urlParserResult: UrlParserResult,
-		private _sourceDocument: Document,
-		private _pluginSettings: GospelStudyPluginSettings) {}
+        private _urlParserResult: UrlParserResult,
+        private _sourceDocument: Document,
+        private _pluginSettings: GospelStudyPluginSettings) { }
 
     /**
      * Gets the string representation of the paragraph IDs excluding the "p" prefix.
@@ -41,7 +49,7 @@ export class StudyBlock {
      * console.log(studyURL.activeParagraphIdsString); // Output: "1, 3-5, 7"
      */
     public get paragraphIdsString(): string {
-		return this._urlParserResult.displayParagraphIds;
+        return this._urlParserResult.displayParagraphIds;
     }
 
     /**
