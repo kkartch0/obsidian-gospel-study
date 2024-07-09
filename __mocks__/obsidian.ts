@@ -1,7 +1,7 @@
-import { RequestUrlResponse, RequestUrlResponsePromise } from "obsidian";
+import { RequestUrlParam, RequestUrlResponse, RequestUrlResponsePromise } from "obsidian";
 import fs from 'fs';
 
-export function requestUrl(url: string): Promise<RequestUrlResponse> {
+export function requestUrl(requestUrlParam: RequestUrlParam): Promise<RequestUrlResponse> {
   const urlToHtmlFileMap: { [key: string]: string } = {
     "https://www.churchofjesuschrist.org/study/scriptures/bofm/2-ne/22?lang=eng&id=2#p2": "2nephi22.2.html",
     "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/10?lang=eng&id=p8": "weRejoiceInChrist.html",
@@ -11,7 +11,7 @@ export function requestUrl(url: string): Promise<RequestUrlResponse> {
     "https://www.churchofjesuschrist.org/study/scriptures/bofm/mosiah/14?lang=eng&id=p4-p5": "mosiah14.4-5.html",
   };
 
-  const htmlFileName = urlToHtmlFileMap[url];
+  const htmlFileName = urlToHtmlFileMap[requestUrlParam.url];
   const htmlFileContent = fs.readFileSync(`__mocks__/${htmlFileName}`, 'utf8');
 
   return new Promise((resolve) => {
