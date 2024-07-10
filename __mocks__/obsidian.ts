@@ -9,6 +9,7 @@ export function requestUrl(requestUrlParam: RequestUrlParam): Promise<RequestUrl
     "https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/5?lang=eng&id=p1-p2#p1": "1nephi5.1-2.html",
     "https://www.churchofjesuschrist.org/study/scriptures/bofm/2-ne/10?lang=eng&id=24#p24": "2nephi10.24.html",
     "https://www.churchofjesuschrist.org/study/scriptures/bofm/mosiah/14?lang=eng&id=p4-p5": "mosiah14.4-5.html",
+    "https://www.churchofjesuschrist.org/study/general-conference/2023/10/15christofferson?lang=eng&id=p4#p4": "theSealingPower.html"
   };
 
   const htmlFileName = urlToHtmlFileMap[requestUrlParam.url];
