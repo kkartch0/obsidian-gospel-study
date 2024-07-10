@@ -12,12 +12,12 @@ import { ParagraphFormatter } from "src/models/ParagraphFormatter";
  * console.log(modifiedText);
  * // Output: "This paragraph \[has] square brackets."
  */
-export const escapeSquareBracketsFormatter : ParagraphFormatter = {
+export const escapeSquareBracketsFormatter: ParagraphFormatter = {
 	isEnabled(): boolean {
 		return true;
 	},
 
 	format(paragraph: string): string {
-        return paragraph.replace(/\[/g, "\\[");
+		return paragraph.replace(/\[/g, "\\[");
 	}
 };
