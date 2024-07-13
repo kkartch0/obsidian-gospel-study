@@ -4,11 +4,13 @@ import { removeNonUsefulTagsFormatter } from "./removeNonUsefulTagsFormatter";
 import { removeFootnotesFormatter } from "./removeFootnotesFormatter";
 import { removeScriptureReferenceLinksFormatter } from "./removeScriptureReferenceLinksFormatter";
 import { escapeSquareBracketsFormatter } from "./escapeSquareBracketsFormatter";
+import { breakRuleRemoveFormatter } from "./breakRuleRemoveFormatter";
 
 export const registeredFormatters: ParagraphFormatter[] = [
     fullyQualifyStudyLinksFormatter,
     removeFootnotesFormatter,
     removeNonUsefulTagsFormatter,
     removeScriptureReferenceLinksFormatter,
-    escapeSquareBracketsFormatter
+    escapeSquareBracketsFormatter,
+    breakRuleRemoveFormatter
 ]; 
