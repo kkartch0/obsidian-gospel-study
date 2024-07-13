@@ -1,0 +1,24 @@
+pastedText: |
+  https://www.churchofjesuschrist.org/study/general-conference/2023/10/15christofferson?lang=eng&id=p4#p4
+
+pluginSettings:
+  studyBlockFormat: |
+    > {{paragraphs:
+    >
+    > }}
+    >
+    > {{referenceLink}}
+
+    {{tag}} 
+  retainScriptureReferenceLinks: true
+
+expectedResult: |
+  > Most importantly, the gathering is for the purpose of bringing the blessings of salvation and exaltation to all who will receive them. It is how the covenant promises given to Abraham are realized. The Lord told Abraham that through his seed and priesthood “all the families of the earth \[should] be blessed, even with the blessings of the Gospel, which are the blessings of salvation, even of life eternal.” President Nelson expressed it this way: “When we embrace the gospel and are baptized, we take upon ourselves the sacred name of Jesus Christ. Baptism is the gate that leads to becoming joint heirs to all the promises given anciently by the Lord to Abraham, Isaac, Jacob, and their posterity.”
+  >
+  > [The Sealing Power](https://www.churchofjesuschrist.org/study/general-conference/2023/10/15christofferson?lang=eng&id=p4#p4)
+
+  #study/general-conference/2023/10/15christofferson
+
+verifies:
+  - Square brackets within paragraphs need to be escaped (e.g "\[" instead of "[") (issue #37)
+  - general conference talk
