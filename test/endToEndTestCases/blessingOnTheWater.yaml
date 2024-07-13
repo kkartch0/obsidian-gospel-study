@@ -1,0 +1,17 @@
+pastedText: |
+  https://www.churchofjesuschrist.org/study/scriptures/sacrament/water?lang=eng&id=p1
+
+pluginSettings:
+  studyBlockFormat: STUDY_BLOCK_FORMAT_1
+  retainScriptureReferenceLinks: true
+
+expectedResult: |
+  > [!gospel-study]
+  > # [Blessing on the Water](https://www.churchofjesuschrist.org/study/scriptures/sacrament/water?lang=eng&id=p1)
+  > O God, the Eternal Father, we ask thee in the name of thy Son, Jesus Christ, to bless and sanctify this water to the souls of all those who drink of it, that they may do it in remembrance of the blood of thy Son, which was shed for them; that they may witness unto thee, O God, the Eternal Father, that they do always remember him, that they may have his Spirit to be with them. Amen.
+  >
+  >#study/scriptures/sacrament/water
+
+verifies:
+  - removal of  tags (issue #38)
+
