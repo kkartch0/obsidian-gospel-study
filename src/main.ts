@@ -3,6 +3,7 @@ import { GospelStudyPluginSettingTab } from "./gospelStudyPluginSettingTab";
 import { DEFAULT_SETTINGS } from "./defaultPluginSettings";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
 import { getStudyBlockFromStudyData } from "./getStudyBlockFromStudyData";
+import { getTaskListFromUrl } from "./comeFollowMePacer";
 
 export default class GospelStudyPlugin extends Plugin {
 	public settings!: GospelStudyPluginSettings;
@@ -36,6 +37,16 @@ export default class GospelStudyPlugin extends Plugin {
 		this.registerEvent(
 			this.app.workspace.on("editor-paste", this.onEditorPaste.bind(this))
 		);
+
+		this.addCommand({ 
+			id: 'generate-come-follow-me-tasks', 
+			name: 'Generate Come Follow Me Study Tasks',
+			editorCallback: async (editor: Editor) => {
+				const taskList = await getTaskListFromUrl("https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/29?lang=eng");
+				navigator.clipboard.writeText(taskList);
+				new Notice("Come Follow Me tasks copied to clipboard.");
+			}
+		});
 	}
 
 	/**
