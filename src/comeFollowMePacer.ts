@@ -23,7 +23,7 @@ export async function getTaskListFromUrl(urlToRequest: string): Promise<string> 
 	const taskList: string[] = [];
 
 	sections.forEach(section => {
-		taskList.push(createTaskListFromSection(section, urlToRequest));
+		taskList.push(createTaskListFromSection(section, urlToRequest, endDate));
 	});
 
 	return taskList.join("\n\n");
@@ -39,11 +39,12 @@ export function getStartDateFromTitle(title: string): Date {
 	return startDate;
 }
 
-function createTaskListFromSection(section: Element, urlToRequest: string): string {
+function createTaskListFromSection(section: Element, urlToRequest: string, endDate: Date): string {
 	const paragraphs = Array.from(section.querySelectorAll("p[id^=p]"));
 	const title = section.querySelector("h2")?.textContent;
 
-	const paragraphsByDay = divideIntoGroups(paragraphs);
+	const remainingDays = endDate.getDate() - new Date().getDate() + 1; // + 1 includes today
+	const paragraphsByDay = divideIntoGroups(paragraphs, remainingDays);
 
 	// print out paragraph ids for each day
 	let oneTaskPerDay = true;
@@ -76,17 +77,17 @@ function createTaskListFromSection(section: Element, urlToRequest: string): stri
 	return taskList.join("\n\n");
 }
 
-function divideIntoGroups(paragraphs: Element[]) {
+function divideIntoGroups(paragraphs: Element[], numberOfGroups: number) {
 	const totalParagraphs = paragraphs.length;
-	const totalWholeParagraphsPerDay = Math.floor(totalParagraphs / 7);
-	let remainingExtraParagraphs = totalParagraphs % 7;
+	const totalWholeParagraphsPerDay = Math.floor(totalParagraphs / numberOfGroups);
+	let remainingExtraParagraphs = totalParagraphs % numberOfGroups;
 
 	const paragraphsByDay = [];
 
 	let start = 0;
 	let end = totalWholeParagraphsPerDay;
 
-	for (let i = 0; i < 7; i++) {
+	for (let i = 0; i < numberOfGroups; i++) {
 		if (remainingExtraParagraphs > 0) {
 			end++;
 			remainingExtraParagraphs--;
