@@ -1,4 +1,4 @@
-import { getTaskListFromUrl } from "../src/comeFollowMePacer";
+import { getStartDateFromTitle, getTaskListFromUrl } from "../src/comeFollowMePacer";
 
 describe("comeFollowMePacer", () => {
 	it("should make a list of tasks from the specified url", async () => {
@@ -36,5 +36,22 @@ Day 7
 - [ ] [Come Follow Me: July 15–21: “The Virtue of the Word of God.” Alma 30–31 (p20-p22)](https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/29?lang=eng&id=p20-p22#p20)`
 
 		expect(taskList).toBe(expectedText);
+	});
+});
+
+describe("getStartDateFromTitle", () => {
+	const cases = [
+		["July 15–21: “The Virtue of the Word of God.” Alma 30–31", "July 15, 2024"],
+		["July 29–August 4: “Look to God and Live.” Alma 36–38", "July 29, 2024"]
+	];
+
+	test.each(cases)("given title of '%s', returns start date of '%s'", (title, expectedStartDateString) => {
+		// Arrange
+		// Act
+		const startDate = getStartDateFromTitle(title);
+
+		// Assert
+		const expectedStartDate = new Date(expectedStartDateString);
+		expect(startDate).toStrictEqual(expectedStartDate);
 	});
 });
