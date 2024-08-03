@@ -7,34 +7,13 @@ describe("comeFollowMePacer", () => {
 		const taskList = await getTaskListFromUrl("https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/29?lang=eng");
 
 		// Assert
-		const expectedText = `Day 1
-
-- [ ] [Come Follow Me: July 15–21: “The Virtue of the Word of God.” Alma 30–31 (p1-p4)](https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/29?lang=eng&id=p1-p4#p1)
-
-Day 2
-
-- [ ] [Come Follow Me: July 15–21: “The Virtue of the Word of God.” Alma 30–31 (p5-p7)](https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/29?lang=eng&id=p5-p7#p5)
-
-Day 3
-
-- [ ] [Come Follow Me: July 15–21: “The Virtue of the Word of God.” Alma 30–31 (p8-p10)](https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/29?lang=eng&id=p8-p10#p8)
-
-Day 4
-
-- [ ] [Come Follow Me: July 15–21: “The Virtue of the Word of God.” Alma 30–31 (p11-p13)](https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/29?lang=eng&id=p11-p13#p11)
-
-Day 5
-
-- [ ] [Come Follow Me: July 15–21: “The Virtue of the Word of God.” Alma 30–31 (p14-p16)](https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/29?lang=eng&id=p14-p16#p14)
-
-Day 6
-
-- [ ] [Come Follow Me: July 15–21: “The Virtue of the Word of God.” Alma 30–31 (p17-p19)](https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/29?lang=eng&id=p17-p19#p17)
-
-Day 7
-
-- [ ] [Come Follow Me: July 15–21: “The Virtue of the Word of God.” Alma 30–31 (p20-p22)](https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/29?lang=eng&id=p20-p22#p20)`
-
+		const expectedText = `
+- [ ] [Ideas for Learning at Home and at Church (p3-p3)](https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/29?lang=eng&id=p3-p3#p3) ⏳ 2024-08-03
+- [ ] [Ideas for Learning at Home and at Church (p4-p4)](https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/29?lang=eng&id=p4-p4#p4) ⏳ 2024-08-04
+- [ ] [Ideas for Learning at Home and at Church (p5-p5)](https://www.churchofjesuschrist.org/study/…t.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/29?lang=eng&id=p20-p20#p20) ⏳ 2024-08-05
+- [ ] [Ideas for Teaching Children (p21-p21)](https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/29?lang=eng&id=p21-p21#p21) ⏳ 2024-08-06
+- [ ] [Ideas for Teaching Children (p22-p22)](https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/29?lang=eng&id=p22-p22#p22) ⏳ 2024-08-07
+`
 		expect(taskList).toBe(expectedText);
 	});
 });

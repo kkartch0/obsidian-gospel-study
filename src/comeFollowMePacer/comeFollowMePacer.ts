@@ -1,4 +1,5 @@
 import { requestUrl } from "obsidian";
+import { start } from "repl";
 
 export async function getTaskListFromUrl(urlToRequest: string): Promise<string> {
 	const response = await requestUrl({
@@ -43,7 +44,8 @@ function createTaskListFromSection(section: Element, urlToRequest: string, endDa
 	const paragraphs = Array.from(section.querySelectorAll("p[id^=p]"));
 	const title = section.querySelector("h2")?.textContent;
 
-	const remainingDays = endDate.getDate() - new Date().getDate() + 1; // + 1 includes today
+	const startDate = new Date();
+	const remainingDays = endDate.getDate() - startDate.getDate() + 1; // + 1 includes today
 	const paragraphsByDay = divideIntoGroups(paragraphs, remainingDays);
 
 	// print out paragraph ids for each day
@@ -51,9 +53,9 @@ function createTaskListFromSection(section: Element, urlToRequest: string, endDa
 
 	const taskList: string[] = [];
 
-	paragraphsByDay.forEach((dayParagraphs, i) => {
-		taskList.push(`Day ${i + 1}`);
+	let scheduledDate = startDate;
 
+	paragraphsByDay.forEach((dayParagraphs, i) => {
 		if (oneTaskPerDay) {
 			if (dayParagraphs.length == 0) return;
 
@@ -61,20 +63,21 @@ function createTaskListFromSection(section: Element, urlToRequest: string, endDa
 			const endId = dayParagraphs[dayParagraphs.length - 1].id;
 			const readingUrl = `${urlToRequest}&id=${startId}-${endId}#${startId}`;
 
-			taskList.push(`- [ ] [${title} (${startId}-${endId})](${readingUrl})`);
+			taskList.push(`- [ ] [${title} (${startId}-${endId})](${readingUrl}) ⏳ ${scheduledDate.toLocaleDateString('en-CA')}`);
 
 		} else {
 			const dayTasks = dayParagraphs.forEach(paragraph => {
 				const paragraphUrl = `${urlToRequest}&id=${paragraph.id}#${paragraph.id}`;
 				const paragraphNumber = paragraph.id.replace("p", "");
 
-				taskList.push(`- [ ] [${title} (${paragraphNumber}/${paragraphs.length})](${paragraphUrl})`);
+				taskList.push(`- [ ] [${title} (${paragraphNumber}/${paragraphs.length})](${paragraphUrl}) ⏳ ${scheduledDate.toLocaleDateString('en-CA')}`);
 			});
 		}
+
+		scheduledDate.setDate(scheduledDate.getDate() + 1);
 	});
 
-
-	return taskList.join("\n\n");
+	return taskList.join("\n");
 }
 
 function divideIntoGroups(paragraphs: Element[], numberOfGroups: number) {
