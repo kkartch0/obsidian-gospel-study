@@ -1,4 +1,4 @@
-import { getStartDateFromTitle, getTaskListFromUrl } from "../src/comeFollowMePacer";
+import { getStartDateFromTitle, getTaskListFromUrl } from "../src/comeFollowMePacer/comeFollowMePacer";
 
 describe("comeFollowMePacer", () => {
 	it("should make a list of tasks from the specified url", async () => {
