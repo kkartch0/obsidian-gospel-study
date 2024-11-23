@@ -1,0 +1,18 @@
+pastedText: |
+  https://www.churchofjesuschrist.org/study/general-conference/2024/10/15renlund?lang=eng&id=p_sDWjE-p_copYg#p_sDWjE
+
+pluginSettings:
+  studyBlockFormat: STUDY_BLOCK_FORMAT_1
+  retainScriptureReferenceLinks: true
+
+expectedResult: |
+  > [!gospel-study]
+  > # [“This Is My Gospel”—“This Is My Church”](https://www.churchofjesuschrist.org/study/general-conference/2024/10/15renlund?lang=eng&id=p_sDWjE-p_copYg#p_sDWjE)
+  > Dynamite changed the world. It also made Nobel wealthy. Without a stabilizer, nitroglycerin was just too hazardous to be commercially valuable, as Ascanio Sobrero found out. By itself, as I mentioned, kieselguhr was of little value. But the combination of the two components made dynamite transformative and precious.
+  > 
+  > In a similar way, the combination of the gospel of Jesus Christ and The Church of Jesus Christ of Latter-day Saints provides powerful and transformative benefits for us. The gospel is perfect, but a divinely commissioned church is required to preach it, maintain its purity, and administer its sacred ordinances with the Savior’s power and authority.
+  > 
+  >#study/general-conference/2024/10/15/renlund
+
+verifies:
+  - new general conference talk format (issue #56)
