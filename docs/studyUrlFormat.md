@@ -1,23 +1,29 @@
 # Study URL Format
 
-## Concepts
-### Id Param
+This document describes the format that is generated on the vast majority of library content when selecting the text and then selecting "Copy Link" (iOS).
 
-The id param is what stores id elements (comma separated) of the paragraphs to highlight. Each id element can include an individual paragraph id (a single) (e.g. p_sDWjE) or a range of paragraph ids (a range) (e.g. p1-p4).
+Examples URLs: 
+- https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/5?lang=eng&id=p1-p2#p1
+- https://www.churchofjesuschrist.org/study/general-conference/2024/10/15renlund?lang=eng&id=p_sDWjE-p_copYg#p_sDWjE
+- https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/10?id=title2,scripture_title1,title3,p2-p4&lang=eng#title2 
 
-### Id Element Types
+## Id Param
 
-#### Single
+https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/5?lang=eng&<strong>id=p1-p2</strong>#p1
 
-Format: <Paragraph Id>
+The id param is what stores id items (comma separated) of the paragraphs to highlight. Each id item can include an individual paragraph id (a single) (e.g. p_sDWjE) or a range of paragraph ids (a range) (e.g. p1-p4).
+
+### Single
+
+Format: \<Paragraph Id>\
 Examples:
 - p1
 - title2
 - scripture_title1
 
-#### Range
+### Range
 
-Format: <Paragraph Id><Hyphen><Paragraph Id>
+Format: \<Paragraph Id>\<Hyphen>\<Paragraph Id>\
 Examples:
 - p1-p5
 - p_sDWjE-p_copYg
@@ -25,20 +31,17 @@ Examples:
 ### Mixture of Singles and Ranges
 
 Examples:
-- p1-p3,p5,p8                              --->      <Range>,<Single>,<Single>
-- p_sDWjE-p_copYg                          --->      <Single>
-- title2,scripture_title1,title3,p2-p4     --->      <Single>,<Single>,<Single>,<Range>
+- p1-p3,p5,p8                              --->      \<Range>,\<Single>,\<Single>
+- p_sDWjE-p_copYg                          --->      \<Single>
+- title2,scripture_title1,title3,p2-p4     --->      \<Single>,\<Single>,\<Single>,\<Range>
 
+## Internal Page Reference (#)
 
-Format: "id=<paragraph id>-<paragraph id>#<paragraph id>"
-Examples: 
-- https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/5?lang=eng&id=p1-p2#p1
-- https://www.churchofjesuschrist.org/study/general-conference/2024/10/15renlund?lang=eng&id=p_sDWjE-p_copYg#p_sDWjE
-- https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/10?id=title2,scripture_title1,title3,p2-p4&lang=eng#title2 
+https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/5?lang=eng&id=p1-p2<strong>#p1</strong>
 
-### Natural Occurrence
+Format: <hashtag><paragraph id>
 
-This seems to be the format that is generated on the vast majority of library content when selecting the text and then selecting "Copy Link" (iOS).
+This is a way to navigate to a particular paragraph upon loading of the page. Without it, the page loads and the top and not with the highlighted paragraphs in focus. This is typically set to the id of the first paragraph provided in the id param of the URL.  
 
 ## Variations
 ### Just Number (e.g. 1) Format
@@ -51,6 +54,6 @@ Examples:
 
 In the case of there just being numbers, it seems evident that the church website will prepend the numbers with a "p" to get the ids of the paragraphs to highlight.
 
-#### Natural Occurrence
+### Natural Occurrence
 
 As of 2024-11-23, one occurence of this format is when sharing the verse of the day from the Gospel Library app on iOS. However, this seems unintentional, because if you select that same verse once navigated to and then share the link, the link follows the standard format.
