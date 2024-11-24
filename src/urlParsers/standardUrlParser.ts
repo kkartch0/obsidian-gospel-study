@@ -4,7 +4,7 @@ import { UrlParserResult } from "src/models/UrlParserResult";
 /**
  * Declares a parser for the default ID format (e.g., p1,p3-p7,p9)
  */
-export const defaultUrlParser: UrlParser = {
+export const standardUrlParser: UrlParser = {
     isParseable(url: URL): boolean {
         const idParam = url.searchParams.get("id");
         const correctFormatRegex = /^(?:[a-z]+[0-9]+[,-])*[a-z]+[0-9]+$/;

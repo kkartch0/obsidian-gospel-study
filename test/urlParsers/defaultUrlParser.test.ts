@@ -1,5 +1,5 @@
 import { UrlParserResult } from "src/models/UrlParserResult";
-import { defaultUrlParser } from "../../src/urlParsers/defaultUrlParser";
+import { standardUrlParser } from "../../src/urlParsers/standardUrlParser";
 
 describe("defaultUrlParser", () => {
 	let url: URL;
@@ -8,7 +8,7 @@ describe("defaultUrlParser", () => {
 		let parseableResult: boolean;
 
 		const act = () => {
-			parseableResult = defaultUrlParser.isParseable(url);
+			parseableResult = standardUrlParser.isParseable(url);
 		};
 
 		describe("a number-only paragraph ID", () => {
@@ -76,7 +76,7 @@ describe("defaultUrlParser", () => {
 		let parseResult: UrlParserResult;
 
 		const act = () => {
-			parseResult = defaultUrlParser.parse(url);
+			parseResult = standardUrlParser.parse(url);
 		};
 
 		describe("a URL with a single ID", () => {

@@ -1,6 +1,6 @@
 import { UrlParser } from "src/models/UrlParser";
-import { defaultUrlParser } from "./defaultUrlParser";
+import { standardUrlParser } from "./standardUrlParser";
 
 export const registeredUrlParsers: UrlParser[] = [
-	defaultUrlParser
+	standardUrlParser
 ];
