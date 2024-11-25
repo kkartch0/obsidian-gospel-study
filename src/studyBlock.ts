@@ -57,7 +57,7 @@ export class StudyBlock {
      */
     public get paragraphs(): string[] {
         if (this._paragraphs === undefined) {
-            this._paragraphs = getFormattedParagraphs(this._sourceDocument, this._urlParserResult.paragraphIds, this._pluginSettings);
+            this._paragraphs = getFormattedParagraphs(this._sourceDocument, this._urlParserResult.paragraphIdItems, this._pluginSettings);
         }
         return this._paragraphs || [];
     }

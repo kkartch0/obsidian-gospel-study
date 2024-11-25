@@ -1,14 +1,14 @@
 import { UrlParserResult } from "src/models/UrlParserResult";
-import { defaultUrlParser } from "../../src/urlParsers/defaultUrlParser";
+import { standardUrlParser } from "../../src/urlParsers/standardUrlParser";
 
-describe("defaultUrlParser", () => {
+describe("standardUrlParser", () => {
 	let url: URL;
 
 	describe("isParseable", () => {
 		let parseableResult: boolean;
 
 		const act = () => {
-			parseableResult = defaultUrlParser.isParseable(url);
+			parseableResult = standardUrlParser.isParseable(url);
 		};
 
 		describe("a number-only paragraph ID", () => {
@@ -72,11 +72,11 @@ describe("defaultUrlParser", () => {
 		});
 	});
 
-	describe("getParagraphIds", () => {
+	describe("parse", () => {
 		let parseResult: UrlParserResult;
 
 		const act = () => {
-			parseResult = defaultUrlParser.parse(url);
+			parseResult = standardUrlParser.parse(url);
 		};
 
 		describe("a URL with a single ID", () => {
@@ -87,7 +87,7 @@ describe("defaultUrlParser", () => {
 			});
 
 			it("should retrieve the paragraph ID", () => {
-				expect(parseResult.paragraphIds).toStrictEqual(["p8"]);
+				expect(parseResult.paragraphIdItems).toStrictEqual(["p8"]);
 			});
 
 			it("should format the number from the ID", () => {
@@ -103,7 +103,7 @@ describe("defaultUrlParser", () => {
 			});
 
 			it("should retrieve all the paragraph IDs", () => {
-				expect(parseResult.paragraphIds).toStrictEqual(["p1", "p2", "p3", "p4"]);
+				expect(parseResult.paragraphIdItems).toStrictEqual(["p1-p4"]);
 			});
 
 			it("should format the range with a hyphen", () => {
@@ -119,7 +119,7 @@ describe("defaultUrlParser", () => {
 			});
 
 			it("should retrieve all the paragraph IDs", () => {
-				expect(parseResult.paragraphIds).toStrictEqual(["p1", "p2", "-", "p4", "-", "p6", "p7", "p8", "p9"]);
+				expect(parseResult.paragraphIdItems).toStrictEqual(["p1-p2", "p4", "p6-p9"]);
 			});
 
 			it("should format all the ranges, separated by commas.", () => {

@@ -11,6 +11,7 @@ export function requestUrl(requestUrlParam: RequestUrlParam): Promise<RequestUrl
     "https://www.churchofjesuschrist.org/study/scriptures/bofm/mosiah/14?lang=eng&id=p4-p5": "mosiah14.4-5.html",
     "https://www.churchofjesuschrist.org/study/general-conference/2023/10/15christofferson?lang=eng&id=p4#p4": "theSealingPower.html",
     "https://www.churchofjesuschrist.org/study/scriptures/sacrament/water?lang=eng&id=p1": "blessingOnTheWater.html",
+    "https://www.churchofjesuschrist.org/study/general-conference/2024/10/15renlund?lang=eng&id=p_sDWjE-p_copYg#p_sDWjE": "thisIsMyGospel-thisIsMyChurch.html"
   };
 
   const htmlFileName = urlToHtmlFileMap[requestUrlParam.url];
