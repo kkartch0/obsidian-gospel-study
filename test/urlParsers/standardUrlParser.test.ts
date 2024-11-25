@@ -1,7 +1,7 @@
 import { UrlParserResult } from "src/models/UrlParserResult";
 import { standardUrlParser } from "../../src/urlParsers/standardUrlParser";
 
-describe("defaultUrlParser", () => {
+describe("standardUrlParser", () => {
 	let url: URL;
 
 	describe("isParseable", () => {
@@ -72,7 +72,7 @@ describe("defaultUrlParser", () => {
 		});
 	});
 
-	describe("getParagraphIds", () => {
+	describe("parse", () => {
 		let parseResult: UrlParserResult;
 
 		const act = () => {
@@ -103,7 +103,7 @@ describe("defaultUrlParser", () => {
 			});
 
 			it("should retrieve all the paragraph IDs", () => {
-				expect(parseResult.paragraphIdItems).toStrictEqual(["p1", "p2", "p3", "p4"]);
+				expect(parseResult.paragraphIdItems).toStrictEqual(["p1-p4"]);
 			});
 
 			it("should format the range with a hyphen", () => {
@@ -119,7 +119,7 @@ describe("defaultUrlParser", () => {
 			});
 
 			it("should retrieve all the paragraph IDs", () => {
-				expect(parseResult.paragraphIdItems).toStrictEqual(["p1", "p2", "-", "p4", "-", "p6", "p7", "p8", "p9"]);
+				expect(parseResult.paragraphIdItems).toStrictEqual(["p1-p2", "p4", "p6-p9"]);
 			});
 
 			it("should format all the ranges, separated by commas.", () => {

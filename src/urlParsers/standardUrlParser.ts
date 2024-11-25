@@ -13,25 +13,12 @@ export const standardUrlParser: UrlParser = {
 
     parse(url: URL): UrlParserResult {
         const idParam = url.searchParams.get("id") || "";
-        const idParts = idParam.split(",");
-
-        const paragraphIds: string[] = [];
-
-        for (const part of idParts) {
-            if (part.includes("-")) { // It is a range of paragraphs
-                const paragraphIdsInRange = paragraphRangeToParagraphIds(part);
-                paragraphIds.push(...paragraphIdsInRange);
-            } else { // It is a single paragraph
-                paragraphIds.push(part);
-            }
-        }
-
-        insertHyphenBetweenNonContiguousParagraphs(paragraphIds);
+        const paragraphIdItems = idParam.split(",");
 
         const displayParagraphIds = idParam.replace(/p/g, "").replace(/,/g, ", ");
 
         return {
-            paragraphIdItems: paragraphIds,
+            paragraphIdItems,
             displayParagraphIds,
             url
         };
