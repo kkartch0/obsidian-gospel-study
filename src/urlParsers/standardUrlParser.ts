@@ -7,7 +7,7 @@ import { UrlParserResult } from "src/models/UrlParserResult";
 export const standardUrlParser: UrlParser = {
     isParseable(url: URL): boolean {
         const idParam = url.searchParams.get("id");
-        const correctFormatRegex = /^(?:[a-z]+[0-9]+[,-])*[a-z]+[0-9]+$/;
+        const correctFormatRegex = /^(?:[a-zA-Z].*[,-])*[a-zA-Z][^,-]*$/;
         return !!idParam && correctFormatRegex.test(idParam);
     },
 
