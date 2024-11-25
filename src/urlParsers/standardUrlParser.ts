@@ -31,7 +31,7 @@ export const standardUrlParser: UrlParser = {
         const displayParagraphIds = idParam.replace(/p/g, "").replace(/,/g, ", ");
 
         return {
-            paragraphIds,
+            paragraphIdItems: paragraphIds,
             displayParagraphIds,
             url
         };

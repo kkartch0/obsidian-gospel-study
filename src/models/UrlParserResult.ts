@@ -5,7 +5,7 @@ export interface UrlParserResult {
     /**
      * The list of paragraph IDs derived from a URL.
      */
-    paragraphIds: string[];
+    paragraphIdItems: string[];
 
     /**
      * A display version of the paragraph IDs derived from a URL.
