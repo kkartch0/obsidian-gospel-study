@@ -3,7 +3,7 @@
  */
 export interface UrlParserResult {
     /**
-     * The list of paragraph IDs derived from a URL.
+     * The list of id items parsed from the URL.
      */
     paragraphIdItems: string[];
 
