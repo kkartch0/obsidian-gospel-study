@@ -1,12 +1,14 @@
 import { ParagraphFormatter } from "src/models/ParagraphFormatter";
 import { GospelStudyPluginSettings } from "src/models/GospelStudyPluginSettings";
 import { registeredFormatters } from "./registeredFormatters";
+
 /**
- * Retrieves the paragraphs with the specified ids from the document, formats, and then returns them.
- * 
- * @param document - The document object representing the HTML document.
- * @param paragraphIdItems - An array of active paragraph IDs.
- * @returns An array of formatted paragraphs.
+ * Retrieves and formats paragraphs from a document based on provided paragraph IDs items and plugin settings.
+ *
+ * @param document - The document object containing the paragraph elements.
+ * @param paragraphIdItems - An array of paragraph ID items such as ["p1", "p2", "p3-p5"].
+ * @param pluginSettings - The settings for the Gospel Study plugin, used to determine which formatters are enabled.
+ * @returns An array of formatted paragraph strings.
  */
 export function getFormattedParagraphs(document: Document, paragraphIdItems: string[], pluginSettings: GospelStudyPluginSettings): string[] {
 	const paragraphElements: Element[] = [];
@@ -36,6 +38,14 @@ export function getFormattedParagraphs(document: Document, paragraphIdItems: str
 }
 
 
+/**
+ * Finds and returns the paragraph element with the specified ID from a list of elements.
+ *
+ * @param idItem - The ID of the paragraph element to find.
+ * @param elementsWithIds - An array of elements that contain IDs.
+ * @returns The paragraph element with the specified ID.
+ * @throws Will throw an error if no element with the specified ID is found.
+ */
 function paragraphIdToParagraphElement(idItem: string, elementsWithIds: Element[]): Element {
 	const paragraphElement = elementsWithIds.find((element) => element.id === idItem);
 
@@ -60,13 +70,14 @@ export function formatParagraph(paragraph: string, enabledFormatters: ParagraphF
 	return paragraph;
 }
 
-
-
 /**
-* Converts a paragraph range string to an array of paragraph IDs.
-* @param range - The paragraph range string in the format "startId-endId".
-* @returns An array of paragraph IDs.
-*/
+ * Extracts a range of paragraph elements from a list of elements based on the provided range string.
+ *
+ * @param range - A string representing the range of paragraph elements, in the format "startId-endId".
+ * @param elementsWithIds - An array of elements, each with an `id` property.
+ * @returns An array of elements that fall within the specified range.
+ * @throws Will throw an error if either the start or end ID is not found in the elements array.
+ */
 function paragraphRangeToParagraphElements(range: string, elementsWithIds: Element[]): Element[] {
 	const [startId, endId] = range.split("-");
 
@@ -80,26 +91,4 @@ function paragraphRangeToParagraphElements(range: string, elementsWithIds: Eleme
 	const paragraphElements = elementsWithIds.slice(startElementIndex, endElementIndex + 1);
 
 	return paragraphElements;
-}
-
-/**
-* Inserts hyphens between non-contiguous paragraphs in the activeParagraphIds array.
-* @param activeParagraphIds - The array of paragraph IDs to insert hyphens into.
-* @example 
-* const activeParagraphIds = ['p1', 'p3', 'p5', 'p6', 'p7', 'p10'];
-* insertEllipsesBetweenNonContiguousParagraphs(activeParagraphIds);
-* console.log(activeParagraphIds); // Output: ['p1','-', 'p3', '-', 'p5', 'p6', 'p7', '-', 'p10']
-*/
-function insertHyphenBetweenNonContiguousParagraphs(activeParagraphIds: string[]) {
-	for (let i = 0; i < activeParagraphIds.length - 1; ++i) {
-		const currentId = activeParagraphIds[i];
-		const nextId = activeParagraphIds[i + 1];
-		const currentNumber = Number(currentId.replace("p", ""));
-		const nextNumber = Number(nextId.replace("p", ""));
-
-		const paragraphsAreNonContiguous = nextNumber - currentNumber > 1;
-		if (paragraphsAreNonContiguous) {
-			activeParagraphIds.splice(i + 1, 0, "-"); // Insert a hyphen between the paragraph ids
-		}
-	}
 }
