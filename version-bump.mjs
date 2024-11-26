@@ -12,3 +12,13 @@ writeFileSync("manifest.json", JSON.stringify(manifest, null, "\t"));
 let versions = JSON.parse(readFileSync("versions.json", "utf8"));
 versions[targetVersion] = minAppVersion;
 writeFileSync("versions.json", JSON.stringify(versions, null, "\t"));
+
+import { execSync } from "child_process";
+
+execSync("git add manifest.json versions.json package.json package-lock.json");
+
+execSync(`git commit -m "bump version to ${targetVersion}"`);
+
+execSync(`git tag -a v${targetVersion} -m "v${targetVersion}"`);
+
+
