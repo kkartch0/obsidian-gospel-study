@@ -1,10 +1,11 @@
 import { RequestUrlParam, RequestUrlResponse } from "obsidian";
+const fetch = require('node-fetch');
 
 export function requestUrl(requestUrlParam: RequestUrlParam): Promise<RequestUrlResponse> {
   return new Promise((resolve) => {
     fetch(requestUrlParam.url)
-      .then(response => response.text())
-      .then(text => {
+      .then((response: { text: () => string; }) => response.text())
+      .then((text: string) => {
         resolve({
           status: 200,
           headers: {},
@@ -13,7 +14,7 @@ export function requestUrl(requestUrlParam: RequestUrlParam): Promise<RequestUrl
           text: text,
         } as RequestUrlResponse);
       })
-      .catch(error => {
+      .catch((error: { message: string; }) => {
         resolve({
           status: 500,
           headers: {},
