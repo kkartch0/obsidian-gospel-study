@@ -105,4 +105,16 @@ describe("formatParagraph", () => {
 		expect(result).toEqual(expectedOutput);
 
 	});
+
+	it('should convert <strong> and <em> tags to markdown equivalnts', () => {
+		// Arrange
+		const input = 'This is a paragraph with <strong>bold text</strong>, <em>emphasized text</em>, <strong><em>bold and emphasized text</em></strong>, and <em><strong>emphasized and bold text</strong></em>.';
+
+		// Act
+		const result = formatParagraph(input, defaultEnabledFormatters);
+
+		// Assert
+		const expectedOutput = 'This is a paragraph with **bold text**, *emphasized text*, ***bold and emphasized text***, and ***emphasized and bold text***.';
+		expect(result).toEqual(expectedOutput);
+	});
 });
