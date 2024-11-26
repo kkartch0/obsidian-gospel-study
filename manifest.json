@@ -1,7 +1,7 @@
 {
 	"id": "obsidian-gospel-study",
 	"name": "Gospel Study",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"minAppVersion": "0.15.0",
 	"description": "Import scripture verses or other quotes into an Obsidian note by simply pasting in the Gospel Library app share link (i.e. of the format \"https://www.churchofjesuschrist.org/study/*\")",
 	"author": "Ky Kartchner",
