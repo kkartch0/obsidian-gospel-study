@@ -6,6 +6,7 @@ import { removeScriptureReferenceLinksFormatter } from "./removeScriptureReferen
 import { escapeSquareBracketsFormatter } from "./escapeSquareBracketsFormatter";
 import { breakRuleRemoveFormatter } from "./breakRuleRemoveFormatter";
 import { strongEmToMarkdownFormatter } from "./strongEmToMarkdownFormatter";
+import { nonBreakingSpaceFormatter } from "./nonBreakingSpaceFormatter";
 
 export const registeredFormatters: ParagraphFormatter[] = [
     fullyQualifyStudyLinksFormatter,
@@ -14,5 +15,6 @@ export const registeredFormatters: ParagraphFormatter[] = [
     removeScriptureReferenceLinksFormatter,
     escapeSquareBracketsFormatter,
     breakRuleRemoveFormatter,
-    strongEmToMarkdownFormatter
+    strongEmToMarkdownFormatter,
+    nonBreakingSpaceFormatter
 ]; 

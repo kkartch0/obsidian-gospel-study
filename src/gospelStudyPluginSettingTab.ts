@@ -94,5 +94,18 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 
 			return toggle;
 		});
+
+		new Setting(containerEl)
+		.setName("Retain Non-Breaking Spaces")
+		.setDesc('If enabled, non-breaking spaces (e.g. "&nbsp;") will be retained, otherwise they will be removed.')
+		.addToggle((toggle) => {	
+			toggle.setValue(this.plugin.settings.retainNonBreakingSpaces)
+				.onChange(async (value) => {
+					this.plugin.settings.retainNonBreakingSpaces = value;
+					await this.plugin.saveSettings();
+				});
+
+			return toggle;
+		});
 	}
 }
