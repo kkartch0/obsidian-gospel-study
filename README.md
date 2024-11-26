@@ -1,41 +1,38 @@
 # Gospel Study
 
-Gospel Study is the ultimate Obsidian plugin for use alongside the Latter-day Saint Gospel Library app. Simply paste the link from any selected Gospel Library content and the Gospel Study plugin will import the associated content. 
+Gospel Study is the ultimate Obsidian plugin for use alongside the [Latter-day Saint Gospel Library app](https://www.churchofjesuschrist.org/learn/mobile-applications/gospel-library?lang=eng). Simply paste the link from any selected Gospel Library content and the Gospel Study plugin will import the associated content. 
 
-It is intended for this plugin to support importing *any* content from the Gospel Library app in *any* language. As long as Gospel Library app has it, the Gospel Study plugin can import it! 
+It is intended for this plugin to support importing *any* content from the Gospel Library app in *any* language. As long as the Gospel Library app has it, the Gospel Study plugin can import it! 
 
-If you run into any content that is not properly importing please create an issue.
+If you encounter any content that is not properly importing, please create an issue.
+
+## Installing via BRAT
+
+Install the [BRAT plugin](https://tfthacker.com/BRAT) via the Obsidian Plugin Browser and then add the beta repository "kkartch0/obsidian-gospel-study".
 
 ## Manually installing the plugin
 
 - Copy over `main.js` and `manifest.json` to your vault `<VaultFolder>/.obsidian/plugins/gospel-study/`.
 
+
 ## Contributing
 
 - Clone this repo.
 - Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
+- `npm ci` to install dependencies.
 - `npm run dev` to start compilation in watch mode.
 
-See https://github.com/obsidianmd/obsidian-api
+For a more in-depth guide, visit the [Obsidian Developer Docs](https://docs.obsidian.md/Home).
 
 ## Architecture
 
 This project uses Typescript to provide type checking and documentation. It depends on the latest plugin API (obsidian.d.ts) in Typescript Definition format, which contains TSDoc comments describing what it does.
 
-## First time developing plugins?
+For more information on the Obsidian API, see [Obsidian API documentation](https://github.com/obsidianmd/obsidian-api).
 
-Quick starting guide for new plugin devs:
+## Releasing new versions
 
-- Clone this repo to a local development folder. For convenience, you can clone it to your `.obsidian/plugins/` folder in a *test vault* NOT your main vault.
-- Install NodeJS, then run `npm ci` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes are automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
-
-## Releasing new releases
+> **Note:** This requires having permission to push directly to `main`.
 
 On the main branch, run `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
 
