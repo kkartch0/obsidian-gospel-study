@@ -82,6 +82,7 @@ describe("formatParagraph", () => {
 		const settings = {
 			...DEFAULT_SETTINGS,
 			retainScriptureReferenceLinks: false,
+			retainNonBreakingSpaces: true
 		};
 		const enabledFormatters = registeredFormatters.filter((formatter: ParagraphFormatter) => formatter.isEnabled(settings));
 
