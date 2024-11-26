@@ -12,6 +12,7 @@ pluginSettings:
     {{referenceLink}}
     {{tag}}
   retainScriptureReferenceLinks: true
+  retainNonBreakingSpaces: true
 
 expectedResult: |
   March 4–10: “We Rejoice in Christ.” 2 Nephi 20–25
