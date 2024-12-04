@@ -6,9 +6,9 @@ pluginSettings:
   retainScriptureReferenceLinks: true
 
 expectedResult: |
-  #### [2 Nephi 22:2](https://www.churchofjesuschrist.org/study/scriptures/bofm/2-ne/22?lang=eng&id=2#p2)
-
-  <span class="verse-number">2 </span>Behold, God is my salvation; I will trust, and not be afraid; for the Lord <span class="deity-name"><span class="small-caps">Jehovah</span></span> is my strength and my song; he also has become my salvation.
+  > <span class="verse-number">2 </span>Behold, God is my salvation; I will trust, and not be afraid; for the Lord <span class="deity-name"><span class="small-caps">Jehovah</span></span> is my strength and my song; he also has become my salvation.
+  >
+  > [2 Nephi 22:2](https://www.churchofjesuschrist.org/study/scriptures/bofm/2-ne/22?lang=eng&id=2#p2)
 
   #study/scriptures/bofm/2-ne/22
 
