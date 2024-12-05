@@ -4,10 +4,12 @@ import { App, PluginSettingTab, Setting } from "obsidian";
 
 export class GospelStudyPluginSettingTab extends PluginSettingTab {
 	public plugin: GospelStudyPlugin;
+	formats: string[];
 
 	public constructor(app: App, plugin: GospelStudyPlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
+		this.formats = [STUDY_BLOCK_FORMAT_1, STUDY_BLOCK_FORMAT_2];
 	}
 
 	public display(): void {
@@ -22,27 +24,13 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 				dropdown
 					.addOption(STUDY_BLOCK_FORMAT_1, "Default 1")
 					.addOption(STUDY_BLOCK_FORMAT_2, "Default 2")
+					.addOption(this.plugin.settings.customStudyBlockFormat, "Custom")
 					.onChange(async (value) => {
 						this.plugin.settings.studyBlockFormat = value;
 						await this.plugin.saveSettings();
 						this.display();
-					});
-
-				if (
-					this.plugin.settings.studyBlockFormat !==
-						STUDY_BLOCK_FORMAT_1 &&
-					this.plugin.settings.studyBlockFormat !==
-						STUDY_BLOCK_FORMAT_2
-				) {
-					// custom format
-					dropdown.addOption(
-						this.plugin.settings.studyBlockFormat,
-						"Custom"
-					);
-				} else {
-					dropdown.addOption("", "Custom Format");
-				}
-				dropdown.setValue(this.plugin.settings.studyBlockFormat);
+					})
+					.setValue(this.plugin.settings.studyBlockFormat);
 
 				return dropdown;
 			});
@@ -55,6 +43,9 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 					.setValue(this.plugin.settings.studyBlockFormat)
 					.onChange(async (value) => {
 						this.plugin.settings.studyBlockFormat = value;
+						if (!this.formats.some(format => format === value)) {
+							this.plugin.settings.customStudyBlockFormat = value;
+						} 
 						await this.plugin.saveSettings();
 					});
 

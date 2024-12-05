@@ -8,6 +8,7 @@ export const DEFAULT_SETTINGS: GospelStudyPluginSettings = {
 	studyBlockFormat: STUDY_BLOCK_FORMAT_1,
 	copyCurrentNoteLinkAfterPaste: true,
 	retainScriptureReferenceLinks: true,
-	retainNonBreakingSpaces: false 
+	retainNonBreakingSpaces: false,
+	customStudyBlockFormat: ""
 };
 
