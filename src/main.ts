@@ -28,7 +28,10 @@ export default class GospelStudyPlugin extends Plugin {
 
 		await this.loadSettings();
 
-		this.addSettingTab(new GospelStudyPluginSettingTab(this.app, this));
+		const studyPluginTab = new GospelStudyPluginSettingTab(this.app, this);
+		await studyPluginTab.initSampleStudyBlockText();
+
+		this.addSettingTab(studyPluginTab);
 
 		this.registerEvent(
 			this.app.workspace.on("editor-paste", this.onEditorPaste.bind(this))
