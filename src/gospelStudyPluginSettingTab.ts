@@ -109,6 +109,19 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 
 				return toggle;
 			});
+
+		new Setting(containerEl)
+			.setName("Retain Paragraph Markers")
+			.setDesc('If enabled, paragraph markers ("¶") will be retained, otherwise they will be removed.')
+			.addToggle((toggle) => {
+				toggle.setValue(this.plugin.settings.retainParagraphMarkers)
+					.onChange(async (value) => {
+						this.plugin.settings.retainParagraphMarkers = value;
+						await this.plugin.saveSettings();
+					});
+
+				return toggle;
+			});
 	}
 
 	private renderBlockFormatPreview(parentDiv: HTMLDivElement) {

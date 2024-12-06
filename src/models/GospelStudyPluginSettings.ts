@@ -4,4 +4,5 @@ export interface GospelStudyPluginSettings {
 	retainScriptureReferenceLinks: boolean;
     retainNonBreakingSpaces: boolean;
 	customStudyBlockFormat: string;
+    retainParagraphMarkers: boolean;
 }
