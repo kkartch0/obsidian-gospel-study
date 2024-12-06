@@ -6,9 +6,10 @@ export const STUDY_BLOCK_FORMAT_2 = "> {{paragraphs:\n>\n> }}\n>\n> {{referenceL
 
 export const DEFAULT_SETTINGS: GospelStudyPluginSettings = {
 	studyBlockFormat: STUDY_BLOCK_FORMAT_1,
+	customStudyBlockFormat: "",
 	copyCurrentNoteLinkAfterPaste: true,
 	retainScriptureReferenceLinks: true,
 	retainNonBreakingSpaces: false,
-	customStudyBlockFormat: ""
+	retainParagraphMarkers: false
 };
 
