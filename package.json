@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-gospel-study",
-	"version": "0.5.0",
+	"version": "0.6.0",
 	"description": "An Obsidian plugin that allows for importing scripture verses or other quotes into an Obsidian note by simply pasting in the Gospel Library app share link (i.e. of the format \"https://www.churchofjesuschrist.org/study/*\")",
 	"main": "main.js",
 	"repository": {
