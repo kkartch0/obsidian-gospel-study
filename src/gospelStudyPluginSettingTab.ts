@@ -43,53 +43,33 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 				return dropdown;
 			});
 
-		// Create a div to render Markdown
-		const markdownDiv = containerEl.createDiv();
-		markdownDiv.addClass('markdown-rendered');
+		const studyBlockFormatPreviewDiv = containerEl.createDiv();
+		studyBlockFormatPreviewDiv.addClass('markdown-rendered');
 
-		// Render the Markdown content into the div
-		MarkdownRenderer.render(
-			this.app,
-			this.studyBlock?.toString(this.plugin.settings.studyBlockFormat) ?? "",
-			markdownDiv,
-			'',
-			this.plugin
-		);
+		this.renderBlockFormatPreview(studyBlockFormatPreviewDiv);
 
-		new Setting(containerEl)
-			.setName("Format String")
-			.setDesc("The format string used to generate the study block.")
-			.addTextArea((text) => {
-				text.setPlaceholder("Enter the format string")
-					.setValue(this.plugin.settings.studyBlockFormat)
-					.onChange(async (value) => {
-						this.plugin.settings.studyBlockFormat = value;
-						if (!this.formats.some(format => format === value)) {
-							this.plugin.settings.customStudyBlockFormat = value;
-						}
-						await this.plugin.saveSettings();
+		const formatStringTextArea = containerEl.createEl("textarea");
+		formatStringTextArea.style.width = "100%";
+		formatStringTextArea.style.height = "150px";
+		formatStringTextArea.style.resize = "none";
+		formatStringTextArea.value = this.plugin.settings.studyBlockFormat;
 
-						// Update the Markdown content
-						markdownDiv.empty();
-						MarkdownRenderer.render(
-							this.app,
-							this.studyBlock?.toString(this.plugin.settings.studyBlockFormat) ?? "",
-							markdownDiv,
-							'',
-							this.plugin
-						);
-					});
+		// on change, update the format string
+		formatStringTextArea.addEventListener("input", async (event) => {
+			const target = event.target as HTMLTextAreaElement;
+			this.plugin.settings.studyBlockFormat = target.value;
+			if (!this.formats.some(format => format === target.value)) {
+				this.plugin.settings.customStudyBlockFormat = target.value;
+			}
+			await this.plugin.saveSettings();
 
-				text.inputEl.style.width = "100%";
-				text.inputEl.style.height = "150px";
-				text.inputEl.style.resize = "none";
+			// Update the Markdown content
+			this.renderBlockFormatPreview(studyBlockFormatPreviewDiv);
+		});
 
-				text.inputEl.addEventListener("focusout", () => {
-					this.display();
-				});
-
-				return text;
-			});
+		formatStringTextArea.addEventListener("focusout", () => {
+			this.display();
+		});
 
 		new Setting(containerEl)
 			.setName("Copy Current Note Link After Paste")
@@ -129,5 +109,16 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 
 				return toggle;
 			});
+	}
+
+	private renderBlockFormatPreview(parentDiv: HTMLDivElement) {
+		parentDiv.empty();
+		MarkdownRenderer.render(
+			this.app,
+			this.studyBlock?.toString(this.plugin.settings.studyBlockFormat) ?? "",
+			parentDiv,
+			'',
+			this.plugin
+		);
 	}
 }
