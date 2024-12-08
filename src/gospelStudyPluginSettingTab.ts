@@ -17,7 +17,7 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 	}
 
 	public async initSampleStudyBlockText() {
-		this.studyBlock = await getStudyBlockFromUrl("https://www.churchofjesuschrist.org/study/scriptures/nt/john/3?lang=eng&id=p16-p17#p16", this.plugin.settings);
+		this.studyBlock = await getStudyBlockFromUrl("https://www.churchofjesuschrist.org/study/scriptures/nt/john/3?lang=eng&id=p16-p17#p16");
 	}
 
 	public display(): void {
@@ -61,10 +61,7 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 			if (!this.formats.some(format => format === target.value)) {
 				this.plugin.settings.customStudyBlockFormat = target.value;
 			}
-			await this.plugin.saveSettings();
-
-			// Update the Markdown content
-			this.renderBlockFormatPreview(studyBlockFormatPreviewDiv);
+			await this.saveSettingsAndUpdatePreview(studyBlockFormatPreviewDiv);
 		});
 
 		formatStringTextArea.addEventListener("focusout", () => {
@@ -78,7 +75,7 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 				toggle.setValue(this.plugin.settings.copyCurrentNoteLinkAfterPaste)
 					.onChange(async (value) => {
 						this.plugin.settings.copyCurrentNoteLinkAfterPaste = value;
-						await this.plugin.saveSettings();
+						await this.saveSettingsAndUpdatePreview(studyBlockFormatPreviewDiv);
 					});
 
 				return toggle;
@@ -91,7 +88,7 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 				toggle.setValue(this.plugin.settings.retainScriptureReferenceLinks)
 					.onChange(async (value) => {
 						this.plugin.settings.retainScriptureReferenceLinks = value;
-						await this.plugin.saveSettings();
+						await this.saveSettingsAndUpdatePreview(studyBlockFormatPreviewDiv);
 					});
 
 				return toggle;
@@ -104,7 +101,7 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 				toggle.setValue(this.plugin.settings.retainNonBreakingSpaces)
 					.onChange(async (value) => {
 						this.plugin.settings.retainNonBreakingSpaces = value;
-						await this.plugin.saveSettings();
+						await this.saveSettingsAndUpdatePreview(studyBlockFormatPreviewDiv);
 					});
 
 				return toggle;
@@ -117,18 +114,23 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 				toggle.setValue(this.plugin.settings.retainParagraphMarkers)
 					.onChange(async (value) => {
 						this.plugin.settings.retainParagraphMarkers = value;
-						await this.plugin.saveSettings();
+						await this.saveSettingsAndUpdatePreview(studyBlockFormatPreviewDiv);
 					});
 
 				return toggle;
 			});
 	}
 
+	private async saveSettingsAndUpdatePreview(studyBlockFormatPreviewDiv: HTMLDivElement) {
+		await this.plugin.saveSettings();
+		this.renderBlockFormatPreview(studyBlockFormatPreviewDiv);
+	}
+
 	private renderBlockFormatPreview(parentDiv: HTMLDivElement) {
 		parentDiv.empty();
 		MarkdownRenderer.render(
 			this.app,
-			this.studyBlock?.toString(this.plugin.settings.studyBlockFormat) ?? "",
+			this.studyBlock?.toString(this.plugin.settings) ?? "",
 			parentDiv,
 			'',
 			this.plugin
