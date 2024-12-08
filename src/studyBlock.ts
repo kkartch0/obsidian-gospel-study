@@ -2,7 +2,6 @@ import { getFormattedParagraphs } from "./paragraphFormatting";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
 import { UrlParserResult } from "./models/UrlParserResult";
 import { requestUrl } from "obsidian";
-import { Platform } from "obsidian";
 
 export class StudyBlock {
     private _paragraphs: string[] | undefined;
@@ -16,7 +15,7 @@ export class StudyBlock {
      * @param pluginSettings - The settings for the Gospel Study plugin.
      * @returns A Promise that resolves to a StudyBlock instance.
      */
-    public static async create(urlParserResult: UrlParserResult, pluginSettings: GospelStudyPluginSettings): Promise<StudyBlock> {
+    public static async create(urlParserResult: UrlParserResult): Promise<StudyBlock> {
         const urlToRequest = urlParserResult.url.toString();
 
         const response = await requestUrl({
@@ -27,7 +26,7 @@ export class StudyBlock {
 
         const parser = new DOMParser();
         const sourceDocument = parser.parseFromString(response.text, "text/html");
-        const studyBlock = new StudyBlock(urlParserResult, sourceDocument, pluginSettings);
+        const studyBlock = new StudyBlock(urlParserResult, sourceDocument);
 
         return studyBlock;
     }
@@ -37,8 +36,7 @@ export class StudyBlock {
      */
     private constructor(
         private _urlParserResult: UrlParserResult,
-        private _sourceDocument: Document,
-        private _pluginSettings: GospelStudyPluginSettings) { }
+        private _sourceDocument: Document) { }
 
     /**
      * Gets the string representation of the paragraph IDs excluding the "p" prefix.
@@ -56,9 +54,6 @@ export class StudyBlock {
      * Gets the formatted paragraphs associated with the study block.
      */
     public get paragraphs(): string[] {
-        if (this._paragraphs === undefined) {
-            this._paragraphs = getFormattedParagraphs(this._sourceDocument, this._urlParserResult.paragraphIdItems, this._pluginSettings);
-        }
         return this._paragraphs || [];
     }
 
@@ -117,11 +112,12 @@ export class StudyBlock {
      * @param format - The format string used to generate the string representation.
      * @returns The string representation of the StudyBlock object.
      */
-    public toString(format: string): string {
-        let injectedText = format;
+    public toString(pluginSettings: GospelStudyPluginSettings): string {
+        let injectedText = pluginSettings.studyBlockFormat;
+
+        this._paragraphs = getFormattedParagraphs(this._sourceDocument, this._urlParserResult.paragraphIdItems, pluginSettings);
 
         const propertyNames = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
-
         propertyNames.forEach((key: string): void => {
             const value = this[key as keyof StudyBlock]; // Add type assertion to keyof StudyBlock
             if (typeof (value) !== 'string') {
