@@ -1,3 +1,4 @@
+import { createStudyBlock } from "./createStudyBlock";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
 import { StudyBlock } from "./studyBlock";
 import { standardizeSearchParams } from "./studyUrlFormatting";
@@ -24,7 +25,7 @@ export async function getStudyBlockFromStudyData(data: string): Promise<StudyBlo
 
 	const urlParserResult = urlParser.parse(url);
 
-	const block = await StudyBlock.create(urlParserResult);
+	const block = await createStudyBlock(urlParserResult);
 
 	return block;
 }
