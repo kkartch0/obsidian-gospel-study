@@ -1,6 +1,7 @@
 import { requestUrl } from "obsidian";
 import { UrlParserResult } from "./models/UrlParserResult";
 import { StudyBlock } from "./studyBlock";
+import { getParagraphElements } from "./getParagraphElements";
 
 /**
  * Creates a new StudyBlock instance using the given URL parser result and plugin settings.
@@ -20,7 +21,9 @@ export async function createStudyBlock(urlParserResult: UrlParserResult): Promis
 
     const parser = new DOMParser();
     const sourceDocument = parser.parseFromString(response.text, "text/html");
-    const studyBlock = new StudyBlock(urlParserResult, sourceDocument);
+    const paragraphElements = getParagraphElements(sourceDocument, urlParserResult.paragraphIdItems);
+
+    const studyBlock = new StudyBlock(urlParserResult, paragraphElements, sourceDocument.title);
 
     return studyBlock;
 }
