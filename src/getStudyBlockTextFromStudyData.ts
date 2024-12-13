@@ -1,4 +1,5 @@
 import { createStudyBlock } from "./createStudyBlock";
+import { formatStudyBlock } from "./formatStudyBlock";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
 import { StudyBlock } from "./studyBlock";
 import { standardizeSearchParams } from "./studyUrlFormatting";
@@ -9,7 +10,7 @@ export async function getStudyBlockTextFromStudyData(data: string, pluginSetting
 	if (!block) {
 		return null;
 	}
-	const blockText = block.toString(pluginSettings);
+	const blockText = formatStudyBlock(block, pluginSettings);
 	return blockText;
 }
 
