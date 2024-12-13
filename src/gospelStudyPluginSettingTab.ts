@@ -1,13 +1,13 @@
 import { STUDY_BLOCK_FORMAT_1, STUDY_BLOCK_FORMAT_2 } from "./defaultPluginSettings";
 import GospelStudyPlugin from "./main";
 import { App, MarkdownRenderer, PluginSettingTab, Setting } from "obsidian";
-import { StudyBlock } from "./studyBlock";
-import { getStudyBlockFromStudyData } from "./getStudyBlockTextFromStudyData";
+import { StudyBlockData } from "./models/StudyBlockData";
+import { getStudyBlockDataFromStudyData } from "./getStudyBlockFromStudyData";
 
 export class GospelStudyPluginSettingTab extends PluginSettingTab {
 	public plugin: GospelStudyPlugin;
 	formats: string[];
-	studyBlock!: StudyBlock | null;
+	studyBlock!: StudyBlockData | null;
 
 	public constructor(app: App, plugin: GospelStudyPlugin) {
 		super(app, plugin);
@@ -17,7 +17,7 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 	}
 
 	public async initSampleStudyBlockText() {
-		this.studyBlock = await getStudyBlockFromStudyData("https://www.churchofjesuschrist.org/study/scriptures/nt/john/3?lang=eng&id=p16-p17#p16");
+		this.studyBlock = await getStudyBlockDataFromStudyData("https://www.churchofjesuschrist.org/study/scriptures/nt/john/3?lang=eng&id=p16-p17#p16");
 	}
 
 	public display(): void {
