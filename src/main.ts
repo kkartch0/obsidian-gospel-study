@@ -2,7 +2,7 @@ import { Plugin, Editor, Notice } from "obsidian";
 import { GospelStudyPluginSettingTab } from "./gospelStudyPluginSettingTab";
 import { DEFAULT_SETTINGS } from "./defaultPluginSettings";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
-import { getStudyBlockTextFromStudyData } from "./getStudyBlockTextFromStudyData";
+import { getStudyBlockFromStudyData } from "./getStudyBlockFromStudyData";
 
 export default class GospelStudyPlugin extends Plugin {
 	public settings!: GospelStudyPluginSettings;
@@ -109,7 +109,7 @@ export default class GospelStudyPlugin extends Plugin {
 		clipboard.preventDefault();
 
 		try {
-			const blockText = await getStudyBlockTextFromStudyData(clipboardData, this.settings);
+			const blockText = await getStudyBlockFromStudyData(clipboardData, this.settings);
 
 			if (blockText) {
 				editor.replaceSelection(blockText);

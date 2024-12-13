@@ -1,29 +1,33 @@
-import { requestUrl } from "obsidian";
-import { UrlParserResult } from "./models/UrlParserResult";
-import { StudyBlock } from "./studyBlock";
-import { getParagraphElements } from "./getParagraphElements";
+import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
+import { getFormattedParagraphs } from "./paragraphFormatting";
+import { StudyBlockData } from "./models/StudyBlockData";
 
 /**
- * Creates a new StudyBlock instance using the given URL parser result and plugin settings.
- * 
- * @param urlParserResult - The result of parsing a URL.
- * @param pluginSettings - The settings for the Gospel Study plugin.
- * @returns A Promise that resolves to a StudyBlock instance.
+ * Converts the StudyBlock object to a string representation based on the specified format.
+ * @param format - The format string used to generate the string representation.
+ * @returns The string representation of the StudyBlock object.
  */
-export async function createStudyBlock(urlParserResult: UrlParserResult): Promise<StudyBlock> {
-    const urlToRequest = urlParserResult.url.toString();
+export function createStudyBlock(studyBlockData: StudyBlockData, pluginSettings: GospelStudyPluginSettings): string {
+    let injectedText = pluginSettings.studyBlockFormat;
 
-    const response = await requestUrl({
-        url: urlToRequest, method: "GET", headers: {
-            "cookie": "analytics_video_metadata_load=false"
+    const formattedParagraphs: string[] = getFormattedParagraphs(studyBlockData.paragraphElements, pluginSettings);
+
+    const propertyNames = Object.keys(studyBlockData);
+
+    propertyNames.forEach((key: string): void => {
+        const value = studyBlockData[key as keyof StudyBlockData]; // Add type assertion to keyof StudyBlock
+        if (typeof (value) !== 'string') {
+            return; // skip function calls
         }
+
+        injectedText = injectedText.replace(new RegExp(`{{${key}}}`, 'g'), String(value));
     });
 
-    const parser = new DOMParser();
-    const sourceDocument = parser.parseFromString(response.text, "text/html");
-    const paragraphElements = getParagraphElements(sourceDocument, urlParserResult.paragraphIdItems);
+    const paragraphsMatch = injectedText.match(/{{paragraphs:([^}]*)}}/);
+    if (paragraphsMatch) {
+        const paragraphsSeparator = paragraphsMatch[1];
+        injectedText = injectedText.replace(new RegExp(`{{paragraphs:${paragraphsSeparator}}}`, 'g'), formattedParagraphs?.join(paragraphsSeparator) || '');
+    }
 
-    const studyBlock = new StudyBlock(urlParserResult, paragraphElements, sourceDocument.title);
-
-    return studyBlock;
+    return injectedText;
 }

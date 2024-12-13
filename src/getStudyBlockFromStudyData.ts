@@ -1,20 +1,20 @@
+import { createStudyBlockData } from "./createStudyBlockData";
 import { createStudyBlock } from "./createStudyBlock";
-import { formatStudyBlock } from "./formatStudyBlock";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
-import { StudyBlock } from "./studyBlock";
+import { StudyBlockData } from "./models/StudyBlockData";
 import { standardizeSearchParams } from "./studyUrlFormatting";
 import { registeredUrlParsers } from "./urlParsers";
 
-export async function getStudyBlockTextFromStudyData(data: string, pluginSettings: GospelStudyPluginSettings): Promise<string | null> {
-	const block = await getStudyBlockFromStudyData(data);
+export async function getStudyBlockFromStudyData(data: string, pluginSettings: GospelStudyPluginSettings): Promise<string | null> {
+	const block = await getStudyBlockDataFromStudyData(data);
 	if (!block) {
 		return null;
 	}
-	const blockText = formatStudyBlock(block, pluginSettings);
+	const blockText = createStudyBlock(block, pluginSettings);
 	return blockText;
 }
 
-export async function getStudyBlockFromStudyData(data: string): Promise<StudyBlock | null> {
+export async function getStudyBlockDataFromStudyData(data: string): Promise<StudyBlockData | null> {
 	const standardizedUrl = standardizeSearchParams(data);
 	const url = new URL(standardizedUrl);
 
@@ -26,7 +26,7 @@ export async function getStudyBlockFromStudyData(data: string): Promise<StudyBlo
 
 	const urlParserResult = urlParser.parse(url);
 
-	const block = await createStudyBlock(urlParserResult);
+	const block = await createStudyBlockData(urlParserResult);
 
 	return block;
 }
