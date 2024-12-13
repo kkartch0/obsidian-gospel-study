@@ -12,7 +12,8 @@ export class StudyBlock {
      */
     public constructor(
         private _urlParserResult: UrlParserResult,
-        private _sourceDocument: Document
+        private _paragraphElements: Element[],
+        private _title: string
     ) { }
 
     /**
@@ -30,8 +31,8 @@ export class StudyBlock {
     /**
      * Gets the formatted paragraphs associated with the study block.
      */
-    public get paragraphs(): string[] {
-        return this._paragraphs || [];
+    public get paragraphElements(): Element[] {
+        return this._paragraphElements || [];
     }
 
     /**
@@ -44,7 +45,7 @@ export class StudyBlock {
     public get referenceLink(): string {
         if (this._referenceLink === undefined) {
             let titleToUse = this.title;
-            if (this.paragraphs[0]?.includes('verse-number')) {
+            if (this.paragraphElements[0]?.outerHTML.includes('verse-number')) {
                 titleToUse += `:${this.paragraphIdsString}`;
             }
             this._referenceLink = `[${titleToUse}](${this.url})`;
@@ -73,7 +74,7 @@ export class StudyBlock {
      * @returns The title of the StudyBlock.
      */
     public get title(): string {
-        return this._sourceDocument.title;
+        return this._title;
     }
 
     /**
@@ -92,7 +93,7 @@ export class StudyBlock {
     public toString(pluginSettings: GospelStudyPluginSettings): string {
         let injectedText = pluginSettings.studyBlockFormat;
 
-        this._paragraphs = getFormattedParagraphs(this._sourceDocument, this._urlParserResult.paragraphIdItems, pluginSettings);
+        const formattedParagraphs:string[] = getFormattedParagraphs(this.paragraphElements, pluginSettings);
 
         const propertyNames = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
         propertyNames.forEach((key: string): void => {
@@ -107,7 +108,7 @@ export class StudyBlock {
         const paragraphsMatch = injectedText.match(/{{paragraphs:([^}]*)}}/);
         if (paragraphsMatch) {
             const paragraphsSeparator = paragraphsMatch[1];
-            injectedText = injectedText.replace(new RegExp(`{{paragraphs:${paragraphsSeparator}}}`, 'g'), this.paragraphs?.join(paragraphsSeparator) || '');
+            injectedText = injectedText.replace(new RegExp(`{{paragraphs:${paragraphsSeparator}}}`, 'g'), formattedParagraphs?.join(paragraphsSeparator) || '');
         }
 
         return injectedText;
