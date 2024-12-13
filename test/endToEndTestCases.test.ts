@@ -1,6 +1,6 @@
 import fs from 'fs';
 import yaml from '../node_modules/yaml/dist';
-import { getStudyBlockTextFromUrl } from '../src/getStudyBlockTextFromUrl';
+import { getStudyBlockTextFromStudyData } from '../src/getStudyBlockTextFromStudyData';
 import { DEFAULT_SETTINGS, STUDY_BLOCK_FORMAT_1, STUDY_BLOCK_FORMAT_2 } from '../src/defaultPluginSettings';
 import { GospelStudyPluginSettings } from "../src/models/GospelStudyPluginSettings";
 
@@ -37,7 +37,7 @@ describe('get study block text from url', () => {
             const pluginSettings = { ...DEFAULT_SETTINGS, ...parsedFile.pluginSettings };
 
             // Act
-            const result = await getStudyBlockTextFromUrl(parsedFile.pastedText, pluginSettings);
+            const result = await getStudyBlockTextFromStudyData(parsedFile.pastedText, pluginSettings);
 
             // Assert
             expect(result).toBe(parsedFile.expectedResult.trim());
