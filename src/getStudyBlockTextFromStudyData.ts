@@ -3,8 +3,8 @@ import { StudyBlock } from "./studyBlock";
 import { standardizeSearchParams } from "./studyUrlFormatting";
 import { registeredUrlParsers } from "./urlParsers";
 
-export async function getStudyBlockTextFromUrl(data: string, pluginSettings: GospelStudyPluginSettings): Promise<string | null> {
-	const block = await getStudyBlockFromUrl(data);
+export async function getStudyBlockTextFromStudyData(data: string, pluginSettings: GospelStudyPluginSettings): Promise<string | null> {
+	const block = await getStudyBlockFromStudyData(data);
 	if (!block) {
 		return null;
 	}
@@ -12,7 +12,7 @@ export async function getStudyBlockTextFromUrl(data: string, pluginSettings: Gos
 	return blockText;
 }
 
-export async function getStudyBlockFromUrl(data: string): Promise<StudyBlock | null> {
+export async function getStudyBlockFromStudyData(data: string): Promise<StudyBlock | null> {
 	const standardizedUrl = standardizeSearchParams(data);
 	const url = new URL(standardizedUrl);
 
