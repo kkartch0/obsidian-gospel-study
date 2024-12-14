@@ -35,5 +35,5 @@ export interface StudyBlockData {
     /**
      * A string representation of the original URL.
      */
-    url: URL;
+    url: URL | undefined;
 }
