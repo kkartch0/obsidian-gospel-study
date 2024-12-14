@@ -1,7 +1,7 @@
 import { StudyDataParser } from "src/models/StudyDataParser";
-import { StudyDataParserResult } from "src/models/StudyDataParserResult";
 import { parseStudyUrl } from "./parseStudyUrl";
 import { tryParseStudyUrl } from "./tryParseStudyUrl";
+import { StudyBlockData } from "src/models/StudyBlockData";
 
 export const numberOnlyUrlStudyDataParser: StudyDataParser = {
     isParseable(studyData: string): boolean {
@@ -16,7 +16,7 @@ export const numberOnlyUrlStudyDataParser: StudyDataParser = {
         return !!idParam && correctFormatRegex.test(idParam);
     },
 
-    parse(studyData: string): StudyDataParserResult {
+    parse(studyData: string): Partial<StudyBlockData> {
         const url = parseStudyUrl(studyData);
 
         const idParam = url?.searchParams.get("id") || "";

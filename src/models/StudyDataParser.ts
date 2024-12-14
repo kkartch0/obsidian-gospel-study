@@ -1,4 +1,4 @@
-import { StudyDataParserResult } from "./StudyDataParserResult";
+import { StudyBlockData } from "./StudyBlockData";
 
 /**
  * Declares methods to be used for parsing paragraph IDs out of the given URL.
@@ -18,5 +18,5 @@ export interface StudyDataParser {
      * @param {URL} url - The URL that is being added to Obsidian.
      * @returns {StudyDataParserResult} - The parse results, including the separated paragraph IDs and the display format for paragraph IDs.
      */
-    parse(studyData: string): StudyDataParserResult;
+    parse(studyData: string): Partial<StudyBlockData>;
 }
