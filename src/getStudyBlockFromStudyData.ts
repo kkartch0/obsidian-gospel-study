@@ -5,8 +5,8 @@ import { StudyBlockData } from "./models/StudyBlockData";
 import { standardizeSearchParams } from "./studyUrlFormatting";
 import { registeredStudyDataParsers } from "./studyDataParsers";
 
-export async function getStudyBlockFromStudyData(data: string, pluginSettings: GospelStudyPluginSettings): Promise<string | null> {
-	const studyBlockData = await getStudyBlockDataFromStudyData(data);
+export async function getStudyBlockFromStudyData(studyData: string, pluginSettings: GospelStudyPluginSettings): Promise<string | null> {
+	const studyBlockData = await getStudyBlockDataFromStudyData(studyData);
 	if (!studyBlockData) {
 		return null;
 	}
@@ -14,8 +14,8 @@ export async function getStudyBlockFromStudyData(data: string, pluginSettings: G
 	return studyBlock;
 }
 
-export async function getStudyBlockDataFromStudyData(data: string): Promise<StudyBlockData | null> {
-	const standardizedUrl = standardizeSearchParams(data);
+export async function getStudyBlockDataFromStudyData(studyData: string): Promise<StudyBlockData | null> {
+	const standardizedUrl = standardizeSearchParams(studyData);
 	const url = new URL(standardizedUrl);
 
 	const studyDataParser = registeredStudyDataParsers.find(currentParser => currentParser.isParseable(url));
