@@ -1,0 +1,19 @@
+studyData: |
+  came to pass that when Jesus had spoken these words he turned again to the multitude, and did open his mouth unto them again, saying: Verily, verily, I say unto you
+
+  3 Nephi 14:1
+
+  https://www.churchofjesuschrist.org/study/scriptures/bofm/3-ne/14?id=p1&lang=eng#p1
+
+pluginSettings:
+  studyBlockFormat: STUDY_BLOCK_FORMAT_2
+
+expectedResult: |
+  > came to pass that when Jesus had spoken these words he turned again to the multitude, and did open his mouth unto them again, saying: Verily, verily, I say unto you
+  >
+  > [3 Nephi 14:1](https://www.churchofjesuschrist.org/study/scriptures/bofm/3-ne/14?lang=eng&id=p1)
+
+  #study/scriptures/bofm/3-ne/14
+
+verifies:
+  - Leverage Android's inclusion of selected text (#11)
