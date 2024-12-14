@@ -1,7 +1,7 @@
 /**
- * The parsed results returned by a UrlParser.
+ * The parsed results returned by a StudyDataParser.
  */
-export interface UrlParserResult {
+export interface StudyDataParserResult {
     /**
      * The list of id items parsed from the URL.
      */

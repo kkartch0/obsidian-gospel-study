@@ -1,17 +1,17 @@
 import { requestUrl } from "obsidian";
-import { UrlParserResult } from "./models/UrlParserResult";
+import { StudyDataParserResult } from "./models/StudyDataParserResult";
 import { StudyBlockData } from "./models/StudyBlockData";
 import { getParagraphElements } from "./getParagraphElements";
 
 /**
  * Creates a new StudyBlock instance using the given URL parser result and plugin settings.
  * 
- * @param urlParserResult - The result of parsing a URL.
+ * @param studyDataParserResult - The result of parsing a URL.
  * @param pluginSettings - The settings for the Gospel Study plugin.
  * @returns A Promise that resolves to a StudyBlock instance.
  */
-export async function createStudyBlockData(urlParserResult: UrlParserResult): Promise<StudyBlockData> {
-    const urlToRequest = urlParserResult.url.toString();
+export async function createStudyBlockData(studyDataParserResult: StudyDataParserResult): Promise<StudyBlockData> {
+    const urlToRequest = studyDataParserResult.url.toString();
 
     const response = await requestUrl({
         url: urlToRequest, method: "GET", headers: {
@@ -21,15 +21,15 @@ export async function createStudyBlockData(urlParserResult: UrlParserResult): Pr
 
     const parser = new DOMParser();
     const sourceDocument = parser.parseFromString(response.text, "text/html");
-    const paragraphElements = getParagraphElements(sourceDocument, urlParserResult.paragraphIdItems);
+    const paragraphElements = getParagraphElements(sourceDocument, studyDataParserResult.paragraphIdItems);
 
     const studyBlockData: StudyBlockData = {
-        paragraphIdsString: urlParserResult.displayParagraphIds,
+        paragraphIdsString: studyDataParserResult.displayParagraphIds,
         paragraphElements,
         referenceLink: "",
-        tag: getTag(urlParserResult),
+        tag: getTag(studyDataParserResult),
         title: sourceDocument.title,
-        url: urlParserResult.url.toString()
+        url: studyDataParserResult.url.toString()
     };
 
     studyBlockData.referenceLink = getReferenceLink(studyBlockData);
@@ -45,7 +45,7 @@ function getReferenceLink(studyBlock: StudyBlockData): string {
     return `[${titleToUse}](${studyBlock.url})`;
 }
 
-function getTag(urlParserResult: UrlParserResult): string {
-    const path = urlParserResult.url.pathname.replace("/study", "study");
+function getTag(studyDataParserResult: StudyDataParserResult): string {
+    const path = studyDataParserResult.url.pathname.replace("/study", "study");
     return `#${path}`;
 }
