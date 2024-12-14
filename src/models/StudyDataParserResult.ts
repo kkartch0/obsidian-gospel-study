@@ -10,7 +10,7 @@ export interface StudyDataParserResult {
     /**
      * A display version of the paragraph IDs derived from a URL.
      */
-    displayParagraphIds: string;
+    paragraphIdsString: string;
 
     /**
      * The URL that was parsed.
