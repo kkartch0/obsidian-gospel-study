@@ -1,4 +1,4 @@
-import { StudyDataParserResult } from "src/models/StudyDataParserResult";
+import { StudyBlockData } from "src/models/StudyBlockData";
 import { standardUrlStudyDataParser } from "../../src/studyDataParsers/standardUrlStudyDataParser";
 
 describe("standardStudyDataParser", () => {
@@ -73,7 +73,7 @@ describe("standardStudyDataParser", () => {
 	});
 
 	describe("parse", () => {
-		let parseResult: StudyDataParserResult;
+		let parseResult: Partial<StudyBlockData>;
 
 		const act = () => {
 			parseResult = standardUrlStudyDataParser.parse(studyData);

@@ -3,6 +3,11 @@
  */
 export interface StudyBlockData {
     /**
+     * The list of id items parsed from the URL.
+     */
+    paragraphIdItems: string[];
+
+    /**
      * The display format for paragraph IDs.
      */
     paragraphIdsString: string;

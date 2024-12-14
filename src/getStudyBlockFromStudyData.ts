@@ -1,4 +1,4 @@
-import { createStudyBlockData } from "./createStudyBlockData";
+import { finalizeStudyBlockData } from "./finalizeStudyBlockData";
 import { createStudyBlock } from "./createStudyBlock";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
 import { StudyBlockData } from "./models/StudyBlockData";
@@ -23,6 +23,6 @@ export async function getStudyBlockDataFromStudyData(studyData: string): Promise
 
 	const studyDataParserResult = studyDataParser.parse(studyData);
 
-	const studyBlockData = await createStudyBlockData(studyDataParserResult);
+	const studyBlockData = await finalizeStudyBlockData(studyDataParserResult);
 	return studyBlockData;
 }
