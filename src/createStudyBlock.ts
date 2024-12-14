@@ -15,11 +15,7 @@ export function createStudyBlock(studyBlockData: StudyBlockData, pluginSettings:
     const propertyNames = Object.keys(studyBlockData);
 
     propertyNames.forEach((key: string): void => {
-        const value = studyBlockData[key as keyof StudyBlockData]; // Add type assertion to keyof StudyBlock
-        if (typeof (value) !== 'string') {
-            return; // skip function calls
-        }
-
+        const value = studyBlockData[key as keyof StudyBlockData];
         injectedText = injectedText.replace(new RegExp(`{{${key}}}`, 'g'), String(value));
     });
 
