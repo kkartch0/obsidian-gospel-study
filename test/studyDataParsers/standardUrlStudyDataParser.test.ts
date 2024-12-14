@@ -1,14 +1,14 @@
-import { UrlParserResult } from "src/models/UrlParserResult";
-import { standardUrlParser } from "../../src/urlParsers/standardUrlParser";
+import { StudyDataParserResult } from "src/models/StudyDataParserResult";
+import { standardUrlStudyDataParser } from "../../src/studyDataParsers/standardUrlStudyDataParser";
 
-describe("standardUrlParser", () => {
+describe("standardStudyDataParser", () => {
 	let url: URL;
 
 	describe("isParseable", () => {
 		let parseableResult: boolean;
 
 		const act = () => {
-			parseableResult = standardUrlParser.isParseable(url);
+			parseableResult = standardUrlStudyDataParser.isParseable(url);
 		};
 
 		describe("a number-only paragraph ID", () => {
@@ -73,10 +73,10 @@ describe("standardUrlParser", () => {
 	});
 
 	describe("parse", () => {
-		let parseResult: UrlParserResult;
+		let parseResult: StudyDataParserResult;
 
 		const act = () => {
-			parseResult = standardUrlParser.parse(url);
+			parseResult = standardUrlStudyDataParser.parse(url);
 		};
 
 		describe("a URL with a single ID", () => {

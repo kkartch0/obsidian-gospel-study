@@ -3,7 +3,7 @@ import { createStudyBlock } from "./createStudyBlock";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
 import { StudyBlockData } from "./models/StudyBlockData";
 import { standardizeSearchParams } from "./studyUrlFormatting";
-import { registeredUrlParsers } from "./urlParsers";
+import { registeredStudyDataParsers } from "./studyDataParsers";
 
 export async function getStudyBlockFromStudyData(data: string, pluginSettings: GospelStudyPluginSettings): Promise<string | null> {
 	const studyBlockData = await getStudyBlockDataFromStudyData(data);
@@ -18,14 +18,14 @@ export async function getStudyBlockDataFromStudyData(data: string): Promise<Stud
 	const standardizedUrl = standardizeSearchParams(data);
 	const url = new URL(standardizedUrl);
 
-	const urlParser = registeredUrlParsers.find(currentParser => currentParser.isParseable(url));
+	const studyDataParser = registeredStudyDataParsers.find(currentParser => currentParser.isParseable(url));
 
-	if (!urlParser) {
+	if (!studyDataParser) {
 		return null;
 	}
 
-	const urlParserResult = urlParser.parse(url);
+	const studyDataParserResult = studyDataParser.parse(url);
 
-	const studyBlockData = await createStudyBlockData(urlParserResult);
+	const studyBlockData = await createStudyBlockData(studyDataParserResult);
 	return studyBlockData;
 }

@@ -1,7 +1,7 @@
-import { UrlParser } from "src/models/UrlParser";
-import { UrlParserResult } from "src/models/UrlParserResult";
+import { StudyDataParser } from "src/models/StudyDataParser";
+import { StudyDataParserResult } from "src/models/StudyDataParserResult";
 
-export const numberOnlyUrlParser: UrlParser = {
+export const numberOnlyUrlStudyDataParser: StudyDataParser = {
     isParseable(url: URL): boolean {
         const idParam = url.searchParams.get("id");
         // https://www.churchofjesuschrist.org/study/scriptures/bofm/ether/12?lang=eng&id=4#p4
@@ -9,7 +9,7 @@ export const numberOnlyUrlParser: UrlParser = {
         return !!idParam && correctFormatRegex.test(idParam);
     },
 
-    parse(url: URL): UrlParserResult {
+    parse(url: URL): StudyDataParserResult {
         const idParam = url.searchParams.get("id") || "";
         const idItems = idParam.split(",");
 
