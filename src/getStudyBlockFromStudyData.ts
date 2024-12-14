@@ -2,7 +2,6 @@ import { createStudyBlockData } from "./createStudyBlockData";
 import { createStudyBlock } from "./createStudyBlock";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
 import { StudyBlockData } from "./models/StudyBlockData";
-import { standardizeSearchParams } from "./studyUrlFormatting";
 import { registeredStudyDataParsers } from "./studyDataParsers";
 
 export async function getStudyBlockFromStudyData(studyData: string, pluginSettings: GospelStudyPluginSettings): Promise<string | null> {

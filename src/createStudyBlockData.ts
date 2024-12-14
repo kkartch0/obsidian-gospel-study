@@ -29,7 +29,7 @@ export async function createStudyBlockData(studyDataParserResult: StudyDataParse
         referenceLink: "",
         tag: getTag(studyDataParserResult),
         title: sourceDocument.title,
-        url: studyDataParserResult.url.toString()
+        url: studyDataParserResult.url
     };
 
     studyBlockData.referenceLink = getReferenceLink(studyBlockData);
