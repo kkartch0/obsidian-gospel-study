@@ -3,5 +3,12 @@
 {
 	"name": "Node.js & TypeScript",
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
-	"postCreateCommand": "npm ci"
+	"postCreateCommand": "npm ci",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"Orta.vscode-jest"
+			]
+		}
+	}
 }
