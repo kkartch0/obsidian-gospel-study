@@ -2,18 +2,18 @@ import { StudyDataParserResult } from "src/models/StudyDataParserResult";
 import { standardUrlStudyDataParser } from "../../src/studyDataParsers/standardUrlStudyDataParser";
 
 describe("standardStudyDataParser", () => {
-	let url: URL;
+	let studyData: string;
 
 	describe("isParseable", () => {
 		let parseableResult: boolean;
 
 		const act = () => {
-			parseableResult = standardUrlStudyDataParser.isParseable(url);
+			parseableResult = standardUrlStudyDataParser.isParseable(studyData);
 		};
 
 		describe("a number-only paragraph ID", () => {
 			beforeEach(() => {
-				url = new URL("https://www.churchofjesuschrist.org/study/scriptures/bofm/2-ne/22?lang=eng&id=2#p2");
+				studyData = "https://www.churchofjesuschrist.org/study/scriptures/bofm/2-ne/22?lang=eng&id=2#p2";
 
 				act();
 			});
@@ -25,7 +25,7 @@ describe("standardStudyDataParser", () => {
 
 		describe("a URL without an ID parameter", () => {
 			beforeEach(() => {
-				url = new URL("https://www.churchofjesuschrist.org/study/general-conference/2023/10/43parrella.p20?lang=eng#p20");
+				studyData = "https://www.churchofjesuschrist.org/study/general-conference/2023/10/43parrella.p20?lang=eng#p20";
 
 				act();
 			});
@@ -37,7 +37,7 @@ describe("standardStudyDataParser", () => {
 
 		describe("a URL with an ID parameter", () => {
 			beforeEach(() => {
-				url = new URL("https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/10?lang=eng&id=p8");
+				studyData = "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/10?lang=eng&id=p8";
 
 				act();
 			});
@@ -49,7 +49,7 @@ describe("standardStudyDataParser", () => {
 
 		describe("a URL with a range of paragraphs", () => {
 			beforeEach(() => {
-				url = new URL("https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/5?lang=eng&id=p1-p2#p1");
+				studyData = "https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/5?lang=eng&id=p1-p2#p1";
 
 				act();
 			});
@@ -61,7 +61,7 @@ describe("standardStudyDataParser", () => {
 
 		describe("a URL with multiple ranges of paragraphs", () => {
 			beforeEach(() => {
-				url = new URL("https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/5?lang=eng&id=p1-p2,p4,p6-p9#p1");
+				studyData = "https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/5?lang=eng&id=p1-p2,p4,p6-p9#p1";
 
 				act();
 			});
@@ -76,12 +76,12 @@ describe("standardStudyDataParser", () => {
 		let parseResult: StudyDataParserResult;
 
 		const act = () => {
-			parseResult = standardUrlStudyDataParser.parse(url);
+			parseResult = standardUrlStudyDataParser.parse(studyData);
 		};
 
 		describe("a URL with a single ID", () => {
 			beforeEach(() => {
-				url = new URL("https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/10?lang=eng&id=p8");
+				studyData = "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/10?lang=eng&id=p8";
 
 				act();
 			});
@@ -97,7 +97,7 @@ describe("standardStudyDataParser", () => {
 
 		describe("a URL with a range of IDs", () => {
 			beforeEach(() => {
-				url = new URL("https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/5?lang=eng&id=p1-p4#p1");
+				studyData = "https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/5?lang=eng&id=p1-p4#p1";
 
 				act();
 			});
@@ -113,7 +113,7 @@ describe("standardStudyDataParser", () => {
 
 		describe("a URL with multiple ranges of IDs", () => {
 			beforeEach(() => {
-				url = new URL("https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/5?lang=eng&id=p1-p2,p4,p6-p9#p1");
+				studyData = "https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/5?lang=eng&id=p1-p2,p4,p6-p9#p1";
 
 				act();
 			});

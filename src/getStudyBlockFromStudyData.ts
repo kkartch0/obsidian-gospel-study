@@ -15,16 +15,14 @@ export async function getStudyBlockFromStudyData(studyData: string, pluginSettin
 }
 
 export async function getStudyBlockDataFromStudyData(studyData: string): Promise<StudyBlockData | null> {
-	const standardizedUrl = standardizeSearchParams(studyData);
-	const url = new URL(standardizedUrl);
 
-	const studyDataParser = registeredStudyDataParsers.find(currentParser => currentParser.isParseable(url));
+	const studyDataParser = registeredStudyDataParsers.find(currentParser => currentParser.isParseable(studyData));
 
 	if (!studyDataParser) {
 		return null;
 	}
 
-	const studyDataParserResult = studyDataParser.parse(url);
+	const studyDataParserResult = studyDataParser.parse(studyData);
 
 	const studyBlockData = await createStudyBlockData(studyDataParserResult);
 	return studyBlockData;

@@ -1,16 +1,25 @@
 import { StudyDataParser } from "src/models/StudyDataParser";
 import { StudyDataParserResult } from "src/models/StudyDataParserResult";
+import { parseStudyUrl } from "./parseStudyUrl";
+import { tryParseStudyUrl } from "./tryParseStudyUrl";
 
 export const numberOnlyUrlStudyDataParser: StudyDataParser = {
-    isParseable(url: URL): boolean {
+    isParseable(studyData: string): boolean {
+        const url = tryParseStudyUrl(studyData);
+        if (!url) {
+            return false;
+        }
+
         const idParam = url.searchParams.get("id");
         // https://www.churchofjesuschrist.org/study/scriptures/bofm/ether/12?lang=eng&id=4#p4
         const correctFormatRegex = /^(?:\d*[,-])*\d*$/;
         return !!idParam && correctFormatRegex.test(idParam);
     },
 
-    parse(url: URL): StudyDataParserResult {
-        const idParam = url.searchParams.get("id") || "";
+    parse(studyData: string): StudyDataParserResult {
+        const url = parseStudyUrl(studyData);
+
+        const idParam = url?.searchParams.get("id") || "";
         const idItems = idParam.split(",");
 
         // prepend "p" to each number
