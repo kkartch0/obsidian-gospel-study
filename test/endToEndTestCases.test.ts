@@ -13,7 +13,7 @@ fileNames = fs.readdirSync('./test/endToEndTestCases').filter(file => !skippedFi
 console.log(fileNames);
 
 interface EndToEndTestCase {
-    pastedText: string;
+    studyData: string;
     pluginSettings: GospelStudyPluginSettings;
     expectedResult: string;
 }
@@ -37,7 +37,7 @@ describe('get study block text from url', () => {
             const pluginSettings = { ...DEFAULT_SETTINGS, ...parsedFile.pluginSettings };
 
             // Act
-            const result = await getStudyBlockFromStudyData(parsedFile.pastedText, pluginSettings);
+            const result = await getStudyBlockFromStudyData(parsedFile.studyData, pluginSettings);
 
             // Assert
             expect(result).toBe(parsedFile.expectedResult.trim());
