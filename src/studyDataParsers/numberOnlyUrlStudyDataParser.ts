@@ -35,11 +35,11 @@ export const numberOnlyUrlStudyDataParser: StudyDataParser = {
             }
         });
 
-        const displayParagraphIds = idParam.replace(/,/g, ", ");
+        const paragraphIdsString = idParam.replace(/,/g, ", ");
 
         return {
             paragraphIdItems,
-            displayParagraphIds,
+            paragraphIdsString,
             url
         };
     },

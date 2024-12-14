@@ -24,11 +24,11 @@ export const standardUrlStudyDataParser: StudyDataParser = {
         const idParam = url.searchParams.get("id") || "";
         const paragraphIdItems = idParam.split(",");
 
-        const displayParagraphIds = idParam.replace(/p/g, "").replace(/,/g, ", ");
+        const paragraphIdsString = idParam.replace(/p/g, "").replace(/,/g, ", ");
 
         return {
             paragraphIdItems,
-            displayParagraphIds,
+            paragraphIdsString,
             url
         };
     },

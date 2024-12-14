@@ -91,7 +91,7 @@ describe("standardStudyDataParser", () => {
 			});
 
 			it("should format the number from the ID", () => {
-				expect(parseResult.displayParagraphIds).toBe("8");
+				expect(parseResult.paragraphIdsString).toBe("8");
 			});
 		});
 
@@ -107,7 +107,7 @@ describe("standardStudyDataParser", () => {
 			});
 
 			it("should format the range with a hyphen", () => {
-				expect(parseResult.displayParagraphIds).toBe("1-4");
+				expect(parseResult.paragraphIdsString).toBe("1-4");
 			});
 		});
 
@@ -123,7 +123,7 @@ describe("standardStudyDataParser", () => {
 			});
 
 			it("should format all the ranges, separated by commas.", () => {
-				expect(parseResult.displayParagraphIds).toBe("1-2, 4, 6-9");
+				expect(parseResult.paragraphIdsString).toBe("1-2, 4, 6-9");
 			});
 		});
 	});

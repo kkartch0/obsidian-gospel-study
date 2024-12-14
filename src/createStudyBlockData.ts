@@ -24,7 +24,7 @@ export async function createStudyBlockData(studyDataParserResult: StudyDataParse
     const paragraphElements = getParagraphElements(sourceDocument, studyDataParserResult.paragraphIdItems);
 
     const studyBlockData: StudyBlockData = {
-        paragraphIdsString: studyDataParserResult.displayParagraphIds,
+        paragraphIdsString: studyDataParserResult.paragraphIdsString,
         paragraphElements,
         referenceLink: "",
         tag: getTag(studyDataParserResult),
