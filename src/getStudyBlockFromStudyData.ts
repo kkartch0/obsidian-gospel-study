@@ -6,12 +6,12 @@ import { standardizeSearchParams } from "./studyUrlFormatting";
 import { registeredUrlParsers } from "./urlParsers";
 
 export async function getStudyBlockFromStudyData(data: string, pluginSettings: GospelStudyPluginSettings): Promise<string | null> {
-	const block = await getStudyBlockDataFromStudyData(data);
-	if (!block) {
+	const studyBlockData = await getStudyBlockDataFromStudyData(data);
+	if (!studyBlockData) {
 		return null;
 	}
-	const blockText = createStudyBlock(block, pluginSettings);
-	return blockText;
+	const studyBlock = createStudyBlock(studyBlockData, pluginSettings);
+	return studyBlock;
 }
 
 export async function getStudyBlockDataFromStudyData(data: string): Promise<StudyBlockData | null> {
@@ -26,7 +26,6 @@ export async function getStudyBlockDataFromStudyData(data: string): Promise<Stud
 
 	const urlParserResult = urlParser.parse(url);
 
-	const block = await createStudyBlockData(urlParserResult);
-
-	return block;
+	const studyBlockData = await createStudyBlockData(urlParserResult);
+	return studyBlockData;
 }
