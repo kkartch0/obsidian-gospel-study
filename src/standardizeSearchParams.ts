@@ -16,23 +16,23 @@
  * defaults to whatever the user has set on the churchofjesuschrist.org website. Moving lang to the front ensures 
  * that the language is set correctly.
  */
-export function standardizeSearchParams(url: string): string {
-    const urlObject = new URL(url);
-    const lang = urlObject.searchParams.get("lang");
+export function standardizeSearchParams(url: URL): URL {
+    const lang = url.searchParams.get("lang");
 
-    urlObject.hash = "";
-    urlObject.search = "";
+    const standardizedUrl = new URL(url.toString());
+    standardizedUrl.hash = url.hash;
+    standardizedUrl.search = "";
 
     if (lang) {
-        urlObject.searchParams.append("lang", lang);
+        standardizedUrl.searchParams.append("lang", lang);
     }
-    const searchParams = new URLSearchParams(url.split("?")[1]);
-    searchParams.forEach((value, key) => {
+    url.searchParams.forEach((value, key) => {
         if (key !== "lang") {
-            urlObject.searchParams.append(key, value);
+            standardizedUrl.searchParams.append(key, value);
         }
     });
 
-    url = decodeURIComponent(urlObject.href);
-    return url;
+    standardizedUrl.href = decodeURIComponent(standardizedUrl.href);
+
+    return standardizedUrl;
 }

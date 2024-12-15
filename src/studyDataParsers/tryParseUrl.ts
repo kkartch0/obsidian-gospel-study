@@ -1,4 +1,4 @@
-import { parseStudyUrl } from "./parseStudyUrl";
+import { parseUrl } from "./parseUrl";
 
 /**
  * Tries to parse the given study data string into a URL object.
@@ -8,9 +8,9 @@ import { parseStudyUrl } from "./parseStudyUrl";
  * @returns The parsed URL object if successful, otherwise null.
  */
 
-export function tryParseStudyUrl(studyData: string): URL | null {
+export function tryParseUrl(studyData: string): URL | null {
     try {
-        return parseStudyUrl(studyData);
+        return parseUrl(studyData);
     } catch {
         return null;
     }

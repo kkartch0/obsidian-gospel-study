@@ -1,23 +1,26 @@
 import { StudyDataParser } from "src/models/StudyDataParser";
-import { parseStudyUrl } from "./parseStudyUrl";
-import { tryParseStudyUrl } from "./tryParseStudyUrl";
+import { parseUrl } from "./parseUrl";
 import { StudyBlockData } from "src/models/StudyBlockData";
+import { containsStudyUrl } from "./containsStudyUrl";
+import { standardizeSearchParams } from "../../src/standardizeSearchParams";
 
 export const numberOnlyUrlStudyDataParser: StudyDataParser = {
     isParseable(studyData: string): boolean {
-        const url = tryParseStudyUrl(studyData);
-        if (!url) {
-            return false;
-        }
+        if(!containsStudyUrl(studyData)) { return false; }
+
+        let url = parseUrl(studyData);
+        url = standardizeSearchParams(url);
 
         const idParam = url.searchParams.get("id");
         // https://www.churchofjesuschrist.org/study/scriptures/bofm/ether/12?lang=eng&id=4#p4
         const correctFormatRegex = /^(?:\d*[,-])*\d*$/;
+
         return !!idParam && correctFormatRegex.test(idParam);
     },
 
     parse(studyData: string): Partial<StudyBlockData> {
-        const url = parseStudyUrl(studyData);
+        let url = parseUrl(studyData);
+        url = standardizeSearchParams(url);
 
         const idParam = url?.searchParams.get("id") || "";
         const idItems = idParam.split(",");

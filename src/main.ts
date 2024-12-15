@@ -98,12 +98,6 @@ export default class GospelStudyPlugin extends Plugin {
 		const clipboardData = clipboard.clipboardData?.getData("text/plain");
 
 		if (!clipboardData) return;
-		if (
-			!clipboardData.contains(
-				"https://www.churchofjesuschrist.org/study/"
-			)
-		)
-			return;
 
 		clipboard.stopPropagation();
 		clipboard.preventDefault();
