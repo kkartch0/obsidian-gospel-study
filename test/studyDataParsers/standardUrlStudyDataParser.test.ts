@@ -1,5 +1,5 @@
 import { StudyBlockData } from "src/models/StudyBlockData";
-import { standardUrlStudyDataParser } from "../../src/studyDataParsers/standardUrlStudyDataParser";
+import { standardUrlStudyDataParser } from "../../src/studyDataParsing/standardUrlStudyDataParser";
 
 describe("standardStudyDataParser", () => {
 	let studyData: string;

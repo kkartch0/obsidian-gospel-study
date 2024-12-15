@@ -2,7 +2,7 @@ import { fetchMissingData } from "./fetchMissingData";
 import { createStudyBlock } from "./createStudyBlock";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
 import { StudyBlockData } from "./models/StudyBlockData";
-import { registeredStudyDataParsers } from "./studyDataParsers";
+import { registeredStudyDataParsers } from "./studyDataParsing";
 
 export async function getStudyBlockFromStudyData(studyData: string, pluginSettings: GospelStudyPluginSettings): Promise<string | null> {
 	const studyBlockData = await getStudyBlockDataFromStudyData(studyData);

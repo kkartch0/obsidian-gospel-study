@@ -2,7 +2,7 @@ import { StudyDataParser } from "src/models/StudyDataParser";
 import { parseUrl } from "./parseUrl";
 import { StudyBlockData } from "src/models/StudyBlockData";
 import { containsStudyUrl } from "./containsStudyUrl";
-import { standardizeSearchParams } from "../../src/standardizeSearchParams";
+import { standardizeSearchParams } from "../standardizeSearchParams";
 
 /**
  * Declares a parser for the default ID format (e.g., p1,p3-p7,p9)

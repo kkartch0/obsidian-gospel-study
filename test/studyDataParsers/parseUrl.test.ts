@@ -1,4 +1,4 @@
-import { parseUrl } from '../../src/studyDataParsers/parseUrl';
+import { parseUrl } from '../../src/studyDataParsing/parseUrl';
 
 describe('parseUrl', () => {
     it('should extract a valid study URL from the study data string', () => {
