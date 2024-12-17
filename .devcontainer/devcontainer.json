@@ -2,6 +2,9 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
 	"name": "Node.js & TypeScript",
+	"build": {
+		"dockerFile": "Dockerfile"
+	},
 	"dockerFile": "Dockerfile",
 	"postCreateCommand": "npm ci",
 	"customizations": {
