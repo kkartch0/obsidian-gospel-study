@@ -22,6 +22,6 @@
 			"onAutoForward": "notify"
 		}
 	},
-	"workspaceMount": "source=workspace-volume,target=/TestVault/.obsidian/plugins/obsidian-gospel-study,type=volume",
-	"workspaceFolder": "/TestVault/.obsidian/plugins/obsidian-gospel-study"
+	"workspaceMount": "source=${localWorkspaceFolder}/sub-folder,target=/workspace,type=bind,consistency=delegated",
+	"workspaceFolder": "/workspace"
 }
