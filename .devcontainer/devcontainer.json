@@ -3,7 +3,7 @@
 {
 	"name": "Node.js & TypeScript",
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
-	"postCreateCommand": "npm ci",
+	"postCreateCommand": "sudo ./setup.sh",
 	"customizations": {
 		"vscode": {
 			"extensions": [
