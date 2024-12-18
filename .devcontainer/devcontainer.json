@@ -25,5 +25,5 @@
 		}
 	},
 	"workspaceMount": "source=${localWorkspaceFolder},target=/home/node/TestVault/.obsidian/plugins/obsidian-gospel-library,type=bind,consistency=delegated",
-	"workspaceFolder": "/home/node/TestVault/.obsidian/plugins/obsidian-gospel-library",
+	"workspaceFolder": "/home/node/TestVault/.obsidian/plugins/obsidian-gospel-library"
 }
