@@ -2,7 +2,9 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
 	"name": "Node.js & TypeScript",
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
 	"postCreateCommand": "sudo ./.devcontainer/setup.sh",
 	"customizations": {
 		"vscode": {
@@ -15,7 +17,9 @@
 	"features": {
 		"ghcr.io/devcontainers/features/desktop-lite:1": {}
 	},
-	"forwardPorts": [6080],
+	"forwardPorts": [
+		6080
+	],
 	"portsAttributes": {
 		"6080": {
 			"label": "Obsidian",
@@ -24,5 +28,8 @@
 	},
 	"workspaceMount": "source=${localWorkspaceFolder},target=/home/node/TestVault/.obsidian/plugins/obsidian-gospel-library,type=bind,consistency=delegated",
 	"workspaceFolder": "/home/node/TestVault/.obsidian/plugins/obsidian-gospel-library",
-	"runArgs": ["--user", "1000:1000"]
+	"runArgs": [
+		"--user",
+		"1000:1000"
+	]
 }
