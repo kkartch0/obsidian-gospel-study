@@ -1,0 +1,1 @@
+/workspaces/obsidian-gospel-study/main.js
