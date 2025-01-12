@@ -21,3 +21,6 @@ data.json
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
 .devcontainer/TestVault/.obsidian/workspace.json
+.devcontainer/.config/obsidian/*
+!.devcontainer/.config/obsidian/93a17b9caafc31d7.json
+!.devcontainer/.config/obsidian/obsidian.json
