@@ -3,4 +3,8 @@ wget -O obsidian.deb "https://github.com/obsidianmd/obsidian-releases/releases/d
 dpkg -i obsidian.deb
 rm obsidian.deb
 
+pwd
+
+ln -s ./devcontainer/.config/obsidian /home/node/.config/obsidian
+
 npm ci
