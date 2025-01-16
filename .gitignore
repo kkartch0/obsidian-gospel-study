@@ -24,3 +24,4 @@ data.json
 .devcontainer/.config/obsidian/*
 !.devcontainer/.config/obsidian/93a17b9caafc31d7.json
 !.devcontainer/.config/obsidian/obsidian.json
+config.bat
