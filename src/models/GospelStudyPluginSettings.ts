@@ -5,4 +5,5 @@ export interface GospelStudyPluginSettings {
     retainNonBreakingSpaces: boolean;
 	customStudyBlockFormat: string;
     retainParagraphMarkers: boolean;
+	enableExperimentalFeatures: boolean;
 }

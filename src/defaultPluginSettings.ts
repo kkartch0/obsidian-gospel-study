@@ -10,6 +10,7 @@ export const DEFAULT_SETTINGS: GospelStudyPluginSettings = {
 	copyCurrentNoteLinkAfterPaste: true,
 	retainScriptureReferenceLinks: true,
 	retainNonBreakingSpaces: false,
-	retainParagraphMarkers: false
+	retainParagraphMarkers: false,
+	enableExperimentalFeatures: false
 };
 

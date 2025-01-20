@@ -1,6 +1,6 @@
 import { STUDY_BLOCK_FORMAT_1, STUDY_BLOCK_FORMAT_2 } from "./defaultPluginSettings";
 import GospelStudyPlugin from "./main";
-import { App, MarkdownRenderer, PluginSettingTab, Setting } from "obsidian";
+import { App, MarkdownRenderer, Notice, PluginSettingTab, Setting } from "obsidian";
 import { StudyBlockData } from "./models/StudyBlockData";
 import { getStudyBlockDataFromStudyData } from "./getStudyBlockFromStudyData";
 import { createStudyBlock } from "./createStudyBlock";
@@ -116,6 +116,21 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 					.onChange(async (value) => {
 						this.plugin.settings.retainParagraphMarkers = value;
 						await this.saveSettingsAndUpdatePreview(studyBlockFormatPreviewDiv);
+					});
+
+				return toggle;
+			});
+
+			new Setting(containerEl)
+			.setName("Enable Experimental Features")
+			.setDesc("If enabled, turns on any features currently classified as experimental. Please be aware that these features may not be fully tested and may not work as expected.")
+			.addToggle((toggle) => {
+				toggle.setValue(this.plugin.settings.enableExperimentalFeatures)
+					.onChange(async (value) => {
+						const wasDisabled = !this.plugin.settings.enableExperimentalFeatures;
+						this.plugin.settings.enableExperimentalFeatures = value;
+						await this.saveSettingsAndUpdatePreview(studyBlockFormatPreviewDiv);
+						new Notice(`Experimental features have been ${wasDisabled ? "enabled" : "disabled"}. Restart Obsidian to apply changes.`);
 					});
 
 				return toggle;
