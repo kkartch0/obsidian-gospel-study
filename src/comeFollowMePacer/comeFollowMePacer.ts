@@ -1,7 +1,6 @@
 import { requestUrl } from "obsidian";
-import { start } from "repl";
 
-export async function getTaskListFromUrl(urlToRequest: string): Promise<string> {
+export async function getTaskListFromUrl(urlToRequest: string, dateProvider: { today: () => Date; }): Promise<string> {
 	const response = await requestUrl({
 		url: urlToRequest, method: "GET", headers: {
 			"cookie": "analytics_video_metadata_load=false"
@@ -11,12 +10,12 @@ export async function getTaskListFromUrl(urlToRequest: string): Promise<string> 
 	const parser = new DOMParser();
 	const sourceDocument = parser.parseFromString(response.text, "text/html");
 
-	const startDate = getStartDateFromTitle(sourceDocument.title);
 	const title = `Come Follow Me: ${sourceDocument.title}`;
 
-	// endDate is startDate + 7 days
+	const startDate = dateProvider.today();
+	// endDate is the sunday following the start date
 	const endDate = new Date(startDate);
-	endDate.setDate(endDate.getDate() + 6);
+	endDate.setDate(endDate.getDate() + (7 - endDate.getDay()));
 
 	// only select paragraphs with id matching the pattern "p\d+"
 	const sections = Array.from(sourceDocument.querySelectorAll(".body-block > section"));
@@ -24,36 +23,26 @@ export async function getTaskListFromUrl(urlToRequest: string): Promise<string> 
 	const taskList: string[] = [];
 
 	sections.forEach(section => {
-		taskList.push(createTaskListFromSection(section, urlToRequest, endDate));
+		const sectionTaskList = createTaskListFromSection(section, urlToRequest, startDate, endDate);
+		taskList.push(sectionTaskList);
 	});
 
 	return taskList.join("\n\n");
 }
 
-/// Function that gets the start date from the title of a Come Follow Me chapter /// e.g. given 'July 15–21: “The Virtue of the Word of God.” Alma 30–31', return start date of July 15
-/// given 'July 28–August 4: “Look to God and Live.” Alma 36–38', return start date of July 29
-export function getStartDateFromTitle(title: string): Date {
-	const dateRangeString = title.split(":")[0];
-	const startDateString = dateRangeString.split("–")[0].trim();
-	const startDate = new Date(`${startDateString}, 2024`);
-
-	return startDate;
-}
-
-function createTaskListFromSection(section: Element, urlToRequest: string, endDate: Date): string {
+function createTaskListFromSection(section: Element, urlToRequest: string, startDate: Date, endDate: Date): string {
 	const paragraphs = Array.from(section.querySelectorAll("p[id^=p]"));
-	const title = section.querySelector("h2")?.textContent;
+	const title = section.querySelector("h2")?.textContent?.trim();
 
-	const startDate = new Date();
 	const remainingDays = endDate.getDate() - startDate.getDate() + 1; // + 1 includes today
 	const paragraphsByDay = divideIntoGroups(paragraphs, remainingDays);
 
 	// print out paragraph ids for each day
-	let oneTaskPerDay = true;
+	const oneTaskPerDay = true;
 
 	const taskList: string[] = [];
 
-	let scheduledDate = startDate;
+	const scheduledDate = new Date(startDate);
 
 	paragraphsByDay.forEach((dayParagraphs, i) => {
 		if (oneTaskPerDay) {

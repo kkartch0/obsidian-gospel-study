@@ -47,9 +47,8 @@ export default class GospelStudyPlugin extends Plugin {
 				let url = "";
 				const urlEntryModal = new UrlEntryModal(this.app, {
 					onSubmit: async (result: string) => {
-						const taskList = await getTaskListFromUrl(result);
-						navigator.clipboard.writeText(taskList);
-						new Notice("Come Follow Me tasks copied to clipboard.");
+						const taskList = await getTaskListFromUrl(result, { today: () => new Date() });
+						editor.replaceSelection(taskList);
 					}
 				});
 
