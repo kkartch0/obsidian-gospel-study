@@ -3,6 +3,8 @@ import { GospelStudyPluginSettingTab } from "./gospelStudyPluginSettingTab";
 import { DEFAULT_SETTINGS } from "./defaultPluginSettings";
 import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
 import { getStudyBlockFromStudyData } from "./getStudyBlockFromStudyData";
+import { getTaskListFromUrl } from "./comeFollowMePacer/comeFollowMePacer";
+import { UrlEntryModal } from "./comeFollowMePacer/urlEntryModal";
 
 export default class GospelStudyPlugin extends Plugin {
 	public settings!: GospelStudyPluginSettings;
@@ -36,6 +38,24 @@ export default class GospelStudyPlugin extends Plugin {
 		this.registerEvent(
 			this.app.workspace.on("editor-paste", this.onEditorPaste.bind(this))
 		);
+
+		if (this.settings.enableExperimentalFeatures) {
+			this.addCommand({
+				id: 'generate-come-follow-me-tasks',
+				name: 'Generate Come Follow Me Study Tasks',
+				editorCallback: async (editor: Editor) => {
+					// launch modal for entering URL
+					const urlEntryModal = new UrlEntryModal(this.app, {
+						onSubmit: async (result: string) => {
+							const taskList = await getTaskListFromUrl(result, { today: () => new Date() });
+							editor.replaceSelection(taskList);
+						}
+					});
+
+					urlEntryModal.open();
+				}
+			});
+		}
 	}
 
 	/**
