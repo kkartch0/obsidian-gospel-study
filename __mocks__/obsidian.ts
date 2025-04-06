@@ -1,5 +1,5 @@
 import { RequestUrlParam, RequestUrlResponse } from "obsidian";
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
 export function requestUrl(requestUrlParam: RequestUrlParam): Promise<RequestUrlResponse> {
   return new Promise((resolve) => {
