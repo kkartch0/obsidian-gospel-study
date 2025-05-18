@@ -69,6 +69,17 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 			this.display();
 		});
 
+		// --- Custom CSS Setting ---
+		new Setting(containerEl)
+			.setName("Custom Study Block CSS")
+			.setDesc("Custom CSS to apply to the study block format. This will be injected into the preview and can be used to style your study blocks.")
+
+		const cssStringTextArea = containerEl.createEl("textarea");
+		cssStringTextArea.style.width = "100%";
+		cssStringTextArea.style.height = "150px";
+		cssStringTextArea.style.resize = "none";
+		cssStringTextArea.value = this.plugin.settings.customStudyBlockCss;
+
 		new Setting(containerEl)
 			.setName("Copy Current Note Link After Paste")
 			.setDesc("Copy the current note link to the clipboard after pasting a study block.")
@@ -135,6 +146,7 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 
 				return toggle;
 			});
+
 	}
 
 	private async saveSettingsAndUpdatePreview(studyBlockFormatPreviewDiv: HTMLDivElement) {
@@ -146,6 +158,12 @@ export class GospelStudyPluginSettingTab extends PluginSettingTab {
 		parentDiv.empty();
 		if (!this.studyBlockData) {
 			return;
+		}
+		// Inject custom CSS if present
+		if (this.plugin.settings.customStudyBlockCss) {
+			const style = document.createElement('style');
+			style.textContent = this.plugin.settings.customStudyBlockCss;
+			parentDiv.appendChild(style);
 		}
 		MarkdownRenderer.render(
 			this.app,

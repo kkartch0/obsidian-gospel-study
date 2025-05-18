@@ -5,6 +5,7 @@ import { GospelStudyPluginSettings } from "./models/GospelStudyPluginSettings";
 import { getStudyBlockFromStudyData } from "./getStudyBlockFromStudyData";
 import { getTaskListFromUrl } from "./comeFollowMePacer/comeFollowMePacer";
 import { UrlEntryModal } from "./comeFollowMePacer/urlEntryModal";
+import { injectCustomStudyBlockCss } from "./createStudyBlock";
 
 export default class GospelStudyPlugin extends Plugin {
 	public settings!: GospelStudyPluginSettings;
@@ -30,6 +31,9 @@ export default class GospelStudyPlugin extends Plugin {
 
 		await this.loadSettings();
 
+		// Inject custom CSS for study blocks
+		injectCustomStudyBlockCss(this.settings.customStudyBlockCss);
+
 		const studyPluginTab = new GospelStudyPluginSettingTab(this.app, this);
 		await studyPluginTab.initSampleStudyBlockText();
 
@@ -51,7 +55,6 @@ export default class GospelStudyPlugin extends Plugin {
 							editor.replaceSelection(taskList);
 						}
 					});
-
 					urlEntryModal.open();
 				}
 			});
@@ -72,6 +75,7 @@ export default class GospelStudyPlugin extends Plugin {
 	 */
 	public async saveSettings(): Promise<void> {
 		await this.saveData(this.settings);
+		injectCustomStudyBlockCss(this.settings.customStudyBlockCss);
 	}
 
 	/**

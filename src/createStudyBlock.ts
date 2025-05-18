@@ -27,3 +27,19 @@ export function createStudyBlock(studyBlockData: StudyBlockData, pluginSettings:
 
     return injectedText;
 }
+
+/**
+ * Injects custom CSS for study blocks into the document if provided in settings.
+ * Call this before rendering study blocks in notes.
+ */
+export function injectCustomStudyBlockCss(css: string | undefined) {
+    if (!css) return;
+    const styleId = 'gospel-study-plugin-custom-css';
+    let style = document.getElementById(styleId) as HTMLStyleElement | null;
+    if (!style) {
+        style = document.createElement('style');
+        style.id = styleId;
+        document.head.appendChild(style);
+    }
+    style.textContent = css;
+}
